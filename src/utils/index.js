@@ -1,4 +1,5 @@
 
 export {
-    copyObj, convertToBooleanVal, immutableSplice, immutablePush, removeOrPushInArr, getCookie, getHashCode, injectIntl, getMenuFromConfig, getSeoDataFromConfig, getRandomDigits, getRandomLetters
+    copyObj, convertToBooleanVal, immutableSplice, immutablePush, removeOrPushInArr, getCookie, getHashCode,
+    getRandomDigits, getRandomLetters
 }from './commonUtils';

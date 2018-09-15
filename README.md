@@ -1,37 +1,41 @@
-## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/magsoft2/ReactStockAnalyzerDemo/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+### React sample app for Stock analysis and portfolio management
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+todo some desc
 
-### Markdown
+# Description
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+todo common some desc
 
-```markdown
-Syntax highlighted code block
+## Architecture
 
-# Header 1
-## Header 2
-### Header 3
+todo desc of app architecture
 
-- Bulleted
-- List
+### Frameworks, libraries and technologies used
 
-1. Numbered
-2. List
+todo describe all libs used in the app
+
+- React
+- Redux
+- Redux-saga
+
 
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+TODO:
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/magsoft2/ReactStockAnalyzerDemo/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+1. Make service StockService layer with using of diff providers like Moex
+2. Add Shared components
+3. non-shared components use inside pages
+4. add pages Stock Analysis and Portfolio Management, and About
+5. add top header Logo and Text and src link, and menu
+6. Footer with links to src and demo
+7. clear all styles guide and find own colors
+8. refactor Chart.js
+9. break StockPage into components
+100. Add requests actions redux-saga
+101. How to make selector of DataProviders?
+102.  find more free providers. quandl?

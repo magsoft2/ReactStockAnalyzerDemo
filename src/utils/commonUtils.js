@@ -1,7 +1,3 @@
-import {FormattedMessage, injectIntl as inject } from "react-intl";
-
-import CONFIG from 'config';
-
 
 //deep clone array and objects
 export const copyObj = (o) => {
@@ -13,21 +9,6 @@ export const copyObj = (o) => {
             copyObj(v) : (typeof v === "object" && v === null) ? null : v;
     }
     return output;
-};
-
-export const extractFiltersValues = (filtersArray, filterNames) => {
-    const filterObject = {};
-
-    if(!filtersArray)
-        return null;
-
-    for(let filter of filterNames){
-        filterObject[filter] = filtersArray.filter(f =>
-            f.type === filter
-        )[0].values;
-    }
-
-    return filterObject;
 };
 
 export const convertToBooleanVal = (val) => {
@@ -69,46 +50,6 @@ export const getHashCode = function (text) {
     }
     return hash;
 };
-
-export const injectIntl = options => target=> {
-    return inject(target, options);
- };
-
-// const configDataMenu = require.context('../../configData/menu', true);
-// const configDataSeo = require.context('../../configData/seo', true);
-
-// export const getMenuFromConfig = () => {
-
-//     try{
-        
-//         const data = configDataMenu(`./${CONFIG.settings.clientTypeId.split(':')[1]}.json`, true);
-        
-//         if(data)
-//             return data;
-
-//         return configDataMenu(`./ru.json`, true);
-
-//     }catch(err){
-//         console.log('cannot load menus from config'+err);
-//     }
-// };
-
-// export const getSeoDataFromConfig = (key) => {
-
-//     try{        
-//         const data = configDataSeo(`./${CONFIG.settings.clientTypeId.split(':')[1]}.json`, true);
-        
-//         if(data && data[key])
-//             return data[key];
-
-//         data = configDataSeo(`./ru.json`, true);
-
-//         return data[key] ? data[key] : "";
-
-//     }catch(err){
-//         console.log('cannot load seo data from config'+err);
-//     }
-// };
 
 export const getRandomLetters = (numOfLetters) => {
     var text = "";
