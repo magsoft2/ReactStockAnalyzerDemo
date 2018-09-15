@@ -1,0 +1,61 @@
+.Nav
+    height 4.8rem
+    background $x-dark-blue
+
+    &-wrapper
+        centered-layout()
+        display flex
+        height 100%
+        align-items center
+        justify-content space-between
+        +tablet()
+            overflow-y scroll
+
+        .Nav-links
+            display flex
+            height 100%
+            align-items center
+            flex-wrap wrap
+            min-width: 800px
+            +tablet()
+                padding 0 5px
+                overflow auto
+                min-width unset
+                width 100%
+
+    &-link
+        display block
+        padding 0 2rem
+        font-size $font-size-medium
+        height 4.8rem
+        line-height 4.8rem
+        text-align center
+        text-transform uppercase
+        text-decoration none
+        color #fff
+        background transparent
+        transition background .3s
+        +tablet()
+            font-size 17px
+            padding 4px 5px
+            margin-right: 10px
+            height 28px
+            line-height initial
+            color $white
+            text-shadow 0 0.5px 0 #0c2c5c
+            font-family TUI-reg
+            text-transform none
+            border 2px
+            // &:nth-child(3), &:nth-child(n+5)
+            //     display: none;
+        &:hover
+            background-color $light-blue
+
+        &.active
+            color $x-dark-blue
+            background-color $light-blue
+            +tablet()
+                background-color #2b4d80
+                color $white
+        &.hotmenu
+            color #ef0000

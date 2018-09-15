@@ -1,0 +1,57 @@
+placeholder()
+    &::-webkit-input-placeholder
+        {block}
+    &:-moz-placeholder
+        {block}
+    &::-moz-placeholder
+        {block}
+    &:-ms-input-placeholder
+        {block}
+
+centered-layout()
+    max-width 115.2rem
+    margin 0 auto
+    // padding-left 15px
+    // padding-right 15px
+    +tablet()
+        padding 0
+
+soft-shadow()
+    box-shadow 0 0 1rem 0 rgba(0,0,0,0.2)
+
+font-url(file)
+    return '/fonts/' + file
+
+webfont($family, $file, $hack-chrome-windows = false, $weight = 'normal', $style = 'normal')
+    @font-face
+        font-family $family
+        src url(font-url($file + '.eot'))
+        src url(font-url($file + '.eot?#iefix')) format('embedded-opentype'),
+            url(font-url($file + '.woff')) format('woff'),
+            url(font-url($file + '.ttf')) format('truetype'),
+            url(font-url($file + '.svg#'+ $family)) format('svg')
+        font-weight $weight
+        font-style $normal
+    if $hack-chrome-windows
+        @media screen and (-webkit-min-device-pixel-ratio:0)
+            @font-face
+                font-family $family
+                src url(font-url($file + '.svg#'+ $family)) format('svg')
+
+
+list-reset()
+    margin 0
+    padding 0
+    display block
+    list-style none
+
+
+separator()
+    content ''
+    display block
+    position absolute
+    width 1px
+    height 82px
+    background $x-light-gray
+    right 0
+    top calc(50% - 41px)
