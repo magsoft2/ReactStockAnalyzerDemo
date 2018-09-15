@@ -1,0 +1,36 @@
+.Pagination
+    display flex
+    align-items center
+    justify-content center
+    flex-wrap: wrap
+    +tablet()
+        flex-wrap initial
+        margin-top 30px
+        margin-bottom 30px
+    &-prev,
+    &-next,
+    &-item
+        font-family 'TUI-reg'
+        height 4.4rem
+        line-height 4.4rem
+        margin-right 0.5rem
+        padding 0 2rem
+        color $x-dark-blue
+        position relative
+        border 1px solid $x-light-gray
+        cursor pointer
+        user-select none
+        &:last-child
+            margin-right 0
+        &:hover
+            background $blue
+        +tablet()
+            width 100%
+            text-align left
+            background-color: #f8f9fa
+
+    &-item
+        &.selected
+            border-color $blue
+            background $blue
+            color $x-dark-blue
