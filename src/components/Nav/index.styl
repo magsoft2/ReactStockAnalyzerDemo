@@ -1,6 +1,6 @@
-.Nav
-    height 4.8rem
-    background $x-dark-blue
+.nav
+    height $nav-height
+    background $back-darker
 
     &-wrapper
         centered-layout()
@@ -11,7 +11,7 @@
         +tablet()
             overflow-y scroll
 
-        .Nav-links
+        .nav-links
             display flex
             height 100%
             align-items center
@@ -27,12 +27,12 @@
         display block
         padding 0 2rem
         font-size $font-size-medium
-        height 4.8rem
-        line-height 4.8rem
+        height $nav-height
+        line-height $nav-height
         text-align center
         text-transform uppercase
         text-decoration none
-        color #fff
+        color $color2
         background transparent
         transition background .3s
         +tablet()
@@ -49,13 +49,11 @@
             // &:nth-child(3), &:nth-child(n+5)
             //     display: none;
         &:hover
-            background-color $light-blue
+            background-color #2A2A2C
 
         &.active
-            color $x-dark-blue
-            background-color $light-blue
+            //color $dark-color
+            background-color #2A2A2C
             +tablet()
                 background-color #2b4d80
-                color $white
-        &.hotmenu
-            color #ef0000
+                color $back-light = #fff

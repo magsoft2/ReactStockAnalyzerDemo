@@ -1,7 +1,29 @@
-.Header
+.header
     position relative
     width 100%
-    height 8.5rem
-    background $white
-    color $x-dark-blue
+    height $header-height
+    background $back-darker
+    color $color1
     font-size 1.6rem
+    display: flex
+    flex-direction: row
+
+    &_menu_container
+        height 100%
+        display inline-flex
+        flex-direction: column
+        padding-left: 50px
+        justify-content: space-between
+
+    &_caption
+        font-size 42px
+        padding-top: 20px
+
+    &_logo
+        width 290px
+        height $header-height
+
+        img
+            height: $header-height
+            object-fit: cover
+            width: 100%

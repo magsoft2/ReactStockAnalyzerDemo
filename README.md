@@ -30,12 +30,6 @@ todo describe all libs used in the app
 TODO:
 
 1. Make service StockService layer with using of diff providers like Moex
-2. Add Shared components
-3. non-shared components use inside pages
-4. add pages Stock Analysis and Portfolio Management, and About
-5. add top header Logo and Text and src link, and menu
-6. Footer with links to src and demo
-7. clear all styles guide and find own colors
 8. refactor Chart.js
 9. break StockPage into components
 100. Add requests actions redux-saga

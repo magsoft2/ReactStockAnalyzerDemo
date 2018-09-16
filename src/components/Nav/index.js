@@ -4,6 +4,21 @@ import {NavLink} from "react-router-dom";
 
 import "./index.styl";
 
+const mainMenu = [
+    {
+        href:'/',
+        title:'Stock analysis'
+    },
+    {
+        href:'/portfolio/',
+        title:'Portfolio'
+    },
+    {
+        href:'/about/',
+        title:'About'
+    }
+];
+
 
 export class Nav extends React.Component {
     static defaultProps = {
@@ -16,28 +31,12 @@ export class Nav extends React.Component {
 
 
     render = () => {
-
-		const mainMenu = [
-			{
-				href:'/',
-				title:'Stock analysis'
-            },
-            {
-				href:'/portfolio/',
-				title:'Portfolio'
-            },
-            {
-				href:'/about/',
-				title:'About'
-			}
-		];
-	
-        return (
-            <nav className="Nav">
-                <div className="Nav-wrapper">
-                    <div className="Nav-links">
+		return (
+            <nav className="nav">
+                <div className="nav-wrapper">
+                    <div className="nav-links">
                         {mainMenu.map((link, key) => {
-                            const classNames = classnames("Nav-link");
+                            const classNames = classnames("nav-link");
                                 return (<NavLink exact={key == 0} to={link.href} key={key} className={classNames}>{link.title}</NavLink>);
                         })}
                     </div>

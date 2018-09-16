@@ -35,8 +35,6 @@ class AppContainer extends PureComponent {
 
                 <Header />
 
-                <Nav />
-
                 <main className="AppContainer-content">
                     {
                         this.props.children

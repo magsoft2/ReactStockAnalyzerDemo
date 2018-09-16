@@ -4,7 +4,12 @@
 //webfont('TUI', 'hinted-TUITypeCyrillicLight-Bold', true, 500, 'normal')
 
 html
+    font-family 'Roboto', sans-serif
     font-size 10px
+
+body
+    overflow hidden
+    margin: 0px
 
 .hidden
     display none !important
@@ -19,13 +24,12 @@ html
         clear both
 
 .AppContainer
-    font-family sans-serif !important
-    color $x-dark-blue
-    background-color $white
+    color $color-text
+    background-color $back-color-2
     font-size $font-size-base
-    font-weight 300
+    min-height 100vh
     position relative
     overflow-x hidden
     &-content
-        min-height 500px
+        min-height "calc(100vh - %s - %s)" % ($header-height $footer-height)
 

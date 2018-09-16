@@ -6,7 +6,7 @@ const baseUrl = 'https://iss.moex.com/';
 const interval = 60;
 const engine = 'stock';
 const market='shares';
-const seach_stock_limit = 20;
+const seach_stock_limit = 100;
 
 class MoexProviderClass {
 
