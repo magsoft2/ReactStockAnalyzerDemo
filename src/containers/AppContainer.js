@@ -1,12 +1,5 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
-import momentTz from "moment-timezone";
-import {connect} from "react-redux";
-import "ress";
-
-import {NODE_ENV} from "../constants";
-import CONFIG from 'config';
 
 import {
     Header,
@@ -34,13 +27,8 @@ class AppContainer extends PureComponent {
         router: PropTypes.object,
     };
 
-    componentDidMount() {
-        const {dispatch} = this.props;
-    }
-
 
     render = () => {
-        const {token} = this.props;
 
         return (
             <div className="AppContainer" >

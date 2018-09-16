@@ -20,7 +20,7 @@ import {MoexProvider} from 'Services';
 
 import "./index.styl";
 
-export class TestPage extends PureComponent {
+export class StockAnalysisPage extends PureComponent {
     static contextTypes: {
     };
 
@@ -127,5 +127,3 @@ export class TestPage extends PureComponent {
         )
     }
 }
-
-export default TestPage;

@@ -1,6 +1,8 @@
 
 ### React sample app for Stock analysis and portfolio management
 
+Demo: [magsoft2.github.io/ReactStockAnalyzerDemo](https://magsoft2.github.io/ReactStockAnalyzerDemo)
+
 todo some desc
 
 # Description
@@ -23,7 +25,7 @@ todo describe all libs used in the app
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
-```
+
 
 TODO:
 

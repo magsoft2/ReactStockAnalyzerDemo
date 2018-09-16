@@ -1,7 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-
-import CONFIG from 'config';
+import {NavLink} from "react-router-dom";
 
 import "./index.styl";
 
@@ -21,11 +20,15 @@ export class Nav extends React.Component {
 		const mainMenu = [
 			{
 				href:'/',
-				title:'Home'
+				title:'Stock analysis'
             },
             {
-				href:'/test/',
-				title:'Test'
+				href:'/portfolio/',
+				title:'Portfolio'
+            },
+            {
+				href:'/about/',
+				title:'About'
 			}
 		];
 	
@@ -35,7 +38,7 @@ export class Nav extends React.Component {
                     <div className="Nav-links">
                         {mainMenu.map((link, key) => {
                             const classNames = classnames("Nav-link");
-                                return <a href={link.href} key={key} className={classNames}>{link.title}</a>;
+                                return (<NavLink exact={key == 0} to={link.href} key={key} className={classNames}>{link.title}</NavLink>);
                         })}
                     </div>
                 </div>
