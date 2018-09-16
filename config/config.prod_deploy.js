@@ -6,7 +6,7 @@ const CONFIG = {
     showDevFeatures: false,
     baseApiUrl: 'www.ru',
 	
-	ENV_PUBLIC_PATH:'/ReactStockAnalyzerDemo' 
+	publicPath:'/ReactStockAnalyzerDemo' 
 };
 
 export default CONFIG;
