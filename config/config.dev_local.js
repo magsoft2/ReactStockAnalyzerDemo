@@ -1,7 +1,7 @@
 import mainConfig from './config.common';
 
 const CONFIG = {
-    ...mainConfig.default,
+    ...mainConfig,
     test: "test dev local",
     baseApiUrl: 'www.ru'	
 };
