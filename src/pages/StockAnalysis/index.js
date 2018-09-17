@@ -166,7 +166,7 @@ function renderSuggestion(item) {
             <div className='stock-description_item' key={item[1]}>
                                 <span className='stock-description_cell'>{item[0]}</span>
                                 <span className='stock-description_cell'>{item[1]}</span>
-                                <span className='stock-description_cell'>{item[4]}</span>
+                                <span className='stock-description_cell_wide'>{item[4]}</span>
             </div>
         </Fragment>
     );
