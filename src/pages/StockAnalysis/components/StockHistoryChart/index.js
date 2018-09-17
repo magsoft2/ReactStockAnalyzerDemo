@@ -12,7 +12,7 @@ export class StockHistoryChartComponent extends PureComponent {
     return (
         <Fragment>             
             <div>Number of candles for stock {candles && stockId ? stockId : ''}: {candles && candles.length && candles.length}</div>
-            {candles && <CandleStickStockScaleChartWithVolumeBarV3 type='svg' data={candles} />}
+            {candles && <CandleStickStockScaleChartWithVolumeBarV3 stockId={stockId} className="dark" type='svg' data={candles} />}
         </Fragment>        
     )
   }

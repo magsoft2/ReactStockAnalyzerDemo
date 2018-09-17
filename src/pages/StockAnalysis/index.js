@@ -115,7 +115,7 @@ export class StockAnalysisPage extends PureComponent {
         const { securities, stockHistory, stockId, stockName } = this.state;
 
         return (
-            <div className='stock-analysis'>
+            <div className='dark stock-analysis'>
 
                 <InputAutoSuggestion onChange={this.changeStockId}></InputAutoSuggestion>
 
