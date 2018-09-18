@@ -22,16 +22,25 @@ todo describe all libs used in the app
 - Redux-saga
 
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 
 
 TODO:
 
 1. Make service StockService layer with using of diff providers like Moex
-8. refactor Chart.js
+3. make stock selector with suggestions
+    + columns with desc
+    + diff market types: stock, index, commod, curr
+    - store full stoc desc, not id only
+4. Add delete stocks to selected stock list
+5. adding indicators to stock list
+6. store\restore settings\project in storege
+
 9. break StockPage into components
+10. Portfolio manager
+    - Add\delete stocks to list
+    - change position
+    - show portfolio hist chart
+    - risk-income bubbles chart
 100. Add requests actions redux-saga
 101. How to make selector of DataProviders?
 102.  find more free providers. quandl?

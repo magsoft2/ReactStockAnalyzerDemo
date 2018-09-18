@@ -2,23 +2,6 @@
 
     padding: 20px
 
-    .stock-description
-        &_container
-            display: inline-flex
-            flex-direction: column
-            min-width:500px
-
-        &_item        
-            font-size: 12px
-            display: inline-flex
-
-        &_cell
-            font-size: 12px
-            min-width: 25%
-        &_cell_wide
-            font-size: 12px
-            min-width: 50%
-
     .stock-id-input
         padding-top:20px
 
@@ -33,62 +16,3 @@
 
         &:hover
             background: $dark-blue
-
-.react-autosuggest__container {
-  position: relative;
-}
-
-.react-autosuggest__input {
-  width: 240px;
-  //height: 30px;
-  //padding: 10px 20px;
-  //font-family: Helvetica, sans-serif;
-  font-weight: 300;
-  //font-size: 16px;
-  //border: 1px solid #aaa;
-  //border-radius: 4px;
-}
-
-.react-autosuggest__input--focused {
-  outline: none;
-}
-
-.react-autosuggest__input--open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.react-autosuggest__suggestions-container {
-  display: none;
-}
-
-.react-autosuggest__suggestions-container--open {
-  display: block;
-  position: absolute;
-  top: 25px;
-  width: 380px;
-  border: 1px solid #aaa;
-  background-color: $back_color_3
-  color: $text-color-2
-  font-family: 'Roboto';
-  font-weight: 300;
-  font-size: 14px;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  z-index: 2000;
-}
-
-.react-autosuggest__suggestions-list {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-.react-autosuggest__suggestion {
-  cursor: pointer;
-  padding: 5px 10px;
-}
-
-.react-autosuggest__suggestion--highlighted {
-  background-color: $back-color-2;
-}

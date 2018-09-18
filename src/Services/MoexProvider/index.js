@@ -20,7 +20,7 @@ class MoexProviderClass {
 
     findStock(stockName) {
         return this.instance
-			.get(`iss/securities.json?q=${stockName}&engine=${engine}&market=${market}&limit=${seach_stock_limit}`)
+			.get(`iss/securities.json?q=${stockName}&limit=${seach_stock_limit}&is_trading=true&group_by=type`) //&engine=${engine}&market=${market}
 			.then((data) => {
 				if(data.response && (data.response.status === 401 || data.response.status === 403))
 				{

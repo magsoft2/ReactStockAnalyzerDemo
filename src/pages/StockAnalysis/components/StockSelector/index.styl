@@ -1,0 +1,96 @@
+.react-autosuggest
+
+    display inline
+
+    &__container 
+        position: relative
+        font-family: 'Roboto'
+        display: inline-block
+
+    &__input
+        width: 240px
+        //height: 30px;
+        //padding: 10px 20px;
+        //font-family: Helvetica, sans-serif;
+        font-weight: 300
+        //font-size: 16px;
+        //border: 1px solid #aaa;
+        //border-radius: 4px;
+
+        &--focused
+            outline: none
+
+        &--open
+            border-bottom-left-radius: 0
+            border-bottom-right-radius: 0
+
+    &__suggestions-container
+        display: none
+
+        &--open
+            display: block;
+            position: absolute;
+            top: 25px;
+            width: 380px;
+            border: 1px solid #aaa;
+            background-color: $back_color_3
+            color: $text-color-2
+            font-family: 'Roboto';
+            font-weight: 300;
+            font-size: 12px;
+            border-bottom-left-radius: 2px;
+            border-bottom-right-radius: 2px;
+            z-index: 2000;
+
+    &__suggestions-list
+        margin: 0;
+        padding: 3px;
+        list-style-type: none;
+        max-height: 600px
+        overflow: auto
+
+    &__suggestion
+        cursor: pointer;
+        padding: 2px 4px;
+
+        &--highlighted
+            background-color: $back-color-2
+
+    &_add_btn
+        background: black
+        display: inline-block
+        height: 22px
+        width: 22px
+        text-align: center
+        cursor pointer
+
+    &_status
+        display: inline-block
+        margin-left 5px
+
+    &__section-title
+        padding-left:20px
+
+.stock-description
+    &_container
+        display: inline-flex
+        flex-direction: column
+        min-width:500px
+        font-size: 12px
+
+    &_item        
+        display: inline-flex
+        width: 100%
+    
+    &_cell_id
+        width: 12%
+        flex-shrink: 0;
+    &_cell_name
+        width: 28%
+        flex-shrink: 0;
+    &_cell_description
+        flex-grow: 1
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
+

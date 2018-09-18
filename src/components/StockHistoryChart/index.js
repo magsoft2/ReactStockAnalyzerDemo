@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 
 import { format } from "d3-format";
@@ -23,10 +23,11 @@ import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
 
 
-export class CandleStickStockScaleChartWithVolumeBarV3 extends React.Component {
-	render() {
-		const { type, data: initialData, width, ratio, stockId } = this.props;
+export class StockHistoryChartComponent extends React.Component {
 
+	renderChart = ({ type, data:initialData, stockId }) => {
+		const { width, ratio } = this.props;
+		
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -44,7 +45,7 @@ export class CandleStickStockScaleChartWithVolumeBarV3 extends React.Component {
 		const height = 500;
 		const margin = { left: 0, right: 50, top: 10, bottom: 30 };
 
-		return (
+		return (			
 			<ChartCanvas height={height}
 				ratio={ratio}
 				width={width}
@@ -99,18 +100,31 @@ export class CandleStickStockScaleChartWithVolumeBarV3 extends React.Component {
 				<CrossHairCursor stroke={tickStroke} />
 			</ChartCanvas>
 		);
+	};
+
+	render() {
+
+		const { data, stockId } = this.props;
+
+		return (
+			<Fragment>             
+				{/* <div>Number of candles for stock {data && stockId ? stockId : ''}: {data && data.length && data.length}</div> */}
+				{data && this.renderChart({stockId, type:'svg', data})}
+			</Fragment> 
+		);
 	}
+
 }
-CandleStickStockScaleChartWithVolumeBarV3.propTypes = {
+StockHistoryChartComponent.propTypes = {
 	data: PropTypes.array.isRequired,
 	width: PropTypes.number.isRequired,
 	ratio: PropTypes.number.isRequired,
 	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
 };
 
-CandleStickStockScaleChartWithVolumeBarV3.defaultProps = {
+StockHistoryChartComponent.defaultProps = {
 	type: "svg",
 };
-CandleStickStockScaleChartWithVolumeBarV3 = fitWidth(CandleStickStockScaleChartWithVolumeBarV3);
+StockHistoryChartComponent = fitWidth(StockHistoryChartComponent);
 
-export default CandleStickStockScaleChartWithVolumeBarV3;
+export default StockHistoryChartComponent;
