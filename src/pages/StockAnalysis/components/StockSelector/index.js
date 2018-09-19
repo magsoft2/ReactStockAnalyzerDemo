@@ -3,11 +3,10 @@ import Autosuggest from 'react-autosuggest';
 
 import "./index.styl";
 
-import { MoexProvider } from 'Services';
+import { StockService } from 'Services';
 
-const IDX_TYPE = 12;
 
-export class InputAutoSuggestion extends React.Component {
+export class StockSelectorComponent extends React.Component {
     constructor() {
         super();
 
@@ -33,50 +32,48 @@ export class InputAutoSuggestion extends React.Component {
 
         this.lastRequestId = setTimeout(async () => {
 
-            const suggestions = await this.findStockByName(value);
+            const suggestions = await StockService.findStock(value);
 
             const map = new Map();
             for(let item of suggestions){
-                if(!map.has(item[IDX_TYPE]))
-                    map.set(item[IDX_TYPE], []);
+                if(!map.has(item.type))
+                    map.set(item.type, []);
 
-                map.get(item[IDX_TYPE]).push(item)
+                map.get(item.type).push(item)
             }
 
             this.setState({
                 isLoading: false,
-                suggestions: Array.from(map)
+                suggestions: Array.from(map),
+                suggestionList: suggestions
             });
         }, 200);
     }
 
 
-    findStockByName = async (stockNamePart) => {
-        const res = await MoexProvider.findStock(stockNamePart);
-
-        if (res.data && res.data.securities) {
-            res.data.securities.data = res.data.securities.data.filter((value, index, self) => self.findIndex(el => el[0] === value[0]) === index);
-
-            return res.data.securities.data;
-        }
-
-        return [];
-    };
-
     onChange = (event, { newValue, method }) => {
 
-        if(method !== 'type') {
+        if(method !== 'type' && this.props.onChange) {
             this.props.onChange(newValue);
         }
-        console.log('method: '+method);
+
+        const {suggestionList} = this.state;
+        let item = undefined;
+
+        if(suggestionList && suggestionList.length){
+            item = suggestionList.filter(a => a.securityId == newValue);
+            if(item.length)
+                item = item[0];
+        }
 
         this.setState({
             value: newValue,
+            item, 
             selected: method !== 'type'
         });
     };
 
-    onAdd = (event) => this.props.onAdd(this.state.value);
+    onAdd = (event) => this.props.onAdd(this.state.value, this.state.item);
 
     handleKeyPress = (event) => {
         if(event.key == 'Enter' && this.state.selected){
@@ -100,16 +97,15 @@ export class InputAutoSuggestion extends React.Component {
 
 
 
-    getSuggestionValue = (suggestion) => suggestion[1];
+    getSuggestionValue = (suggestion) => suggestion.securityId;
     
     renderSuggestion = (item) => {
         return (
             <Fragment>
-                {/* <span>{item[1]}</span><span>{item[2]}</span> */}
-                <div className='stock-description_item' key={item[1]}>
-                                    <span className='stock-description_cell_id'>{item[0]}</span>
-                                    <span className='stock-description_cell_name'>{item[1]}</span>
-                                    <span className='stock-description_cell_description'>{item[4]}</span>
+                <div className='stock-description_item' key={item.securityId}>
+                                    {/* <span className='stock-description_cell_id'>{item.id}</span> */}
+                                    <span className='stock-description_cell_name'>{item.securityId}</span>
+                                    <span className='stock-description_cell_description'>{item.name}</span>
                 </div>
             </Fragment>
         );
@@ -156,6 +152,9 @@ export class InputAutoSuggestion extends React.Component {
                 </div>
                 <div className="react-autosuggest_status">
                     {status}
+                </div>
+                <div className="react-autosuggest_status">
+                    <a className="tooltip" href="#">?<span>Поиск инструмента по части Кода, Названию, ISIN, Идентификатору Эмитента</span></a>.
                 </div>
 
             </div>

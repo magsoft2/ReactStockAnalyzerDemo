@@ -1,1 +1,1 @@
-export {MoexProvider} from './MoexProvider';
+export {StockService} from './StockService';

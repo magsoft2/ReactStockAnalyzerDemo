@@ -32,6 +32,41 @@ input
     &:after
         clear both
 
+
+a
+    &.tooltip
+        background gray
+        text-decoration none
+        color $color-text
+        border-radius: 50%
+        display inline-block
+        padding-left: 4px
+        width: 14px
+        height: 14px
+        font-size: 12px
+
+        &:hover
+            background $back-light
+    
+            span
+                display inline
+                position absolute
+                background gray
+                border 1px solid #cccccc
+                color lightgray
+                z-index 10000
+    
+        span
+            display: none
+            padding: 2px 3px 
+            margin-left: 8px
+            max-width: 200px
+
+        &:hover
+            background $back-color-2
+            color $color-text
+
+
 .AppContainer
     color $color-text
     background-color $back-color-2

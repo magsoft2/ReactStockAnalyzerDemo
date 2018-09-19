@@ -25,9 +25,12 @@ import { last } from "react-stockcharts/lib/utils";
 
 export class StockHistoryChartComponent extends React.Component {
 
-	renderChart = ({ type, data:initialData, stockId }) => {
+	renderChart = ({ type, data:initialData, securityId }) => {
 		const { width, ratio } = this.props;
 		
+		if(!initialData || !initialData.length)
+			return null;
+
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -51,7 +54,7 @@ export class StockHistoryChartComponent extends React.Component {
 				width={width}
 				margin={margin}
 				type={type}
-				seriesName={stockId}
+				seriesName={securityId}
 				data={data}
 				xScale={xScale}
 				xAccessor={xAccessor}
@@ -59,7 +62,7 @@ export class StockHistoryChartComponent extends React.Component {
 				xExtents={xExtents}
 			>
 
-				<Label x={50} y={50} fontSize={24} text={stockId} />
+				<Label x={50} y={50} fontSize={24} text={securityId} />
 
 				<Chart id={1} height={400} yExtents={d => [d.high, d.low]} >
 					<YAxis axisAt="right" orient="right" ticks={5} tickStroke={tickStroke}/>
@@ -104,12 +107,12 @@ export class StockHistoryChartComponent extends React.Component {
 
 	render() {
 
-		const { data, stockId } = this.props;
+		const { data, securityId } = this.props;
 
 		return (
 			<Fragment>             
-				{/* <div>Number of candles for stock {data && stockId ? stockId : ''}: {data && data.length && data.length}</div> */}
-				{data && this.renderChart({stockId, type:'svg', data})}
+				{/* <div>Number of candles for stock {data && securityId ? securityId : ''}: {data && data.length && data.length}</div> */}
+				{data && this.renderChart({securityId, type:'svg', data})}
 			</Fragment> 
 		);
 	}
