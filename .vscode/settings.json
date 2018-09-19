@@ -1,3 +1,5 @@
 {
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "favorites.sortDirection": "ASC",
+    "favorites.groupsFirst": true
 }

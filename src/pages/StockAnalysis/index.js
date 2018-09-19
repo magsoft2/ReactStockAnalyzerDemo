@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import debounce from 'lodash/debounce';
 
 import CONFIG from 'config';
-import { StockService } from 'Services';
+
+import { SecurityService } from 'Services';
 
 import { StockHistoryChartComponent } from '../../components/StockHistoryChart';
-import {StockSelectorComponent} from './components/StockSelector';
+import { SecuritySelectorComponent } from './components/SecuritySelector';
+import { SecurityDescriptionComponent } from './components/SecurityDescription';
 
 import "./index.styl";
 
@@ -19,10 +21,10 @@ export class StockAnalysisPage extends PureComponent {
         this.state = {
             securities: undefined,
             candles: undefined,
-            stockName: 'ГАЗП',
-            stockItem: { securityId: 'GAZP', group: 'stock_shares'},
-            stockHistory: undefined,
-            stockDescription: undefined,
+            securityName: 'ГАЗП',
+            securityItem: { securityId: 'GAZP', group: 'stock_shares'},
+            securityHistory: undefined,
+            securityDescription: undefined,
             startDate: '2018-07-01'
         };
 
@@ -31,74 +33,61 @@ export class StockAnalysisPage extends PureComponent {
 
     async componentDidMount() {
 
-        const { stockItem, startDate, stockName } = this.state;
+        const { securityItem, startDate, securityName } = this.state;
 
-        const stockHistory = await this.getStockHistory(stockItem, startDate);
+        const securityHistory = await this.getSecurityHistory(securityItem, startDate);
 
-        this.setState({ stockHistory });
+        this.setState({ securityHistory });
     }
 
-    getStockHistory = async (stockItem, startDate) => {
+    getSecurityHistory = async (securityItem, startDate) => {
 
-        const resHist = await StockService.getStockHistory(stockItem.securityId, stockItem.group, startDate);
+        const resHist = await SecurityService.getSecurityHistory(securityItem.securityId, securityItem.group, startDate);
 
         return {
-            securityId: stockItem.securityId,
+            securityId: securityItem.securityId,
             candles: resHist
         };
     };
 
 
-    handleGetStockHistory = async () => {
-        const { stockItem, startDate } = this.state;
+    handleGetSecurityHistory = async () => {
+        const { securityItem, startDate } = this.state;
 
-        const stockHistory = await this.getStockHistory(stockItem, startDate);
+        const securityHistory = await this.getSecurityHistory(securityItem, startDate);
 
-        this.setState({ stockHistory });
+        this.setState({ securityHistory });
     };
 
-    handleAddStock = async(newStockId, item) => {
+    handleAddSecurity = async(newSecurityId, item) => {
         this.setState({
-            stockItem: item
+            securityItem: item
         });
 
-        const stockDescription = await StockService.getStockDescription(newStockId);
+        const securityDescription = await SecurityService.getSecurityDescription(newSecurityId);
 
         this.setState({
-            stockDescription
+            securityDescription
         });
 
     };
 
     render = () => {
 
-        const { securities, stockHistory, stockName, stockItem, stockDescription } = this.state;
-
-    console.log("stockDescription: "+JSON.stringify(stockDescription));
+        const { securities, securityHistory, securityName, securityItem, securityDescription } = this.state;
 
         return (
             <div className='dark stock-analysis'>
 
-                <StockSelectorComponent onAdd={this.handleAddStock}/>
+                <SecuritySelectorComponent onAdd={this.handleAddSecurity}/>
 
-                { stockDescription && <div>
-                        <a className="tooltip" href="#">Security info
-                        <span>
-                            {stockDescription.map((item => {
-                                return (<div>{JSON.stringify(item)}</div>);
-                            }))}
-                        </span></a>.
-                    </div>
-                }
+                <SecurityDescriptionComponent securityDescription={securityDescription} securityItem={securityItem} />
 
-                <div className='stock-id-input'>
-                    {/* <input className='stock-id-input_input' value={stockItem.securityId} readOnly/> */}
-                    <span>{stockItem && stockItem.name}</span>
-                    <br />
-                    <div className='btn' onClick={this.handleGetStockHistory}>Update chart</div>
+                <div>
+                    <div className='btn' onClick={this.handleGetSecurityHistory}>Update chart</div>
                 </div>
 
-                {stockHistory && <StockHistoryChartComponent data={stockHistory.candles} securityId={stockHistory.securityId} />}
+                {securityHistory && <StockHistoryChartComponent data={securityHistory.candles} securityId={securityHistory.securityId} />}
 
 
             </div>

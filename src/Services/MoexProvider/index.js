@@ -2,7 +2,9 @@ import axios from "axios";
 import CONFIG from "config";
 import {getHashCode} from '../../utils';
 
+
 const baseUrl = 'https://iss.moex.com/';
+
 
 class MoexProviderClass {
 
@@ -26,7 +28,7 @@ class MoexProviderClass {
             });
             
         if (res.data && res.data.securities && res.data.securities.data) {
-            let resConverted = res.data.securities.data.map(stockInfoConvertor).filter(item => item !== undefined);
+            let resConverted = res.data.securities.data.map(securityInfoConvertor).filter(item => item !== undefined);
             if (resConverted.length) {
                 resConverted = resConverted.filter((value, index, self) => self.findIndex(el => el.id === value.id) === index);
             }
@@ -36,7 +38,7 @@ class MoexProviderClass {
         return Promise.resolve([]);
     };
 
-    getStockDescription = async (securityId) => {
+    getSecurityDescription = async (securityId) => {
         const res = await this.instance
 			.get(`iss/securities/${securityId}.json`)
 			.then((data) => {
@@ -48,16 +50,16 @@ class MoexProviderClass {
             });
             
         if (res.data && res.data.description && res.data.description.data) {
-            const resConverted = res.data.description.data.map(stockDescriptionConvertor).filter(item => item !== undefined);
+            const resConverted = res.data.description.data.map(securityDescriptionConvertor).filter(item => item !== undefined);
             return Promise.resolve(resConverted);
         }
 
         return Promise.resolve([]);
     };
 
-    findStock = async (stockName, seach_stock_limit) => {
+    findSecurity = async (securityName, seach_stock_limit) => {
         const res = await this.instance
-			.get(`iss/securities.json?q=${stockName}&limit=${seach_stock_limit}&is_trading=true&group_by=type`) //&engine=${engine}&market=${market}
+			.get(`iss/securities.json?q=${securityName}&limit=${seach_stock_limit}&is_trading=true&group_by=type`) //&engine=${engine}&market=${market}
 			.then((data) => {
 				if(data.response && (data.response.status === 401 || data.response.status === 403))
 				{
@@ -67,7 +69,7 @@ class MoexProviderClass {
             });
             
         if (res.data && res.data.securities && res.data.securities.data) {
-            let resConverted = res.data.securities.data.map(stockInfoConvertor).filter(item => item !== undefined);
+            let resConverted = res.data.securities.data.map(securityInfoConvertor).filter(item => item !== undefined);
             if (resConverted.length) {
                 resConverted = resConverted.filter((value, index, self) => self.findIndex(el => el.id === value.id) === index);
             }
@@ -77,7 +79,7 @@ class MoexProviderClass {
         return Promise.resolve([]);
     };
 
-    getStockHistory = async(securityId, startDate, interval, engine, market) => {
+    getSecurityHistory = async(securityId, startDate, interval, engine, market) => {
         const res =  await this.instance
 			.get(`iss/engines/${engine}/markets/${market}/securities/${securityId}/candles.json?from=${startDate}&interval=${interval}`)
 			.then((data) => {
@@ -89,7 +91,7 @@ class MoexProviderClass {
             }); 
             
         if (res.data && res.data.candles && res.data.candles.data) {
-            const resConverted = res.data.candles.data.map(stockHistoryConvertor).filter(item => item !== undefined);
+            const resConverted = res.data.candles.data.map(securityHistoryConvertor).filter(item => item !== undefined);
             return Promise.resolve(resConverted);
         }
     
@@ -115,7 +117,7 @@ class MoexProviderClass {
 
 }
 
-const stockInfoConvertor = (item) => {
+const securityInfoConvertor = (item) => {
     
     if(!item || !item.length )
         return undefined;
@@ -143,7 +145,7 @@ const stockInfoConvertor = (item) => {
     };
 };
 
-const stockDescriptionConvertor = (item) => {
+const securityDescriptionConvertor = (item) => {
     
     if(!item || !item.length )
         return undefined;
@@ -178,7 +180,7 @@ const referenceConvertor = (list) => {
     */
 };
 
-const stockHistoryConvertor = (item) => {
+const securityHistoryConvertor = (item) => {
     
     if(!item || !item.length )
         return undefined;

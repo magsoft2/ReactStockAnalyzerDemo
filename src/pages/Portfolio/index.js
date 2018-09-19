@@ -1,5 +1,7 @@
 import React, {PureComponent} from "react";
 
+import "./index.styl";
+
 
 export class PortfolioManagementPage extends PureComponent {
     static contextTypes: {

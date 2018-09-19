@@ -3,10 +3,10 @@ import Autosuggest from 'react-autosuggest';
 
 import "./index.styl";
 
-import { StockService } from 'Services';
+import { SecurityService } from 'Services';
 
 
-export class StockSelectorComponent extends React.Component {
+export class SecuritySelectorComponent extends React.Component {
     constructor() {
         super();
 
@@ -32,7 +32,7 @@ export class StockSelectorComponent extends React.Component {
 
         this.lastRequestId = setTimeout(async () => {
 
-            const suggestions = await StockService.findStock(value);
+            const suggestions = await SecurityService.findSecurity(value);
 
             const map = new Map();
             for(let item of suggestions){
@@ -77,8 +77,7 @@ export class StockSelectorComponent extends React.Component {
 
     handleKeyPress = (event) => {
         if(event.key == 'Enter' && this.state.selected){
-            console.log('enter');
-            this.props.onAdd(this.state.value);
+            this.onAdd();
         }
 
         this.setState({selected: false});

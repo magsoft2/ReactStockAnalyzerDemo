@@ -1,1 +1,1 @@
-export {StockService} from './StockService';
+export {SecurityService} from './SecurityService';

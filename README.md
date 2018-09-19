@@ -47,10 +47,12 @@ TODO:
 
 9. break StockPage into components
 10. Portfolio manager
+    - one/two stocks at port by default
     - Add\delete stocks to list
     - change position
     - show portfolio hist chart
-    - risk-income bubbles chart
+    - add common index from list to compare
+    - risk(volatility)-income bubbles chart
 100. Add requests actions redux-saga
 101. How to make selector of DataProviders?
 102.  find more free providers. quandl?
