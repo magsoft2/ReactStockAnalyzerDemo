@@ -1,24 +1,33 @@
 .security-desc
     &_container
-        margin-top: 20px
+        //margin-top: 20px
         display: table
-        border: 1px solid #78799E
-        padding: 0px 10px
+        //border: 1px solid #78799E
+        padding: 0px// 10px
+        position relative
 
     &_name
         font-size: 16px
 
     &_btn
         color gray
-        padding 5px
+        padding-left 5px
+        font-size: 14px
         display: inline-block
         cursor pointer
     
     &_list
-        font-size: 14px
-        padding 7px
+        font-size: 12px
+        padding 2px 7px
+        background-color: $back-color-2
         display: inline-flex
         flex-direction: column
+        position: absolute
+        top: 40px
+        z-index: 10000
+        left: 80%
+        border: 1px solid #78799e
+        box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.91)
         
         &.collapsed
             display none

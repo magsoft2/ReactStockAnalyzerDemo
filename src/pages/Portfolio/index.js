@@ -1,4 +1,6 @@
 import React, {PureComponent} from "react";
+import {Helmet} from 'react-helmet';
+
 
 import "./index.styl";
 
@@ -21,6 +23,10 @@ export class PortfolioManagementPage extends PureComponent {
         return (
             <div>
                 
+                <Helmet>
+                    <title>Demo portfolio management app</title>
+                </Helmet>
+
                 <div>PortfolioManagement page</div>
                 
 
