@@ -21,12 +21,10 @@ export class SecurityDescriptionComponent extends PureComponent {
         const {securityDescription, securityItem} = this.props;
         const isCollapsedClass = this.state.isCollapsed ? ' collapsed' : '';
 
-        console.log("stockDescription: "+JSON.stringify(securityDescription));
-
         return (
             <div className='security-desc_container'>
                 <span className='security-desc_name'>{securityItem && securityItem.name}</span>
-                {securityDescription && <div className='security-desc_btn' onClick={this.handleClick}> {this.state.isCollapsed ? (<span>&#x25B2;</span>) : (<span>&#x25BC;</span>)}</div>}
+                {securityDescription && <div className={'security-desc_btn' + isCollapsedClass} onClick={this.handleClick}> ?</div>}
                 { 
                     securityDescription && 
                     <div>
@@ -35,7 +33,8 @@ export class SecurityDescriptionComponent extends PureComponent {
                                     (item, key) => {
                                         return (
                                                 <div key={key} className='security-desc_row '>
-                                                    <span className='security-desc_cell__name'>{item.title}</span><span className='security-desc_cell__value'>{item.value}</span>
+                                                    <span className='security-desc_cell__name'>{item.title}</span>
+                                                    <span className='security-desc_cell__value'>{item.value}</span>
                                                 </div>
                                             );
                                     }
@@ -43,6 +42,8 @@ export class SecurityDescriptionComponent extends PureComponent {
                         </div>
                     </div>
                 }
+                <span class="security-desc_filler"></span>
+                <span className='security-desc_delete'>&#x2715;</span>
             </div>
         );
     };

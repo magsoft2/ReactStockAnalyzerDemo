@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import debounce from 'lodash/debounce';
@@ -10,34 +10,29 @@ import { SecurityService } from 'Services';
 
 import { StockHistoryChartComponent } from '../../components/StockHistoryChart';
 import { SecuritySelectorComponent } from './components/SecuritySelector';
-import { SecurityDescriptionComponent } from './components/SecurityDescription';
+import { SecurityListComponent } from './components/SecurityList';
 
 import "./index.styl";
 
-export class StockAnalysisPage extends PureComponent {
+export class StockAnalysisPage extends Component {
 
     constructor(props) {
         super(props);
 
-        const securityItem = { 
+        const securityDef = { 
             securityId: 'GAZP', 
+            name: 'GAZP',
             group: 'stock_shares'
         };
 
         this.state = {
-            securities: undefined,
-            candles: undefined,
-            securityName: 'ГАЗП',
-            securityItem,
             securityItems:[
                 {
-                    securityId: securityItem.securityId,
-                    securityItem,
+                    securityId: securityDef.securityId,
+                    securityDef,
                     securityHistory: undefined,
                     securityDescription: undefined
                 }],
-            securityHistory: undefined,
-            securityDescription: undefined,
             startDate: '2018-07-01'
         };
 
@@ -46,34 +41,39 @@ export class StockAnalysisPage extends PureComponent {
 
     async componentDidMount() {
 
-        const { securityItem, startDate, securityName } = this.state;
+        const { securityItems, startDate } = this.state;
 
-        const securityHistory = await this.getSecurityHistory(securityItem, startDate);
+        const securityDescription = await SecurityService.getSecurityDescription(securityItems[0].securityId);
+        const securityHistory = await this.getSecurityHistory(securityItems[0].securityId, securityItems[0].securityDef.group, startDate);
 
-        this.setState({ securityHistory });
+        const list = this.updateOrAddItemToList(securityItems, securityItems[0].securityDef, securityHistory, securityDescription);
+
+        this.setState({ securityItems:list });
     }
 
-    getSecurityHistory = async (securityItem, startDate) => {
+    getSecurityHistory = async (securityId, securityGroup, startDate) => {
 
-        const resHist = await SecurityService.getSecurityHistory(securityItem.securityId, securityItem.group, startDate);
+        const resHist = await SecurityService.getSecurityHistory(securityId, securityGroup, startDate);
 
         return {
-            securityId: securityItem.securityId,
+            securityId: securityId,
             candles: resHist
         };
     };
 
 
     handleGetSecurityHistory = async () => {
-        const { securityItem, startDate, securityItems } = this.state;
+        const { startDate, securityItems } = this.state;
 
-        const securityHistory = await this.getSecurityHistory(securityItem, startDate);
+        if(!securityItems || !securityItems.length)
+            return;
 
-        let list = this.updateOrAddItemToList(securityItems, securityItem, securityHistory, undefined);
+        const securityHistory = await this.getSecurityHistory(securityItems[0].securityId, securityItems[0].securityDef.group, startDate);
+
+        const list = this.updateOrAddItemToList(securityItems, securityItems[0].securityDef, securityHistory, undefined);
 
         this.setState(
             { 
-                securityHistory,
                 securityItems: list
             });
     };
@@ -92,7 +92,7 @@ export class StockAnalysisPage extends PureComponent {
         }else{
             item = item[0];
         };
-        item.securityItem = itemNew;
+        item.securityDef = itemNew;
         item.securityHistory = history ? history : item.securityHistory;
         item.securityDescription = description ? description : item.securityDescription;
 
@@ -101,29 +101,32 @@ export class StockAnalysisPage extends PureComponent {
 
     handleAddSecurity = async(newSecurityId, item) => {
 
-        const {securityItems} = this.state;
+        const {securityItems, startDate} = this.state;
 
         let list = this.updateOrAddItemToList(securityItems, item);
 
         this.setState({
-            securityItem: item,
             securityItems: list
         });
 
-        const securityDescription = await SecurityService.getSecurityDescription(newSecurityId);
+        const securityDescription = await SecurityService.getSecurityDescription(item.securityId);
+        const securityHistory = await this.getSecurityHistory(item.securityId, item.group, startDate);
 
-        list = this.updateOrAddItemToList(list, item, undefined, securityDescription);
+        list = this.updateOrAddItemToList(list, item, securityHistory, securityDescription);
 
         this.setState({
-            securityDescription,
             securityItems: list
         });
 
     };
 
+    handleDeleteItem = (id) => {
+
+    };
+
     render = () => {
 
-        const { securities, securityItems, securityHistory, securityName, securityItem, securityDescription } = this.state;
+        const { securityItems } = this.state;
 
         return (
             <div className='dark stock-analysis'>
@@ -134,19 +137,15 @@ export class StockAnalysisPage extends PureComponent {
 
                 <SecuritySelectorComponent onAdd={this.handleAddSecurity}/>
 
-                <div className='securities-list'>
-                    {securityItems && securityItems.length && securityItems.map((item) =>{
-                        return (<div className='securities-list_item' key={item.securityId}>
-                            <SecurityDescriptionComponent securityDescription={item.securityDescription} securityItem={item.securityItem} />
-                        </div>);
-                    })}
-                </div>
+                <br/>
+                <SecurityListComponent securityItems={securityItems} onDelete={this.handleDeleteItem} />
 
                 <div>
                     <div className='btn' onClick={this.handleGetSecurityHistory}>Update chart</div>
                 </div>
 
-                {securityHistory && <StockHistoryChartComponent data={securityHistory.candles} securityId={securityHistory.securityId} />}
+                {securityItems && securityItems.length && securityItems[0].securityHistory &&
+                     <StockHistoryChartComponent data={securityItems[0].securityHistory.candles} securityId={securityItems[0].securityId} />}
 
 
             </div>
