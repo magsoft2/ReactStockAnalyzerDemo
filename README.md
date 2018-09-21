@@ -28,15 +28,9 @@ TODO:
 
 - get https://iss.moex.com/iss/index.xml all descriptions and make references lists
 
-1. + Make service StockService layer with using of diff providers like Moex
-    + store data into DTO
 2. add LogService
 3. make stock selector with suggestions
-    + columns with desc
-    + diff market types: stock, index, commod, curr
-	+ hide int id from the list
-    + store full stoc desc, not id only
-	- show full stock info in popup/modal? (https://iss.moex.com/iss/securities/IMOEX.json)
+	+ show full stock info in popup/modal? (https://iss.moex.com/iss/securities/IMOEX.json)
 4. selected stock list with add\delete
 5. adding indicators to stock list/ predefined set?
 5.5 tune chart: show dateRange lins (1d 1w 1m 3m), chart type selector
@@ -44,8 +38,8 @@ TODO:
 7. get hist data from diff engines and markets
 8. Fill about page
 9. Add some Jest unit tests
+10. Add requests actions redux-saga
 
-9. break StockPage into components
 10. Portfolio manager
     - one/two stocks at port by default
     - Add\delete stocks to list
@@ -53,6 +47,5 @@ TODO:
     - show portfolio hist chart
     - add common index from list to compare
     - risk(volatility)-income bubbles chart
-100. Add requests actions redux-saga
 101. How to make selector of DataProviders?
 102.  find more free providers. quandl?

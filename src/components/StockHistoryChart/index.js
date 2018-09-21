@@ -7,7 +7,7 @@ import { timeFormat } from "d3-time-format";
 import { ChartCanvas, Chart } from "react-stockcharts";
 import {
 	BarSeries,
-	CandlestickSeries,
+	CandlestickSeries
 } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
@@ -15,7 +15,7 @@ import {
 	EdgeIndicator,
 	CurrentCoordinate,
 	MouseCoordinateX,
-	MouseCoordinateY,
+	MouseCoordinateY
 } from "react-stockcharts/lib/coordinates";
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
 import { LabelAnnotation, Label, Annotate } from "react-stockcharts/lib/annotation";
@@ -25,8 +25,19 @@ import { last } from "react-stockcharts/lib/utils";
 
 export class StockHistoryChartComponent extends React.Component {
 
-	renderChart = ({ type, data:initialData, securityId }) => {
+	renderChart = ({ type, securityItems }) => {
 		const { width, ratio } = this.props;
+
+		if(!securityItems || !securityItems.length || !securityItems[0].securityHistory)
+			return null;
+
+		const item = securityItems[0];
+
+		if(!item.securityHistory)
+			return null;
+
+		const securityId = item.securityId;
+		const initialData = item.securityHistory.candles;
 		
 		if(!initialData || !initialData.length)
 			return null;
@@ -37,7 +48,7 @@ export class StockHistoryChartComponent extends React.Component {
 			data,
 			xScale,
 			xAccessor,
-			displayXAccessor,
+			displayXAccessor
 		} = xScaleProvider(initialData);
 
 		const start = xAccessor(last(data));
@@ -107,19 +118,19 @@ export class StockHistoryChartComponent extends React.Component {
 
 	render() {
 
-		const { data, securityId } = this.props;
+		const { securityItems } = this.props;
 
 		return (
 			<Fragment>             
 				{/* <div>Number of candles for stock {data && securityId ? securityId : ''}: {data && data.length && data.length}</div> */}
-				{data && this.renderChart({securityId, type:'svg', data})}
+				{ this.renderChart({securityItems, type:'svg'})}
 			</Fragment> 
 		);
 	}
 
 }
 StockHistoryChartComponent.propTypes = {
-	data: PropTypes.array.isRequired,
+	securityItems: PropTypes.array.isRequired,
 	width: PropTypes.number.isRequired,
 	ratio: PropTypes.number.isRequired,
 	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,

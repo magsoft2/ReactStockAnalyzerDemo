@@ -1,14 +1,24 @@
 .security-desc
     &_container
         //margin-top: 20px
-        display: inline-flex
+        display: flex
         //border: 1px solid #78799E
         padding: 0px// 10px
         position relative
         align-items: baseline
 
+    &_check
+        padding-right 10px
+        cursor pointer
+        flex-shrink: 0
+        min-width: 25px
+
+        &:hover
+            color: gray
+
     &_name
         font-size: 14px
+        flex-grow: 0
 
     &_btn
         //color: #808080
@@ -22,6 +32,7 @@
         text-align: center
         margin-left: 7px
         box-shadow: none
+        flex-shrink: 0
         
         &.collapsed
             background-color: #484848
@@ -29,14 +40,14 @@
     
     &_list
         font-size: 12px
-        padding 2px 7px
+        padding 5px
         background-color: $back-color-2
         display: inline-flex
         flex-direction: column
         position: absolute
-        top: 25px
+        top: 5px
         z-index: 10000
-        left: 90%
+        left: -7px
         border: 1px solid #78799e
         box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.91)
         min-width: 350px
@@ -59,7 +70,15 @@
     &_delete
         padding-left 10px
         cursor pointer
+        flex-shrink: 0
+
+        &:hover
+            color: gray
         
     &_filler
         flex-grow: 1
+        min-width: 50px
+
+    &_tooltip_container
+        position relative
 

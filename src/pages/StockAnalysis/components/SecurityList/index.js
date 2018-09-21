@@ -20,7 +20,10 @@ export class SecurityListComponent extends Component {
             <div className='securities-list'>
                 {securityItems && securityItems.length && securityItems.map((item) =>{
                     return (<div className='securities-list_item' key={item.securityId}>
-                        <SecurityDescriptionComponent securityDescription={item.securityDescription} securityItem={item.securityDef} />
+                        <SecurityDescriptionComponent 
+                                securityItem={item} 
+                                onDelete={this.props.onDelete} 
+                                onCheck={this.props.onCheck} />
                     </div>);
                 })}
             </div>

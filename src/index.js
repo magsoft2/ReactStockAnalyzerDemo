@@ -7,7 +7,7 @@ import { createLogger } from 'redux-logger';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import compose from "redux/es/compose";
 
-import AppContainer from "containers/AppContainer";
+import AppLayoutContainer from "./components/AppLayoutContainer";
 import {
     StockAnalysisPage,
     PortfolioManagementPage,
@@ -41,14 +41,14 @@ render(
     (<Provider store={store}>
         <Router basename={CONFIG.publicPath}>
             <Switch>
-                <AppContainer>
+                <AppLayoutContainer>
                     <Switch>
                         <Route path="/" exact={true} component={StockAnalysisPage} />
                         <Route path="/portfolio" component={PortfolioManagementPage} />
                         <Route path="/about" component={AboutPage} />
                         <Route path="*" component={NotFoundPage} />
                     </Switch>
-                </AppContainer>
+                </AppLayoutContainer>
             </Switch>
         </Router> 
     </Provider>),

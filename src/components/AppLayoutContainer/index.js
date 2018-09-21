@@ -5,11 +5,11 @@ import {
     Header,
     Nav,
     Footer
-} from "../components";
-import "./AppContainer.styl";
+} from "../";
+import "./index.styl";
 
 
-class AppContainer extends PureComponent {
+class AppLayoutContainer extends PureComponent {
     // getChildContext = () => {
         // return {
             // location: this.props.location,
@@ -24,7 +24,7 @@ class AppContainer extends PureComponent {
         children: PropTypes.node,
         location: PropTypes.object,
         params: PropTypes.object,
-        router: PropTypes.object,
+        router: PropTypes.object
     };
 
 
@@ -45,7 +45,7 @@ class AppContainer extends PureComponent {
 
 
             </div>
-        )
+        );
     }
 }
 
@@ -58,4 +58,4 @@ class AppContainer extends PureComponent {
     // lang: PropTypes.string,
 //};
 
-export default AppContainer;
+export default AppLayoutContainer;

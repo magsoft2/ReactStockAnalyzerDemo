@@ -29,6 +29,7 @@ export class StockAnalysisPage extends Component {
             securityItems:[
                 {
                     securityId: securityDef.securityId,
+                    selected: true,
                     securityDef,
                     securityHistory: undefined,
                     securityDescription: undefined
@@ -61,6 +62,17 @@ export class StockAnalysisPage extends Component {
         };
     };
 
+    findItemByIdInList = (id, list) => {
+        
+        if(list && list.length){
+            let item = list.filter(a => a.securityId == id);
+            if(item && item.length){
+                return item[0];
+            };
+        }
+        
+        return undefined;
+    };
 
     handleGetSecurityHistory = async () => {
         const { startDate, securityItems } = this.state;
@@ -83,15 +95,13 @@ export class StockAnalysisPage extends Component {
         if(!itemNew)
             return list;
 
-        let item = list.filter(a => a.securityId == itemNew.securityId);
-        if(!item || !item.length){
+        let item = this.findItemByIdInList(itemNew.securityId, list);
+        if(!item){
             item = {
                 securityId: itemNew.securityId
             };
             list.unshift(item);
-        }else{
-            item = item[0];
-        };
+        }
         item.securityDef = itemNew;
         item.securityHistory = history ? history : item.securityHistory;
         item.securityDescription = description ? description : item.securityDescription;
@@ -103,8 +113,16 @@ export class StockAnalysisPage extends Component {
 
         const {securityItems, startDate} = this.state;
 
+        if(securityItems && securityItems.length > 20)
+            return;
+
         let list = this.updateOrAddItemToList(securityItems, item);
 
+        let itemTemp = this.findItemByIdInList(item.securityId, list);
+        if(itemTemp){
+            itemTemp.selected = true;
+        }
+        
         this.setState({
             securityItems: list
         });
@@ -121,9 +139,27 @@ export class StockAnalysisPage extends Component {
     };
 
     handleDeleteItem = (id) => {
+        const {securityItems} = this.state;
 
+        if(securityItems && securityItems.length){
+            const newList = securityItems.filter(a => a.securityId !== id);
+            this.setState({securityItems: newList});
+        }
     };
 
+    handleCheckItem = (id) => {
+        
+        const {securityItems} = this.state;
+
+        const item = this.findItemByIdInList(id, securityItems);
+
+        if(item){
+            item.selected = !item.selected;
+            this.setState({securityItems});
+        }
+    };
+
+    
     render = () => {
 
         const { securityItems } = this.state;
@@ -138,15 +174,13 @@ export class StockAnalysisPage extends Component {
                 <SecuritySelectorComponent onAdd={this.handleAddSecurity}/>
 
                 <br/>
-                <SecurityListComponent securityItems={securityItems} onDelete={this.handleDeleteItem} />
+                <SecurityListComponent securityItems={securityItems} onDelete={this.handleDeleteItem} onCheck={this.handleCheckItem} />
 
                 <div>
-                    <div className='btn' onClick={this.handleGetSecurityHistory}>Update chart</div>
+                    <div className='btn' onClick={this.handleGetSecurityHistory} title='Обновить график'>&#x27F3;</div>
                 </div>
 
-                {securityItems && securityItems.length && securityItems[0].securityHistory &&
-                     <StockHistoryChartComponent data={securityItems[0].securityHistory.candles} securityId={securityItems[0].securityId} />}
-
+                <StockHistoryChartComponent securityItems={securityItems} />
 
             </div>
         )
