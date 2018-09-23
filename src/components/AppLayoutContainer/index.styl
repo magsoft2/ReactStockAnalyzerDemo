@@ -8,7 +8,7 @@ html
     font-size 10px
 
 body
-    overflow hidden
+    overflow auto
     margin: 0px
 
 input 
@@ -19,6 +19,16 @@ input
     font-size: 15px
     color: $text-color-2
     border-radius: 2px
+
+select
+    background-color: #52526b
+    border: 1px solid #112c35
+    padding: 2px 4px
+    font-family: 'Roboto'
+    font-size: 15px
+    color: #a1a1d1
+    border-radius: 2px
+
 
 .hidden
     display none !important
@@ -52,8 +62,8 @@ a
                 display inline
                 position absolute
                 background $back-color-2
-                border: 1px solid #78799e;
-                box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.91);
+                border: 1px solid #78799e
+                box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.91)
                 //color lightgray
                 z-index 10000
     
@@ -67,6 +77,30 @@ a
             background $back-color-2
             color $color-text
 
+
+.lds-dual-ring
+    display: inline-block
+    width: 22px
+    height: 18px
+
+.lds-dual-ring:after
+    content: " "
+    display: block
+    width: 18px
+    height: 18px
+    margin: 1px
+    border-radius: 50%
+    border: 2px solid gray
+    border-color: royalblue transparent royalblue transparent
+    animation: lds-dual-ring 1.2s linear infinite
+
+@keyframes lds-dual-ring
+    0%
+        transform: rotate(0deg)
+    
+    100%
+        transform: rotate(360deg)
+  
 
 .AppContainer
     color $color-text

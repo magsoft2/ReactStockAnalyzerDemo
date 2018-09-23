@@ -1,37 +1,35 @@
-import React, {PureComponent} from "react";
+import React, {PureComponent} from 'react';
 import {Helmet} from 'react-helmet';
 
 
-import "./index.styl";
+import './index.styl';
 
 
 export class PortfolioManagementPage extends PureComponent {
-    static contextTypes: {
-    };
 
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        this.state = {
+		this.state = {
             
-        };
-    }
+		};
+	}
     
                      
     render = () => {
 
-        return (
-            <div>
+    	return (
+    		<div>
                 
-                <Helmet>
-                    <title>Demo portfolio management app</title>
-                </Helmet>
+    			<Helmet>
+    				<title>Demo portfolio management app</title>
+    			</Helmet>
 
-                <div>PortfolioManagement page</div>
+    			<div>TODO: PortfolioManagement page</div>
                 
 
 
-            </div>
-        )
+    		</div>
+    	);
     }
 }

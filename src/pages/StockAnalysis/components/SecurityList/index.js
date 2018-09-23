@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import "./index.styl";
+import './index.styl';
 
-import { SecurityDescriptionComponent } from '../SecurityDescription';
+import { SecurityListItemComponent } from './../SecurityListItem/index';
 
 
 export class SecurityListComponent extends Component {
@@ -14,26 +14,29 @@ export class SecurityListComponent extends Component {
 
     render = () => {
 
-        const {securityItems, onDelete, onCheck} = this.props;
+    	const {securityItems, onDelete, onCheck} = this.props;
 
-        return (
-            <div className='securities-list'>
-                {securityItems && securityItems.length && securityItems.map((item) =>{
-                    return (<div className='securities-list_item' key={item.securityId}>
-                        <SecurityDescriptionComponent 
-                                securityItem={item} 
-                                onDelete={this.props.onDelete} 
-                                onCheck={this.props.onCheck} />
-                    </div>);
-                })}
-            </div>
-        );
+    	return (
+    		<div className='security-list'>
+    			{securityItems && securityItems.length && securityItems.map((item) =>{
+    				return (
+                        <SecurityListItemComponent 
+                            key={item.securityId}
+    						securityItem={item} 
+    						onDelete={onDelete} 
+    						onCheck={onCheck} />
+    				);
+    			})}
+    		</div>
+    	);
 
     };
     
 
-};
+}
     
 SecurityListComponent.propTypes = {
-
+    onDelete: PropTypes.func,
+    onCheck: PropTypes.func,
+    securityItems: PropTypes.array
 };

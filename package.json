@@ -1,8 +1,8 @@
 {
-  "name": "test",
+  "name": "ReactStockAnalyzerDemo",
   "version": "1.0.0",
   "private": true,
-  "description": "Test website",
+  "description": "ReactStockAnalyzerDemo demo application",
   "author": "Serg volk",
   "homepage": "https://magsoft2.github.io/ReactStockAnalyzerDemo",
   "scripts": {
@@ -86,8 +86,6 @@
     "react-select": "^1.2.1",
     "react-stockcharts": "^0.7.8",
     "react-text-mask": "^5.4.1",
-    "react-timeseries-charts": "^0.15.3",
-    "recharts": "^1.1.0",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-devtools": "^3.3.2",
@@ -116,6 +114,7 @@
     "zenscroll": "^4.0.2"
   },
   "devDependencies": {
+    "@types/react": "^16.4.14",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",

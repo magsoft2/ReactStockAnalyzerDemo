@@ -1,6 +1,8 @@
 .nav
     height $nav-height
     background $back-darker
+    +tablet()
+        height unset
 
     &-wrapper
         centered-layout()
@@ -18,10 +20,12 @@
             flex-wrap wrap
             min-width: 800px
             +tablet()
-                padding 0 5px
+                padding 0px 5px
                 overflow auto
                 min-width unset
                 width 100%
+                flex-direction: column
+                align-items: baseline
 
     &-link
         display block

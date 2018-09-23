@@ -1,5 +1,13 @@
 {
     "editor.minimap.enabled": false,
     "favorites.sortDirection": "ASC",
-    "favorites.groupsFirst": true
+    "favorites.groupsFirst": true,
+    "editor.fontSize": 15,
+    "breadcrumbs.enabled": true,
+    "search.quickOpen.includeSymbols": true,
+    "telemetry.enableTelemetry": false,
+    "telemetry.enableCrashReporter": false,
+    "autoimport.filesToScan": "**/*.{ts,tsx,js}",
+    "autoimport.showNotifications": true,
+    "editor.detectIndentation": false
 }

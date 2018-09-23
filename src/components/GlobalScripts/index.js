@@ -3,11 +3,11 @@ import React, {PureComponent} from 'react';
 
 export class GlobalScripts extends PureComponent {
 
-    componentWillMount() {
-    }
+	componentWillMount() {
+	}
 
-    componentDidMount() {
-    }
+	componentDidMount() {
+	}
 
 }
 
