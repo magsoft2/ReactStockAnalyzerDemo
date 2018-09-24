@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import './index.styl';
 
+import {incrementAsync} from 'actions';
 
 import CONFIG from 'config';
 
@@ -21,7 +22,12 @@ import { CONSTANTS } from '../../constants';
 
 
 
-export class StockAnalysisPage extends Component {
+@connect((state) => {
+    return {
+        notifications: state.notifications
+    };
+}, { incrementAsync })
+class StockAnalysisPage extends Component {
 
     constructor(props) {
         super(props);
@@ -69,6 +75,9 @@ export class StockAnalysisPage extends Component {
         securityItems = await this.loadAllData(securityItems, startDate, false);
 
         this.setState({ securityItems, isUpdatingData: false });
+
+        this.props.incrementAsync('Hello');
+
     }
 
     componentWillUnmount = () => {
@@ -230,6 +239,9 @@ export class StockAnalysisPage extends Component {
     render = () => {
     	const { securityItems, isUpdatingData, indicators } = this.state;
 
+        LogService.log('render: '+this.props.notifications.length, this.props.notifications);
+
+
         return (
     		<div className='dark stock-analysis'>
 
@@ -258,4 +270,4 @@ export class StockAnalysisPage extends Component {
     }
 }
 
-
+export {StockAnalysisPage};
