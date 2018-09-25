@@ -17,7 +17,7 @@ todo describe all libs used in the app
 
 - React
 - Redux
-- Redux-saga
+- Redux-saga - Why: 'Where do I put my business logic in a React Redux application?'
 
 
 
@@ -26,13 +26,7 @@ TODO:
 
 - get https://iss.moex.com/iss/index.xml all descriptions and make references lists
 
-2. + add LogService
-4. + refactor model. Sec., SecList, SecHist, SecDesc, Indicators?
-5. + adding indicators to stock list/ predefined set?
-5. + tune chart: show dateRange links (1d 1w 1m 3m), chart type selector, sec. legend with colors
-6. + store\restore settings\project in storage
-8. + Fill about page
-10. + make mobile
+10. +- make mobile
 9. Add requests actions redux-saga
 11. Add some Jest unit tests
 12. get hist data from diff engines and markets
