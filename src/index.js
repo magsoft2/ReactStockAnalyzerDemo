@@ -8,6 +8,8 @@ import { createLogger } from 'redux-logger';
 import compose from 'redux/es/compose';
 import createSagaMiddleware from 'redux-saga';
 
+import { composeWithDevTools } from 'redux-devtools-extension';
+
 import AppLayoutContainer from './components/AppLayoutContainer';
 import {
     StockAnalysisPage,
@@ -24,7 +26,10 @@ import combinedReducers from 'reducers';
 
 
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = composeWithDevTools({
+    // Specify name here, actionsBlacklist, actionsCreators and other options if needed
+});
 const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger( { collapsed: true } );
 let middleWares = [ sagaMiddleware ];
@@ -33,12 +38,12 @@ if ( NODE_ENV === 'development' ) {
 }
 
 const store = createStore(
-    //composeEnhancers(
     combinedReducers,
-    applyMiddleware(
-        ...middleWares
+    composeEnhancers(
+        applyMiddleware(
+            ...middleWares
+        )
     )
-    //)
 );
 sagaMiddleware.run(rootSaga);
 
