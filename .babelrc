@@ -1,0 +1,4 @@
+{
+  "plugins": ["wildcard", "transform-decorators-legacy"],
+  "presets": ["env", "react", "es2015", "stage-0"]  
+}

@@ -10,7 +10,7 @@ class LogServiceClass {
         console.log(args);
     };
 
-    error = (args) => {
+    error = (...args) => {
         console.error(args);
     };
 

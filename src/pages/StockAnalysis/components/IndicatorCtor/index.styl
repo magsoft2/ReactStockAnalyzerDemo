@@ -1,10 +1,16 @@
 .indicator-ctor
     display inline-flex
-    padding: 2px 0px
+    padding: 2px 10px
     align-items: center
     //border-bottom: 1px solid #284242
-    margin-left: 20px
+    margin-left: 10px
     flex-wrap: wrap;
+    border-left: 1px solid #284242;
+    
+    +tablet()
+        margin-left: 0px
+        padding: 2px 0px
+        border: 0px
 
     &__label
         padding 0px 5px 0px 15px

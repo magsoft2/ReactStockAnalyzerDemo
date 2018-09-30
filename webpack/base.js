@@ -220,7 +220,6 @@ module.exports = {
         new CopyWebpackPlugin([
             // {from: Path.resolve(Utils.SRC_PATH, 'touch-icons'),  fromType: 'glob'},
             { from: path.resolve(Utils.SRC_PATH, 'images'), to: 'images', fromType: 'glob' },
-            { from: path.resolve(Utils.SRC_PATH, 'robots.txt'), fromType: 'glob' },
         ])
     ]
 

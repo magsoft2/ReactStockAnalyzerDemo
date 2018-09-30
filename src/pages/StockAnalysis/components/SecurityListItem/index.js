@@ -23,7 +23,7 @@ export class SecurityListItemComponent extends Component {
 
     	return (
     		<div className='security-list__item'>
-    			<div className='security-list__cell_check' onClick={ this.handleCheck }>{ securityItem.selected ? ( <span>&#x2714;</span> ) : ( <span>&#x2610;</span> ) }</div>
+    			<div className='security-list__cell_check' onClick={ this.handleCheck }>{ securityItem.selected ? ( <span>&#10687;</span> ) : ( <span>&#10686;</span> ) }</div>
                 <SecurityDescriptionComponent securityItem={securityItem} />
     			<div className="security-list__cell_filler" />
     			<div className='security-list__cell_delete' onClick={ this.handleDelete }>&#x2715;</div>
