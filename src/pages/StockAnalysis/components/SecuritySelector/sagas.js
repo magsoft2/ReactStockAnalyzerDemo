@@ -14,23 +14,14 @@ export function* securitySearchFunc ( action ) {
 
         yield put( startSecuritySearch() );
 
-        const suggestions = yield call(SecurityService.findSecurity, action.text);
-
-        const map = new Map();
-        for ( let item of suggestions ) {
-            if ( !map.has( item.type ) )
-                map.set( item.type, [] );
-
-            map.get( item.type ).push( item );
-        }
+        const suggestions = yield call( SecurityService.findSecurity, action.text );
 
         yield put( showSecuritySuggestions( {
-            suggestionsMap: Array.from( map ),
             suggestionsList: suggestions
         } ) );
     }
     catch ( err ) {
-        yield put( securitySearchFailed (err) );
+        yield put( securitySearchFailed( err ) );
     }
 }
 

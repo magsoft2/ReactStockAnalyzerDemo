@@ -1,8 +1,8 @@
+import { createSelector } from 'reselect';
 
-import {ACTIONS} from './actions';
+import { ACTIONS } from './actions';
 
 const initialState = {
-    securitiesSuggestionsMap:[],
     securitiesSuggestionsList: [],
     isLoading: false
 };
@@ -10,22 +10,20 @@ const initialState = {
 const suggestions = ( state = initialState, action ) => {
     switch ( action.type ) {
         case ACTIONS.SECURITY_SEARCH_STARTED:
-            return { 
-                ...state, 
+            return {
+                ...state,
                 isLoading: true
             };
         case ACTIONS.SECURITY_SEARCH_SUCCEEDED:
             return {
-                ...state, 
+                ...state,
                 isLoading: false,
-                securitiesSuggestionsMap: action.data.suggestionsMap,
                 securitiesSuggestionsList: action.data.suggestionsList
             };
         case ACTIONS.SECURITY_SEARCH_FAILED:
             return {
-                ...state, 
+                ...state,
                 isLoading: false,
-                securitiesSuggestionsMap: [],
                 securitiesSuggestionsList: []
             };
         default:
@@ -33,4 +31,25 @@ const suggestions = ( state = initialState, action ) => {
     }
 };
 
-export {suggestions};
+
+export const getSecuritiesSuggestionsList = ( state ) => state.suggestions.securitiesSuggestionsList;
+export const getIsLoading = ( state ) => state.suggestions.isLoading;
+
+
+export const getSecuritiesSuggestionsMap = createSelector(
+    [ getSecuritiesSuggestionsList ],
+    ( suggestions ) => {
+
+        const map = new Map();
+        for ( let item of suggestions ) {
+            if ( !map.has( item.type ) )
+                map.set( item.type, [] );
+
+            map.get( item.type ).push( item );
+        }
+
+        return Array.from( map );
+    }
+)
+
+export { suggestions };

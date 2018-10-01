@@ -20,49 +20,6 @@ todo describe all libs used in the app
 - Redux-saga - Why: 'Where do I put my business logic in a React Redux application?'
 
 
-
-createRequestTypes('USER')
-
-
-
-STOCKANALYSIS_DATA_ALL_UPDATE  (force: true or false)
-STOCKANALYSIS_DATA_ALL_UPDATE_STARTED
-STOCKANALYSIS_DATA_ALL_UPDATE_SUCCEEDED
-STOCKANALYSIS_DATA_ALL_UPDATE_FAILED
-
-SECURITY_HISTORY_LOAD
-SECURITY_HISTORY_LOAD_STARTED
-SECURITY_HISTORY_LOAD_SUCCEEDED
-SECURITY_HISTORY_LOAD_FAILED
-SECURITY_DESCRIPTION_LOAD
-SECURITY_DESCRIPTION_LOAD_STARTED
-SECURITY_DESCRIPTION_LOAD_SUCCEEDED
-SECURITY_DESCRIPTION_LOAD_FAILED
-
-
-INDICATOR_ADD
-INDICATOR_DELETE
-
-
-state: {
-
-    securitiesSuggestions: []
-
-	securyties: [
-	],
-	
-	indicators:[],
-	
-	isLoading: false,
-	
-	startDate: moment().add(-1, 'years').format(CONSTANTS.dateFormat)	
-}
-
-
-getters ???
-
-
-
 TODO:
 
 - get https://iss.moex.com/iss/index.xml all descriptions and make references lists

@@ -8,7 +8,7 @@ import './index.styl';
 
 import CONFIG from 'config';
 
-import { SecurityService, LogService, StoreService } from 'Services';
+import { LogService } from 'Services';
 
 import { LoaderComponent } from 'components';
 
@@ -21,18 +21,22 @@ import { CONSTANTS } from '../../constants';
 
 import {
     restoreStockAnalysisState, storeStockAnalysisState,
-    addSecurityToList, deleteSecurityFromList, checkSecurity
+    addSecurityToList, deleteSecurityFromList, checkSecurity,
+    addIndicator, deleteIndicator,
+    updateAll
 } from 'pages/StockAnalysis/actions';
+
+import {selectors} from './reducers';
 
 
 @connect( ( state ) => {
     return {
-        securities: state.securitiesAnalysis.securities,
-        indicators: state.securitiesAnalysis.indicators,
-        isLoading: state.securitiesAnalysis.isLoading,
-        startDate: state.securitiesAnalysis.startDate
+        securities: selectors.getSecuritiesSelected(state),
+        indicators: selectors.getIndicatorsSelected(state),
+        isLoading: selectors.getIsLoading(state),
+        startDate: selectors.getStartDate(state)
     };
-}, { restoreStockAnalysisState, storeStockAnalysisState, addSecurityToList, deleteSecurityFromList, checkSecurity } )
+}, { restoreStockAnalysisState, storeStockAnalysisState, addSecurityToList, deleteSecurityFromList, checkSecurity, addIndicator, deleteIndicator, updateAll } )
 class StockAnalysisPage extends Component {
 
     constructor ( props ) {
@@ -62,15 +66,8 @@ class StockAnalysisPage extends Component {
     handleUpdateAll = async () => {
         let { startDate, securities } = this.props;
 
-        //this.setState( { isUpdatingData: true } );
+        this.props.updateAll(securities, startDate);
 
-        // securities = await this.loadAllData( securities, startDate, true );
-
-        // this.setState(
-        //     {
-        //         securities,
-        //         isUpdatingData: false
-        //     } );
     };
 
    
@@ -78,7 +75,13 @@ class StockAnalysisPage extends Component {
 
         const { securities, startDate } = this.props;
 
-        this.props.addSecurityToList( item, securities, startDate );
+        const maxSecuritiesNum = 20;
+        if ( securities && securities.length > maxSecuritiesNum ) {
+            LogService.error( `cannot add more than ${maxSecuritiesNum} securities to list` );
+            return;
+        }
+
+        this.props.addSecurityToList( item, startDate );
 
     };
 
@@ -87,6 +90,7 @@ class StockAnalysisPage extends Component {
         const { securities } = this.props;
 
         this.props.deleteSecurityFromList( id, securities );
+        this.props.storeStockAnalysisState();
     };
 
     handleCheckSecurity = ( id ) => {
@@ -98,20 +102,12 @@ class StockAnalysisPage extends Component {
     };
 
     handleAddIndicator = ( indicator ) => {
-        const { indicators } = this.props;
 
-        if ( indicator && indicators.findIndex( a => a.key === indicator.key ) < 0 ) {
-            indicators.push( indicator );
-
-            this.setState( { indicators } );
-        }
+        this.props.addIndicator( indicator );
     };
     handleDeleteIndicator = ( key ) => {
-        let { indicators } = this.props;
 
-        indicators = indicators.filter( a => a.key !== key );
-
-        this.setState( { indicators } );
+        this.props.deleteIndicator( key );
     };
 
     render = () => {

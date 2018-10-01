@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import CONSTANTS from 'constants';
-
+import { globalizeSelectors, fromRoot } from 'utils';
 
 import { ACTIONS } from './actions';
 
@@ -38,6 +38,7 @@ const securitiesAnalysis = ( state = initialState, action ) => {
                 isLoading: false,
                 ...action.data
             };
+
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_STARTED:
             return {
                 ...state,
@@ -50,49 +51,151 @@ const securitiesAnalysis = ( state = initialState, action ) => {
                 isLoading: false,
                 error: action.error
             };
-        case ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED:
-            return {
-                ...state,
-                securities: [ ...action.data.securities ],
-                isLoading: false
-            };
+        case ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED: {
+
+            const { security, history, description } = action.data;
+
+            return addSecurityToList( security, history, description, state );
+        }
         case ACTIONS.STOCKANALYSIS_SECURITY_DELETE: {
 
             let { id, securities } = action.data;
 
-            if ( securities && securities.length > 1 ) {
-                securities = securities.filter( it => it.securityId !== id );
-
-                if ( securities.filter( it => it.selected ).length <= 0 ) {
-                    securities[ 0 ].selected = true;
-                }
-            }
-
-            return {
-                ...state,
-                securities: [ ...securities ]
-            };
+            return deleteSecurityFromList( securities, id, state );
         }
         case ACTIONS.STOCKANALYSIS_SECURITY_CHECK: {
 
             const { id, securities } = action.data;
 
-            if ( securities && securities.length ) {
-                let item = securities.filter( a => a.securityId == id );
-                if ( item && item.length ) {
-                    item[ 0 ].selected = true;
-                    securities.map( a => a.securityId != item[ 0 ].securityId ? a.selected = false : '' );
-                }
+            return checkSecurity( securities, id, state );
+        }
+
+        case ACTIONS.STOCKANALYSIS_INDICATOR_ADD: {
+
+            const { indicator } = action.data;
+
+            const indicators = getIndicatorsSelected( state );
+
+            if ( indicator && indicators.findIndex( a => a.key === indicator.key ) < 0 ) {
+                indicators.push( indicator );
             }
+            return {
+                ...state,
+                indicators: [ ...indicators ]
+            };
+        }
+        case ACTIONS.STOCKANALYSIS_INDICATOR_DELETE: {
+
+            const { key } = action.data;
+
+            const indicators = getIndicatorsSelected( state ).filter( a => a.key !== key );
 
             return {
                 ...state,
-                securities: [ ...securities ]
+                indicators: [ ...indicators ]
             };
         }
+
+        case ACTIONS.STOCKANALYSIS_UPDATE_ALL_STARTED:
+            return {
+                ...state,
+                isLoading: true,
+                error: undefined
+            };
+        case ACTIONS.STOCKANALYSIS_UPDATE_ALL_ADD_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.error
+            };
+        case ACTIONS.STOCKANALYSIS_UPDATE_ALL_ADD_SUCCEEDED: {
+
+            const { securities } = action.data;
+
+            return {
+                ...state,
+                isLoading: false,
+            };
+            //return addSecurityToList( security, history, description, state );
+        }
+
         default:
             return state;
     }
 };
+
+
+const addSecurityToList = ( security, history, description, state ) => {
+    
+    const securities = getSecuritiesSelected( state );
+
+    const item = {
+        securityId: security.securityId,
+        selected: true
+    };
+
+    item.definition = security;
+    item.history = history ? history : item.history;
+    item.description = description ? description : item.description;
+    
+    const index = securities.findIndex( it => it.securityId === security.securityId );
+    
+    if ( index >= 0 ) {
+        securities.splice( index, 1, item );
+    }
+    else {
+        securities.unshift( item );
+    }
+
+    securities.map( a => a.securityId != security.securityId ? a.selected = false : '' );
+    
+    return {
+        ...state,
+        securities: [ ...securities ],
+        isLoading: false
+    };
+};
+
+const deleteSecurityFromList = ( securities, id, state ) => {
+    if ( securities && securities.length > 1 ) {
+        securities = securities.filter( it => it.securityId !== id );
+        if ( securities.filter( it => it.selected ).length <= 0 ) {
+            securities[ 0 ].selected = true;
+        }
+    }
+    return {
+        ...state,
+        securities: [ ...securities ]
+    };
+};
+
+const checkSecurity = ( securities, id, state ) => {
+    if ( securities && securities.length ) {
+        let item = securities.filter( a => a.securityId == id );
+        if ( item && item.length ) {
+            item[ 0 ].selected = true;
+            securities.map( a => a.securityId != item[ 0 ].securityId ? a.selected = false : '' );
+        }
+    }
+    return {
+        ...state,
+        securities: [ ...securities ]
+    };
+};
+
+
+
+const getSecuritiesSelected = ( state ) => state.securities;
+const getIndicatorsSelected = ( state ) => state.indicators;
+const getIsLoading = ( state ) => state.isLoading;
+const getStartDate = ( state ) => state.startDate;
+
+export const selectors = globalizeSelectors( {
+    getSecuritiesSelected,
+    getIndicatorsSelected,
+    getIsLoading,
+    getStartDate
+}, 'securitiesAnalysis' );
+
 
 export { securitiesAnalysis };

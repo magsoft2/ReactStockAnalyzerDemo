@@ -6,13 +6,14 @@ import { connect } from 'react-redux';
 import './index.styl';
 
 import { searchSecurityAsync } from './actions';
-import {LoaderComponent, Header} from 'components';
+import {LoaderComponent} from 'components';
+import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList, getIsLoading } from './reducers';
 
 @connect( ( state ) => {
     return {
-        suggestions: state.suggestions.securitiesSuggestionsMap,
-        suggestionList: state.suggestions.securitiesSuggestionsList,
-        isLoading: state.suggestions.isLoading
+        suggestions: getSecuritiesSuggestionsMap(state),
+        suggestionList: getSecuritiesSuggestionsList(state),
+        isLoading: getIsLoading(state)
     };
 }, { searchSecurityAsync } )
 class SecuritySelectorComponent extends React.PureComponent {

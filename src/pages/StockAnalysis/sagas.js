@@ -4,24 +4,29 @@ import { put, takeEvery, all, call, select } from 'redux-saga/effects';
 import { StoreService, LogService, SecurityService } from 'Services';
 
 import {
-    ACTIONS, 
+    ACTIONS,
     showStockAnalysisState, storeStockAnalysisState,
-    addSecurityToList, addSecurityToListStarted, addSecurityToListSucceeded, addSecurityToListFailed
+    addSecurityToList, addSecurityToListStarted, addSecurityToListSucceeded, addSecurityToListFailed,
+    updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed
 } from './actions';
+
+import { selectors, getSecuritiesSelected } from './reducers';
 
 
 function* restoreState () {
 
     const { securities = undefined, indicators = [] } = yield call( StoreService.restoreStockAnalysisState );
 
-    if ( securities ) {
-        LogService.log( 'StockAnalysis: project state was initialized from store' );
-    }
-
     const data = {
-        securities,
         indicators
     };
+
+    if ( securities ) {
+        LogService.log( 'StockAnalysis: project state was initialized from store' );
+        data.securities = securities;
+    } else {
+        LogService.log( 'StockAnalysis: no stored project state was found. Initializing .' );
+    }
 
     yield put( showStockAnalysisState( data ) );
 }
@@ -29,14 +34,14 @@ function* restoreState () {
 function* storeState ( action ) {
 
     const state = yield select();
-    let {securities = undefined, indicators = undefined} = action.data;
+    let { securities = undefined, indicators = undefined } = action.data ? action.data : {};
 
-    if(!securities)
-        securities = state.securities;
-    if(!indicators)
-        indicators = state.indicators;
+    if ( !securities )
+        securities = selectors.getSecuritiesSelected( state );
+    if ( !indicators )
+        indicators = selectors.getIndicatorsSelected( state );
 
-    const data = {securities, indicators};
+    const data = { securities, indicators };
     yield call( StoreService.storeStockAnalysisState, data );
 
 }
@@ -47,41 +52,18 @@ function* addSecurity ( action ) {
 
     yield put( addSecurityToListStarted() );
 
-    const { security, securities, startDate } = action.data;
+    const { security, startDate } = action.data;
 
     try {
-        if ( security && securities ) {
-
-            if ( securities && securities.length > 20 ) {
-                yield put( addSecurityToListFailed( 'cannot add more than 20 securities to list' ) );
-                return;
-            }
+        if ( security ) {
 
             const [ description, history ] = yield all(
                 [ call( SecurityService.getSecurityDescription, security.securityId ),
                 call( getSecurityHistory, security.securityId, security.group, startDate ) ] );
 
+            yield put( addSecurityToListSucceeded( security, history, description ) );
 
-            const item = {
-                securityId: security.securityId,
-                selected: true
-            };
-            item.definition = security;
-            item.history = history ? history : item.history;
-            item.description = description ? description : item.description;
-
-            const index = securities.findIndex( it => it.securityId === security.securityId );
-            if ( index >= 0 ) {
-                securities.splice( index, 1, item );
-            } else {
-                securities.unshift( item );
-            }
-
-            securities.map( a => a.securityId != security.securityId ? a.selected = false : '' );
-
-            yield put( addSecurityToListSucceeded( securities ) );
-
-            //yield put(storeStockAnalysisState( {securities}));
+            yield put( storeStockAnalysisState() );
 
         }
     } catch ( error ) {
@@ -91,6 +73,31 @@ function* addSecurity ( action ) {
     }
 }
 
+function* updateAllSaga ( action ) {
+
+    yield put( updateAllStarted() );
+
+    const { securities, startDate } = action.data;
+
+    try {
+
+        yield delay(5000);
+        // if ( security ) {
+
+        //     const [ description, history ] = yield all(
+        //         [ call( SecurityService.getSecurityDescription, security.securityId ),
+        //         call( getSecurityHistory, security.securityId, security.group, startDate ) ] );
+
+        yield put( updateAllSucceeded( ) );
+
+        yield put( storeStockAnalysisState() );
+
+    } catch ( error ) {
+        LogService.error( 'Cannot update all ', error );
+        yield put( updateAllFailed( 'Cannot add security ' + ', error: ' + error ) );
+        return;
+    }
+}
 
 const getSecurityHistory = async ( securityId, securityGroup, startDate ) => {
 
@@ -156,5 +163,6 @@ export function* securityAnalysisRootSaga () {
         takeEvery( ACTIONS.STOCKANALYSIS_STATE_RESTORE, restoreState ),
         takeEvery( ACTIONS.STOCKANALYSIS_STATE_STORE, storeState ),
         takeEvery( ACTIONS.STOCKANALYSIS_SECURITY_ADD, addSecurity ),
+        takeEvery( ACTIONS.STOCKANALYSIS_UPDATE_ALL, updateAllSaga ),
     ] );
 }
