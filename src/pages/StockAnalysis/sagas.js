@@ -28,7 +28,16 @@ function* restoreState () {
 
 function* storeState ( action ) {
 
-    yield call( StoreService.storeStockAnalysisState, action.data );
+    const state = yield select();
+    let {securities = undefined, indicators = undefined} = action.data;
+
+    if(!securities)
+        securities = state.securities;
+    if(!indicators)
+        indicators = state.indicators;
+
+    const data = {securities, indicators};
+    yield call( StoreService.storeStockAnalysisState, data );
 
 }
 
@@ -72,8 +81,7 @@ function* addSecurity ( action ) {
 
             yield put( addSecurityToListSucceeded( securities ) );
 
-            const state = yield select();
-            yield put(storeStockAnalysisState( {securities, indicators: state.indicators}));
+            //yield put(storeStockAnalysisState( {securities}));
 
         }
     } catch ( error ) {
