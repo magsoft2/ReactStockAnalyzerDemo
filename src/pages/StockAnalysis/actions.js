@@ -45,11 +45,11 @@ const addSecurityToListSucceeded = (security, history, description) => {
 const addSecurityToListFailed = (error) => {
     return { type: ACTIONS.STOCKANALYSIS_SECURITY_ADD_FAILED, error };
 };
-const deleteSecurityFromList = (id, securities) => {
-    return { type: ACTIONS.STOCKANALYSIS_SECURITY_DELETE, data: {id, securities} };
+const deleteSecurityFromList = (id) => {
+    return { type: ACTIONS.STOCKANALYSIS_SECURITY_DELETE, data: {id} };
 };
-const checkSecurity = (id, securities) => {
-    return { type: ACTIONS.STOCKANALYSIS_SECURITY_CHECK, data: {id, securities} };
+const checkSecurity = (id) => {
+    return { type: ACTIONS.STOCKANALYSIS_SECURITY_CHECK, data: {id} };
 };
 const addIndicator = (indicator) => {
     return { type: ACTIONS.STOCKANALYSIS_INDICATOR_ADD, data: {indicator} };

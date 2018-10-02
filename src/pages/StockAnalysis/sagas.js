@@ -81,14 +81,20 @@ function* updateAllSaga ( action ) {
 
     try {
 
-        yield delay(5000);
-        // if ( security ) {
+        if ( securities && securities.length ) {
+            for ( const item of securities ) {
 
-        //     const [ description, history ] = yield all(
-        //         [ call( SecurityService.getSecurityDescription, security.securityId ),
-        //         call( getSecurityHistory, security.securityId, security.group, startDate ) ] );
+                const [ description, history ] = yield all(
+                    [ call( SecurityService.getSecurityDescription, item.securityId ),
+                    call( getSecurityHistory, item.securityId, item.definition.group, startDate ) ] 
+                );
 
-        yield put( updateAllSucceeded( ) );
+                item.history = history ? history : item.history;
+                item.description = description ? description : item.description;
+            }
+        }
+
+        yield put( updateAllSucceeded(securities ) );
 
         yield put( storeStockAnalysisState() );
 
@@ -109,54 +115,6 @@ const getSecurityHistory = async ( securityId, securityGroup, startDate ) => {
     };
 };
 
-/*
-const findItemByIdInList = ( id, list ) => {
-
-    if ( list && list.length ) {
-        let item = list.filter( a => a.securityId == id );
-        if ( item && item.length ) {
-            return item[ 0 ];
-        }
-    }
-
-    return undefined;
-};
-
-const loadAllData = async ( securities, startDate, forceUpdate = false ) => {
-    if ( !securities || !securities.length )
-        return securities;
-
-    for ( const item of securities ) {
-
-        const description = item.description && !forceUpdate ? item.description : await SecurityService.getSecurityDescription( item.securityId );
-        const history = item.history && !forceUpdate ? item.history : await this.getSecurityHistory( item.securityId, item.definition.group, startDate );
-        //TEMP! optimize it. 
-
-        this.updateOrAddItemToList( securities, item.definition, history, description );
-    }
-
-    return securities;
-};
-
-const updateOrAddItemToList = ( list, itemNew, history, description ) => {
-
-    if ( !itemNew )
-        return list;
-
-    let item = this.findItemByIdInList( itemNew.securityId, list );
-    if ( !item ) {
-        item = {
-            securityId: itemNew.securityId
-        };
-        list.unshift( item );
-    }
-    item.definition = itemNew;
-    item.history = history ? history : item.history;
-    item.description = description ? description : item.description;
-
-    return list;
-};
-*/
 
 export function* securityAnalysisRootSaga () {
     yield all( [

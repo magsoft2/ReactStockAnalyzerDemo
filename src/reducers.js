@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import {suggestions} from 'pages/StockAnalysis/components/SecuritySelector/reducers';
-import {securitiesAnalysis} from 'pages/StockAnalysis/reducers';
+import {suggestions} from 'pages/StockAnalysis/components/SecuritySelector';
+import {securitiesAnalysis} from 'pages/StockAnalysis';
+
+export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
 
 
 

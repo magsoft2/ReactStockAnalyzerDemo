@@ -1,31 +1,54 @@
-import { delay } from 'redux-saga';
-import { put, take, takeEvery, call, all, cancel, fork, takeLatest } from 'redux-saga/effects';
+import { delay } from "redux-saga";
+import { put, take, takeEvery, call, all, cancel, fork, takeLatest } from "redux-saga/effects";
+
+import { ACTIONS, startSecuritySearch, showSecuritySuggestions, securitySearchFailed } from "./actions";
+
+import { SecurityService, CacheService, LogService } from "Services";
 
 
-import { ACTIONS, startSecuritySearch, showSecuritySuggestions, securitySearchFailed } from './actions';
-
-import { SecurityService } from 'Services';
-
-
-export function* securitySearchFunc ( action ) {
+export function* securitySearchFunc(action) {
     try {
+        const key = action.text;
 
-        yield delay( 300 );
+        const suggestions = yield CacheService.getOrAdd(key, function*() {
+            
+            try {
+                yield delay(300);
 
-        yield put( startSecuritySearch() );
+                yield put(startSecuritySearch());
 
-        const suggestions = yield call( SecurityService.findSecurity, action.text );
+                const suggestions = yield call(SecurityService.findSecurity, action.text);
 
-        yield put( showSecuritySuggestions( {
-            suggestionsList: suggestions
-        } ) );
-    }
-    catch ( err ) {
-        yield put( securitySearchFailed( err ) );
+                return suggestions;
+            } catch (err) {
+                yield put(securitySearchFailed(err));
+            }
+
+        });
+
+        const descriptions = yield CacheService.getOrAdd('get_all_descriptions', function*() {
+            
+            try {
+                const descr = yield SecurityService.getAllReferences();
+                return descr;
+            } catch (err) {
+                //yield put(securitySearchFailed(err));
+                LogService.error('getting all descriptions error, ', err);
+            }
+
+        });
+
+        yield put(
+            showSecuritySuggestions({
+                suggestionsList: suggestions,
+                descriptions
+            })
+        );
+    } catch (err) {
+        yield put(securitySearchFailed(err));
     }
 }
 
-export function* securitySearchSaga () {
-    yield takeLatest( ACTIONS.SECURITY_SEARCH, securitySearchFunc );
+export function* securitySearchSagaRootSaga() {
+    yield takeLatest(ACTIONS.SECURITY_SEARCH, securitySearchFunc);
 }
-

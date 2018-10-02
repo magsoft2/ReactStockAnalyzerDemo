@@ -28,15 +28,22 @@ class MoexProviderClass {
                 return Promise.resolve( data );
             } );
 
-        if ( res.data && res.data.securities && res.data.securities.data ) {
-            let resConverted = res.data.securities.data.map( securityInfoConvertor ).filter( item => item !== undefined );
-            if ( resConverted.length ) {
-                resConverted = resConverted.filter( ( value, index, self ) => self.findIndex( el => el.id === value.id ) === index );
-            }
-            return Promise.resolve( resConverted );
+        const result = {
+            securityTypes:[],
+            securityGroups:[]
+        };
+
+        if ( res.data && res.data.securitytypes && res.data.securitytypes.data &&
+             res.data.securitygroups && res.data.securitygroups.data ) {
+            //TODO:
+            //1. get securitytypes
+            //2. securitygroups
+            //3. securitycollections
+            result.securityTypes = res.data.securitytypes.data.map( securityTypesConvertor ).filter( item => item !== undefined );
+            result.securityGroups = res.data.securitygroups.data.map( securityGroupsConvertor ).filter( item => item !== undefined );
         }
 
-        return Promise.resolve( [] );
+        return Promise.resolve( result );
     };
 
     getSecurityDescription = async ( securityId ) => {
@@ -162,21 +169,36 @@ const securityDescriptionConvertor = ( item ) => {
     };
 };
 
-const referenceConvertor = ( list ) => {
+const securityGroupsConvertor = ( item ) => {
 
-    if ( !list )
+    if ( !item || !item.length )
         return undefined;
 
-    /*
-    list.durations, //!
-    list.securitytypes, //!
-    list.securitygroups, //!
+    //"columns": ["id", "name", "title", "is_hidden"], 
+    return {
+        id: item[ 0 ],
+        name: item[ 1 ],
+        title: item[ 2 ],
+        isHidden: item[ 3 ]
+    };
 
-    
-    ///???list.boards,
-    list.engines,
-    list.markets,
-    */
+};
+
+const securityTypesConvertor = ( item ) => {
+
+    if ( !item || !item.length )
+        return undefined;
+
+    //"columns": ["id", "trade_engine_id", "trade_engine_name", "trade_engine_title", "security_type_name", "security_type_title"], 
+    return {
+        id: item[ 0 ],
+        engineId: item[ 1 ],
+        engineName: item[ 2 ],
+        engineTitle: item[ 3 ],
+        typeName: item[ 4 ],
+        typeTitle: item[ 5 ]
+    };
+
 };
 
 const securityHistoryConvertor = ( item ) => {

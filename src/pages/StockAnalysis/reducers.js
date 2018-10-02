@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {createSelector } from 'reselect';
 
 import CONSTANTS from 'constants';
 import { globalizeSelectors, fromRoot } from 'utils';
@@ -59,14 +60,17 @@ const securitiesAnalysis = ( state = initialState, action ) => {
         }
         case ACTIONS.STOCKANALYSIS_SECURITY_DELETE: {
 
-            let { id, securities } = action.data;
+            let { id } = action.data;
+            const securities = getSecuritiesSelected( state );
 
             return deleteSecurityFromList( securities, id, state );
         }
         case ACTIONS.STOCKANALYSIS_SECURITY_CHECK: {
 
-            const { id, securities } = action.data;
+            const { id } = action.data;
 
+            const securities = getSecuritiesSelected( state );
+            
             return checkSecurity( securities, id, state );
         }
 
@@ -110,13 +114,25 @@ const securitiesAnalysis = ( state = initialState, action ) => {
             };
         case ACTIONS.STOCKANALYSIS_UPDATE_ALL_ADD_SUCCEEDED: {
 
-            const { securities } = action.data;
+            const { securities:securitiesNew } = action.data;
+
+            const securities = getSecuritiesSelected( state );
+
+            for(let item of securitiesNew) {
+                const prev = getSecuritySelectedById(state, item.securityId);
+                if(prev) {
+                    prev.history = item.history,
+                    prev.description = item.description;
+                }else{
+                    console.log('NOT FOUND!');
+                }
+            }
 
             return {
                 ...state,
+                securities:[...securities],
                 isLoading: false,
             };
-            //return addSecurityToList( security, history, description, state );
         }
 
         default:
@@ -190,8 +206,17 @@ const getIndicatorsSelected = ( state ) => state.indicators;
 const getIsLoading = ( state ) => state.isLoading;
 const getStartDate = ( state ) => state.startDate;
 
+const getSecuritySelectedById = createSelector(
+    (state, securityId) => { return { suggestions: getSecuritiesSelected(state), securityId}; },
+    ( obj ) => {
+        const {suggestions, securityId} = obj;
+        return suggestions.find(a => a.securityId === securityId);
+    }
+)
+
 export const selectors = globalizeSelectors( {
     getSecuritiesSelected,
+    getSecuritySelectedById,
     getIndicatorsSelected,
     getIsLoading,
     getStartDate
