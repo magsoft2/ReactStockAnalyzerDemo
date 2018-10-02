@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -37,7 +37,7 @@ import {selectors} from './reducers';
         startDate: selectors.getStartDate(state)
     };
 }, { restoreStockAnalysisState, storeStockAnalysisState, addSecurityToList, deleteSecurityFromList, checkSecurity, addIndicator, deleteIndicator, updateAll } )
-class StockAnalysisPage extends Component {
+class StockAnalysisPage extends PureComponent {
 
     constructor ( props ) {
         super( props );

@@ -28,7 +28,6 @@ TODO:
     +- getters, saga helpers
 10. make better initial list of stocks: GAZP, several indexes, USD_RUB, EUR_RUB
 11. Add some Jest unit tests
-12. get hist data from diff engines and markets
 13. refactor stock chart code
 
 20. Portfolio manager

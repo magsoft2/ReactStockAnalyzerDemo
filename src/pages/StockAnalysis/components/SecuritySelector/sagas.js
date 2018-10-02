@@ -11,9 +11,9 @@ export function* securitySearchFunc(action) {
         const key = action.text;
 
         const suggestions = yield CacheService.getOrAdd(key, function*() {
-            
+
             try {
-                yield delay(300);
+                yield delay(100);
 
                 yield put(startSecuritySearch());
 
@@ -26,22 +26,9 @@ export function* securitySearchFunc(action) {
 
         });
 
-        const descriptions = yield CacheService.getOrAdd('get_all_descriptions', function*() {
-            
-            try {
-                const descr = yield SecurityService.getAllReferences();
-                return descr;
-            } catch (err) {
-                //yield put(securitySearchFailed(err));
-                LogService.error('getting all descriptions error, ', err);
-            }
-
-        });
-
         yield put(
             showSecuritySuggestions({
-                suggestionsList: suggestions,
-                descriptions
+                suggestionsList: suggestions
             })
         );
     } catch (err) {
