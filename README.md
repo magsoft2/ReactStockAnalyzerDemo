@@ -22,12 +22,13 @@ todo describe all libs used in the app
 
 TODO:
 
-- get https://iss.moex.com/iss/index.xml all descriptions and make references lists
++ get https://iss.moex.com/iss/index.xml all descriptions and make references lists
 
 9. + Add requests actions redux-saga
     +- getters, saga helpers
 10. make better initial list of stocks: GAZP, several indexes, USD_RUB, EUR_RUB
 11. Add some Jest unit tests
+12. PERFOMANCE analysis, react perf. tools etc.
 13. refactor stock chart code
 
 20. Portfolio manager

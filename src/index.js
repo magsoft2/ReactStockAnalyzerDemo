@@ -22,7 +22,7 @@ import { NODE_ENV } from './constants';
 import CONFIG from 'config';
 
 import {rootSaga} from 'sagas';
-import combinedReducers from 'reducers';
+import {combinedReducers} from 'reducers';
 
 
 

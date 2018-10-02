@@ -212,7 +212,7 @@ const getSecuritySelectedById = createSelector(
         const {suggestions, securityId} = obj;
         return suggestions.find(a => a.securityId === securityId);
     }
-)
+);
 
 export const selectors = globalizeSelectors( {
     getSecuritiesSelected,

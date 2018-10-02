@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { createSelector } from 'reselect';
 
 import {suggestions} from 'pages/StockAnalysis/components/SecuritySelector';
 import {securitiesAnalysis} from 'pages/StockAnalysis';
@@ -17,10 +18,21 @@ const references = ( state = null, action ) => {
     }
 };
 
+const getReferences = (state) => state.references;
+
+const getSecurityTypeReference = createSelector(
+    (state, securityTypeId) => { return { references: getReferences(state), securityTypeId}; },
+    ( obj ) => {
+        const {references, securityTypeId} = obj;
+        return references.securityTypes.find(a => a.typeName === securityTypeId);
+    }
+);
+
+
 const combinedReducers = combineReducers( {
     securitiesAnalysis,
     suggestions,
     references
 } );
 
-export default combinedReducers;
+export {combinedReducers, getReferences, getSecurityTypeReference};

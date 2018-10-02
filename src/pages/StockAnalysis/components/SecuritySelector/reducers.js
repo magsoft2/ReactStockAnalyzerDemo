@@ -50,6 +50,6 @@ export const getSecuritiesSuggestionsMap = createSelector(
 
         return Array.from( map );
     }
-)
+);
 
 export { suggestions };

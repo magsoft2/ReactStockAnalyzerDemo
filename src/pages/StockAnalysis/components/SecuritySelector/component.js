@@ -8,12 +8,15 @@ import './index.styl';
 import { searchSecurityAsync } from './actions';
 import {LoaderComponent} from 'components';
 import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList, getIsLoading } from './reducers';
+//import {getReferences} from 'reducers';
+
 
 @connect( ( state ) => {
     return {
         suggestions: getSecuritiesSuggestionsMap(state),
         suggestionList: getSecuritiesSuggestionsList(state),
-        isLoading: getIsLoading(state)
+        isLoading: getIsLoading(state),
+        references: state.references //getReferences(state)
     };
 }, { searchSecurityAsync } )
 class SecuritySelectorComponent extends React.PureComponent {
@@ -100,10 +103,21 @@ class SecuritySelectorComponent extends React.PureComponent {
     }
 
     renderSectionTitle = ( section ) => {
+
+        const {references} = this.props;
+
+        let title = section[ 0 ];
+
+        if(references && references.securityTypes) {
+            const item = references.securityTypes.find(a => a.typeName == title);
+            if(item)
+                title = item.typeTitle;
+        }
+
         return (
             <div className='stock-description_item' >
                 <span className='stock-description_cell_id'></span>
-                <span className='stock-description_cell_name'><strong>{ section[ 0 ] }</strong></span>
+                <span className='stock-description_cell_title'><strong>{ title }</strong></span>
                 <span className='stock-description_cell_description'></span>
             </div>
         );
