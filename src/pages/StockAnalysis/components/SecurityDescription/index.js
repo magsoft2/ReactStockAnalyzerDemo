@@ -14,6 +14,20 @@ export class SecurityDescriptionComponent extends Component {
 
     handleClick = () => this.setState( { isCollapsed: !this.state.isCollapsed } );
 
+    getStockName = (item) => {
+        if(!item)
+            return null;
+
+        if(item.description){
+            //TODO: make mapping of table to stock fields
+            const raw = item.description.find(a => a.name ==='NAME');
+            if(raw)
+                return raw.value;
+        }
+
+        return item.definition && item.definition.name ? item.definition.name : item.securityId;
+    }
+
     render () {
 
     	const { securityItem } = this.props;
@@ -21,9 +35,10 @@ export class SecurityDescriptionComponent extends Component {
 
     	const description = securityItem.description;
 
+
     	return (
             <Fragment>
-                <div className='security-desc_name'>{ securityItem && securityItem.definition && securityItem.definition.name }</div>
+                <span className='security-desc_name'>{ this.getStockName(securityItem) }</span>
     			{ description && <div className={ 'security-desc_btn' + isCollapsedClass } onClick={ this.handleClick }> ?</div> }
     			{
     				description &&

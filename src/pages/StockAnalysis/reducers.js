@@ -4,12 +4,15 @@ import {createSelector } from 'reselect';
 import CONSTANTS from 'constants';
 import { globalizeSelectors, fromRoot } from 'utils';
 
+import { LogService } from 'Services';
+
 import { ACTIONS } from './actions';
 
+const HISTORY_HORIZON_YEAR = 1;
 
 const defaultDefinition = {
     securityId: 'GAZP',
-    name: 'GAZP',
+    //name: 'GAZP',
     group: 'stock_shares'
 };
 
@@ -25,7 +28,7 @@ const initialState = {
     ],
     indicators: [],
 
-    startDate: moment().add( -1, 'years' ).format( CONSTANTS.dateFormat ),
+    startDate: moment().add( -1*HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat ),
 };
 
 
@@ -117,7 +120,7 @@ const securitiesAnalysis = ( state = initialState, action ) => {
                     prev.history = item.history,
                     prev.description = item.description;
                 }else{
-                    console.log('NOT FOUND!');
+                    LogService.log('NOT FOUND: ' + item.securityId);
                 }
             }
 

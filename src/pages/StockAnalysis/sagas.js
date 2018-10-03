@@ -31,6 +31,14 @@ function* restoreState () {
     }
 
     yield put( showStockAnalysisState( data ) );
+
+    const state = yield select();
+
+    const uncompleteSecurities = (data.securities ? data.securities : selectors.getSecuritiesSelected(state)).filter( a => !a.description );
+
+    if ( uncompleteSecurities.length > 0 || !data.securities) {
+        yield put( updateAll( uncompleteSecurities, selectors.getStartDate( state ) ) );
+    }
 }
 
 function* storeState ( action ) {
@@ -93,7 +101,7 @@ function* updateAllSaga ( action ) {
 
                 const [ description, history ] = yield all(
                     [ call( SecurityService.getSecurityDescription, item.securityId ),
-                    call( getSecurityHistory, item.securityId, item.definition.group, startDate ) ] 
+                    call( getSecurityHistory, item.securityId, item.definition.group, startDate ) ]
                 );
 
                 item.history = history ? history : item.history;
@@ -101,7 +109,7 @@ function* updateAllSaga ( action ) {
             }
         }
 
-        yield put( updateAllSucceeded(securities ) );
+        yield put( updateAllSucceeded( securities ) );
 
         yield put( storeStockAnalysisState() );
 

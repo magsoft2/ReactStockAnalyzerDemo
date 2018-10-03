@@ -4,6 +4,8 @@ const initialState = {
     showLoader: false
 };
 
+//TODO: track stack/number of showLoader calls ?
+
 const loaderState = ( state = initialState, action ) => {
     switch ( action.type ) {
         case ACTIONS.GLOBAL_LOADER_SHOW:
