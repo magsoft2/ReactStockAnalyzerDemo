@@ -13,7 +13,6 @@ todo desc of app architecture
 
 ### Frameworks, libraries and technologies used
 
-todo describe all libs used in the app
 
 - React
 - Redux
@@ -24,6 +23,7 @@ TODO:
 
 + get https://iss.moex.com/iss/index.xml all descriptions and make references lists
 
+8. move isLoading to separate reducer and state, LoaderComponent should take it from the state itself
 9. + Add requests actions redux-saga
     +- getters, saga helpers
 10. make better initial list of stocks: GAZP, several indexes, USD_RUB, EUR_RUB
