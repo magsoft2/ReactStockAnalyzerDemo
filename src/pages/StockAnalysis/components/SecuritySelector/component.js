@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import './index.styl';
 
 import { searchSecurityAsync } from './actions';
-import {LoaderComponent} from 'components';
-import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList, getIsLoading } from './reducers';
+import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList } from './reducers';
 //import {getReferences} from 'reducers';
 
 
@@ -15,7 +14,6 @@ import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList, getIsLoading 
     return {
         suggestions: getSecuritiesSuggestionsMap(state),
         suggestionList: getSecuritiesSuggestionsList(state),
-        isLoading: getIsLoading(state),
         references: state.references //getReferences(state)
     };
 }, { searchSecurityAsync } )
@@ -124,7 +122,7 @@ class SecuritySelectorComponent extends React.PureComponent {
     }
 
     render () {
-        let { suggestions, isLoading } = this.props;
+        let { suggestions } = this.props;
         const { value } = this.state;
         const inputProps = {
             placeholder: 'Type \'ГАЗП\'',
@@ -135,7 +133,6 @@ class SecuritySelectorComponent extends React.PureComponent {
 
         return (
             <div className="react-autosuggest">
-                <LoaderComponent show={isLoading} />
                 <Autosuggest
                     suggestions={ suggestions }
                     multiSection={ true }

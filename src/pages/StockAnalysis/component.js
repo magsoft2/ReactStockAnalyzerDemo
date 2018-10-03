@@ -10,8 +10,6 @@ import CONFIG from 'config';
 
 import { LogService } from 'Services';
 
-import { LoaderComponent } from 'components';
-
 import { StockHistoryChartComponent } from '../../components/StockHistoryChart';
 import { SecuritySelectorComponent } from './components/SecuritySelector';
 import { SecurityListComponent } from './components/SecurityList';
@@ -33,7 +31,6 @@ import {selectors} from './reducers';
     return {
         securities: selectors.getSecuritiesSelected(state),
         indicators: selectors.getIndicatorsSelected(state),
-        isLoading: selectors.getIsLoading(state),
         startDate: selectors.getStartDate(state)
     };
 }, { restoreStockAnalysisState, storeStockAnalysisState, addSecurityToList, deleteSecurityFromList, checkSecurity, addIndicator, deleteIndicator, updateAll } )
@@ -89,7 +86,7 @@ class StockAnalysisPage extends PureComponent {
 
 
     render = () => {
-        const { securities, isLoading, indicators } = this.props;
+        const { securities, indicators } = this.props;
 
         return (
             <div className='dark stock-analysis'>
@@ -97,8 +94,6 @@ class StockAnalysisPage extends PureComponent {
                 <Helmet>
                     <title>Demo stock analysis app</title>
                 </Helmet>
-
-                <LoaderComponent show={ isLoading } />
 
                 <div className='stock-analysis__control_panel'>
                     <SecuritySelectorComponent onAdd={ this.handleAddSecurity } />

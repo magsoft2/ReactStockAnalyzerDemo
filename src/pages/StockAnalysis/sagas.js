@@ -1,6 +1,8 @@
 import { delay } from 'redux-saga';
 import { put, takeEvery, all, call, select } from 'redux-saga/effects';
 
+import { showLoader, hideLoader } from 'components/Loader';
+
 import { StoreService, LogService, SecurityService } from 'Services';
 
 import {
@@ -10,7 +12,7 @@ import {
     updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed
 } from './actions';
 
-import { selectors, getSecuritiesSelected } from './reducers';
+import { selectors } from './reducers';
 
 
 function* restoreState () {
@@ -57,6 +59,8 @@ function* addSecurity ( action ) {
     try {
         if ( security ) {
 
+            yield put( showLoader() );
+
             const [ description, history ] = yield all(
                 [ call( SecurityService.getSecurityDescription, security.securityId ),
                 call( getSecurityHistory, security.securityId, security.group, startDate ) ] );
@@ -69,12 +73,15 @@ function* addSecurity ( action ) {
     } catch ( error ) {
         LogService.error( 'Cannot add security ' + security.securityId, error );
         yield put( addSecurityToListFailed( 'Cannot add security ' + security.securityId + ', error: ' + error ) );
-        return;
     }
+
+    yield put( hideLoader() );
+
 }
 
 function* updateAllSaga ( action ) {
 
+    yield put( showLoader() );
     yield put( updateAllStarted() );
 
     const { securities, startDate } = action.data;
@@ -103,6 +110,9 @@ function* updateAllSaga ( action ) {
         yield put( updateAllFailed( 'Cannot add security ' + ', error: ' + error ) );
         return;
     }
+
+    yield put( hideLoader() );
+
 }
 
 const getSecurityHistory = async ( securityId, securityGroup, startDate ) => {

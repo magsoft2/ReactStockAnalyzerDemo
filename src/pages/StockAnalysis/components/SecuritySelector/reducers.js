@@ -3,27 +3,21 @@ import { createSelector } from 'reselect';
 import { ACTIONS } from './actions';
 
 const initialState = {
-    securitiesSuggestionsList: [],
-    isLoading: false
+    securitiesSuggestionsList: []
 };
 
 const suggestions = ( state = initialState, action ) => {
     switch ( action.type ) {
         case ACTIONS.SECURITY_SEARCH_STARTED:
-            return {
-                ...state,
-                isLoading: true
-            };
+            return state;
         case ACTIONS.SECURITY_SEARCH_SUCCEEDED:
             return {
                 ...state,
-                isLoading: false,
                 securitiesSuggestionsList: action.data.suggestionsList
             };
         case ACTIONS.SECURITY_SEARCH_FAILED:
             return {
                 ...state,
-                isLoading: false,
                 securitiesSuggestionsList: []
             };
         default:
@@ -33,7 +27,6 @@ const suggestions = ( state = initialState, action ) => {
 
 
 export const getSecuritiesSuggestionsList = ( state ) => state.suggestions.securitiesSuggestionsList;
-export const getIsLoading = ( state ) => state.suggestions.isLoading;
 
 
 export const getSecuritiesSuggestionsMap = createSelector(

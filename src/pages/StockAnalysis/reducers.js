@@ -25,8 +25,6 @@ const initialState = {
     ],
     indicators: [],
 
-    isLoading: false,
-
     startDate: moment().add( -1, 'years' ).format( CONSTANTS.dateFormat ),
 };
 
@@ -36,20 +34,17 @@ const securitiesAnalysis = ( state = initialState, action ) => {
         case ACTIONS.STOCKANALYSIS_STATE_RESTORE_SUCCEEDED:
             return {
                 ...state,
-                isLoading: false,
                 ...action.data
             };
 
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_STARTED:
             return {
                 ...state,
-                isLoading: true,
                 error: undefined
             };
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_FAILED:
             return {
                 ...state,
-                isLoading: false,
                 error: action.error
             };
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED: {
@@ -103,13 +98,11 @@ const securitiesAnalysis = ( state = initialState, action ) => {
         case ACTIONS.STOCKANALYSIS_UPDATE_ALL_STARTED:
             return {
                 ...state,
-                isLoading: true,
                 error: undefined
             };
         case ACTIONS.STOCKANALYSIS_UPDATE_ALL_ADD_FAILED:
             return {
                 ...state,
-                isLoading: false,
                 error: action.error
             };
         case ACTIONS.STOCKANALYSIS_UPDATE_ALL_ADD_SUCCEEDED: {
@@ -130,8 +123,7 @@ const securitiesAnalysis = ( state = initialState, action ) => {
 
             return {
                 ...state,
-                securities:[...securities],
-                isLoading: false,
+                securities:[...securities]
             };
         }
 
@@ -167,8 +159,7 @@ const addSecurityToList = ( security, history, description, state ) => {
     
     return {
         ...state,
-        securities: [ ...securities ],
-        isLoading: false
+        securities: [ ...securities ]
     };
 };
 
@@ -203,7 +194,6 @@ const checkSecurity = ( securities, id, state ) => {
 
 const getSecuritiesSelected = ( state ) => state.securities;
 const getIndicatorsSelected = ( state ) => state.indicators;
-const getIsLoading = ( state ) => state.isLoading;
 const getStartDate = ( state ) => state.startDate;
 
 const getSecuritySelectedById = createSelector(
@@ -218,7 +208,6 @@ export const selectors = globalizeSelectors( {
     getSecuritiesSelected,
     getSecuritySelectedById,
     getIndicatorsSelected,
-    getIsLoading,
     getStartDate
 }, 'securitiesAnalysis' );
 

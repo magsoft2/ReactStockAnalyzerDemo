@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 
 import {suggestions} from 'pages/StockAnalysis/components/SecuritySelector';
 import {securitiesAnalysis} from 'pages/StockAnalysis';
+import {loaderState} from 'components/Loader';
 
 export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
 
@@ -32,7 +33,8 @@ const getSecurityTypeReference = createSelector(
 const combinedReducers = combineReducers( {
     securitiesAnalysis,
     suggestions,
-    references
+    references,
+    loaderState
 } );
 
 export {combinedReducers, getReferences, getSecurityTypeReference};
