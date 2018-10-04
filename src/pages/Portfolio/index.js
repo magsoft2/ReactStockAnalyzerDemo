@@ -1,5 +1,7 @@
-import React, {PureComponent} from 'react';
-import {Helmet} from 'react-helmet';
+import React, { PureComponent } from 'react';
+import { Helmet } from 'react-helmet';
+
+import {WarningBadgeComponent} from 'components';
 
 
 import './index.styl';
@@ -7,29 +9,31 @@ import './index.styl';
 
 export class PortfolioManagementPage extends PureComponent {
 
-	constructor(props) {
-		super(props);
+    constructor ( props ) {
+        super( props );
 
-		this.state = {
-            
-		};
-	}
-    
-                     
+        this.state = {
+
+        };
+    }
+
+
     render = () => {
 
-    	return (
-    		<div>
-                
-    			<Helmet>
-    				<title>Demo portfolio management app</title>
-    			</Helmet>
+        return (
+            <div>
 
-    			<div>TODO: PortfolioManagement page</div>
-                
+                <Helmet>
+                    <title>Demo portfolio management app</title>
+                </Helmet>
+
+                <div>TODO: PortfolioManagement page</div>
+
+                <WarningBadgeComponent message={'Under construction.'}/>
 
 
-    		</div>
-    	);
+
+            </div>
+        );
     }
 }

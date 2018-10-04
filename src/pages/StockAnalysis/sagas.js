@@ -101,7 +101,7 @@ function* updateAllSaga ( action ) {
             let counter = 1;
             for ( const item of securities ) {
 
-                yield put( showMessage(`Updating ${item.definition.name}...`, parseFloat(counter*100/securities.length).toFixed() ) );
+                yield put( showMessage(`Updating ${item.definition.name ? item.definition.name : item.securityId}...`, Math.round(counter*100/securities.length) ) );
 
                 const [ description, history ] = yield all(
                     [ call( SecurityService.getSecurityDescription, item.securityId ),

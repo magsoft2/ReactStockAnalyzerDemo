@@ -9,9 +9,9 @@ import { getLoaderShownState } from '../reducers';
 
 @connect( ( state ) => {
     return {
-        showLoader: getLoaderShownState(state)
+        showLoader: getLoaderShownState( state )
     };
-})
+} )
 class LoaderComponent extends PureComponent {
     static propTypes = {
         showLoader: PropTypes.bool
@@ -20,11 +20,12 @@ class LoaderComponent extends PureComponent {
     render () {
         const { showLoader = false } = this.props;
 
-        if(!showLoader)
+        if ( !showLoader )
             return null;
-        return (            
+        return (
             <div className='loader'>
             </div>
+
         );
     }
 }

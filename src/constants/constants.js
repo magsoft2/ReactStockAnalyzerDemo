@@ -24,5 +24,9 @@ export const CONSTANTS =
         EMA: 2,
         WMA: 3,
         TMA: 4
-    }    
+    },
+    
+    DATA_PROVIDER_CODES: {
+        MOEX: 'MOEX'
+    }
 };

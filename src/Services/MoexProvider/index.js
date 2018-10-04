@@ -3,6 +3,7 @@ import CONFIG from 'config';
 import { getHashCode } from '../../utils';
 
 import { LogService } from 'Services';
+import { CONSTANTS } from '../../constants';
 
 
 const baseUrl = 'https://iss.moex.com/';
@@ -147,7 +148,9 @@ const securityInfoConvertor = ( item ) => {
         type: item[ 12 ],
         group: item[ 13 ],
         primaryBoardId: item[ 14 ],
-        marketPriceBoardId: item[ 15 ]
+        marketPriceBoardId: item[ 15 ],
+
+        providerCode: CONSTANTS.DATA_PROVIDER_CODES.MOEX
     };
 };
 

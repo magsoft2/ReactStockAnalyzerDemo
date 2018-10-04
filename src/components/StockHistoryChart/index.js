@@ -67,17 +67,15 @@ export class StockHistoryChartComponent extends React.Component {
         };
     }
 
-    handleShowCandles = () => this.setState( { chartType: CONSTANTS.CHART_TYPES.Candles } );
-    handleShowArea = () => this.setState( { chartType: CONSTANTS.CHART_TYPES.Area } );
-    handleShowLine = () => this.setState( { chartType: CONSTANTS.CHART_TYPES.Line } );
+    handleChartType = (event) => {
+        const {id} = event.target;
+        this.setState( { chartType: Number(id) });
+    }
 
-    handleTimeDay = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Day } );
-    handleTimeW = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Week } );
-    handleTimeM = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Month } );
-    handleTime2M = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Month2 } );
-    handleTime3M = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Month3 } );
-    handleTime6M = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Month6 } );
-    handleTimeY = () => this.setState( { chartTimeRange: CONSTANTS.TIME_RANGES.Year } );
+    handleChartTimeRange = (event) => {
+        const {id} = event.target;
+        this.setState( { chartTimeRange: Number(id) });
+    }
 
     handleIndicatorClick = (e) => {
         const {onIndicatorClick} = this.props;
@@ -271,21 +269,20 @@ export class StockHistoryChartComponent extends React.Component {
         return (
             <div className='stockchart-control-panel'>
                 <div className='stockchart-control-panel__title'>Chart:</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleShowCandles }>Candles</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleShowArea }>Area</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleShowLine }>Line</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Candles}>Candles</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Area}>Area</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Line}>Line</div>
                 <div className='stockchart-control-panel__title'>Time range:</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTimeDay }>D</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTimeW }>W</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTimeM }>M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTime2M }>2M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTime3M }>3M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTime6M }>6M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleTimeY }>Y</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Day}>D</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Week}>W</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month}>M</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month2}>2M</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month3}>3M</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month6}>6M</div>
+                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Year}>Y</div>
             </div>
         );
     };
-
 
     render () {
         return (

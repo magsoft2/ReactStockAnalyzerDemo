@@ -21,11 +21,14 @@ todo desc of app architecture
 
 TODO:
 
-+ get https://iss.moex.com/iss/index.xml all descriptions and make references lists
-
++ Add provider code to stock
++ Add WarningBadgeComponent
+ Where to place Domain logic? its name? PLACE it in domain-component, i.e. PortfolioAnalysis
+ PortfolioProcessor()
+ DataAnalysis()
+ Highcharts stock?
 9. + Add requests actions redux-saga
     +- getters, saga helpers
-9. + Add notification subsystem: message control, progress control, progress and message API
 10. make better initial list of stocks: GAZP, several indexes, USD_RUB, EUR_RUB
 11. Add some Jest unit tests
 12. PERFOMANCE analysis, react perf. tools etc.

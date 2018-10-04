@@ -42,6 +42,11 @@
             border-bottom-left-radius: 2px;
             border-bottom-right-radius: 2px;
             z-index: 10000;
+            +tablet()
+                font-size: 16px;
+                width:100vw
+                left:-5px
+                top 30px
 
     &__suggestions-list
         margin: 0;
@@ -64,6 +69,10 @@
         width: 22px
         text-align: center
         cursor pointer
+        +tablet()
+            height: 3rem
+            width: 3rem
+        
 
     &__section-title
         padding-left:20px
@@ -85,9 +94,14 @@
     &_cell_id
         width: 12%
         flex-shrink: 0;
+        
     &_cell_name
         width: 28%
         flex-shrink: 0;
+        +tablet()
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
     &_cell_title
         width: auto
     &_cell_description

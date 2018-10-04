@@ -1,9 +1,13 @@
 .loader
+
     width: 64px
     height: 64px
-    position: absolute
-    top: 40%
+    position: fixed
+    top: 20%
     left: 40%
+    z-index 100000
+    +tablet()
+        top:30%
 
     &:after
         content: " "
@@ -12,7 +16,7 @@
         height: 64px
         margin: 1px
         border-radius: 50%
-        border: 5px solid gray
+        border: 8px solid gray
         border-color: royalblue transparent royalblue transparent
         animation: loader-anim 1.2s linear infinite
 
