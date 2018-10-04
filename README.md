@@ -25,6 +25,7 @@ TODO:
 
 9. + Add requests actions redux-saga
     +- getters, saga helpers
+9. + Add notification subsystem: message control, progress control, progress and message API
 10. make better initial list of stocks: GAZP, several indexes, USD_RUB, EUR_RUB
 11. Add some Jest unit tests
 12. PERFOMANCE analysis, react perf. tools etc.

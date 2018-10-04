@@ -2,7 +2,7 @@ import { delay } from "redux-saga";
 import { put, take, takeEvery, call, all, cancel, fork, takeLatest } from "redux-saga/effects";
 
 import { ACTIONS, startSecuritySearch, showSecuritySuggestions, securitySearchFailed } from "./actions";
-import { showLoader, hideLoader } from 'components/Loader';
+import { showLoader, hideLoader } from 'components/GlobalNotification';
 
 import { SecurityService, CacheService, LogService } from "Services";
 

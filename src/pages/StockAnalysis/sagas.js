@@ -1,7 +1,7 @@
 import { delay } from 'redux-saga';
 import { put, takeEvery, all, call, select } from 'redux-saga/effects';
 
-import { showLoader, hideLoader } from 'components/Loader';
+import { showLoader, hideLoader, showMessage, setProgress } from 'components/GlobalNotification';
 
 import { StoreService, LogService, SecurityService } from 'Services';
 
@@ -89,6 +89,7 @@ function* addSecurity ( action ) {
 
 function* updateAllSaga ( action ) {
 
+    yield put( showMessage( 'Update all data...', 0 ) );
     yield put( showLoader() );
     yield put( updateAllStarted() );
 
@@ -97,7 +98,10 @@ function* updateAllSaga ( action ) {
     try {
 
         if ( securities && securities.length ) {
+            let counter = 1;
             for ( const item of securities ) {
+
+                yield put( showMessage(`Updating ${item.definition.name}...`, parseFloat(counter*100/securities.length).toFixed() ) );
 
                 const [ description, history ] = yield all(
                     [ call( SecurityService.getSecurityDescription, item.securityId ),
@@ -106,6 +110,8 @@ function* updateAllSaga ( action ) {
 
                 item.history = history ? history : item.history;
                 item.description = description ? description : item.description;
+
+                counter++;
             }
         }
 
@@ -119,6 +125,7 @@ function* updateAllSaga ( action ) {
         return;
     }
 
+    yield put( showMessage('', 0) );
     yield put( hideLoader() );
 
 }

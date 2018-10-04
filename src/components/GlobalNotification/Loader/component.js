@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import './index.styl';
 
-import { getLoaderShownState } from './reducers';
+import { getLoaderShownState } from '../reducers';
 
 
 @connect( ( state ) => {
