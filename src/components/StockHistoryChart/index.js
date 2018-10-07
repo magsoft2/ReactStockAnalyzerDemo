@@ -45,7 +45,50 @@ import './index.styl';
 const dateFormat = timeFormat( '%Y-%m-%d' );
 const numberFormat = format( '.2f' );
 
+const chartTypes = [
+    {
+        id: CONSTANTS.CHART_TYPES.Candles,
+        name: 'Candles'
+    },
+    {
+        id: CONSTANTS.CHART_TYPES.Area,
+        name: 'Area'
+    },
+    {
+        id: CONSTANTS.CHART_TYPES.Line,
+        name: 'Line'
+    } ];
 
+const timeRanges = [
+    {
+        id: CONSTANTS.TIME_RANGES.Day,
+        name: 'D'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Week,
+        name: 'W'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Month,
+        name: 'M'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Month2,
+        name: '2M'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Month3,
+        name: '3M'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Month6,
+        name: '6M'
+    },
+    {
+        id: CONSTANTS.TIME_RANGES.Year,
+        name: 'Y'
+    },
+];
 
 const ChartTheme = {
     tickStroke: '#78799E',
@@ -67,21 +110,36 @@ export class StockHistoryChartComponent extends React.Component {
         };
     }
 
-    handleChartType = (event) => {
-        const {id} = event.target;
-        this.setState( { chartType: Number(id) });
+    static propTypes = {
+        securityItem: PropTypes.object.isRequired,
+        width: PropTypes.number.isRequired,
+        ratio: PropTypes.number.isRequired,
+        type: PropTypes.oneOf( [ 'svg', 'hybrid' ] ).isRequired,
+        indicators: PropTypes.array,
+        onIndicatorClick: PropTypes.func
+    };
+    
+    static defaultProps = {
+        type: 'svg',
+        width: 100,
+        ratio:1
+    };
+
+    handleChartType = ( event ) => {
+        const { id } = event.target;
+        this.setState( { chartType: Number( id ) } );
     }
 
-    handleChartTimeRange = (event) => {
-        const {id} = event.target;
-        this.setState( { chartTimeRange: Number(id) });
+    handleChartTimeRange = ( event ) => {
+        const { id } = event.target;
+        this.setState( { chartTimeRange: Number( id ) } );
     }
 
-    handleIndicatorClick = (e) => {
-        const {onIndicatorClick} = this.props;
+    handleIndicatorClick = ( e ) => {
+        const { onIndicatorClick } = this.props;
 
-        if(onIndicatorClick)
-            onIndicatorClick(e.key);
+        if ( onIndicatorClick )
+            onIndicatorClick( e.key );
     };
 
     renderChart = ( { type, securityItem: item } ) => {
@@ -173,7 +231,7 @@ export class StockHistoryChartComponent extends React.Component {
                     />
                     { indicatorsPrepared &&
                         <MovingAverageTooltip
-                            onClick={this.handleIndicatorClick}
+                            onClick={ this.handleIndicatorClick }
                             origin={ [ 200, 10 ] }
                             textFill={ ChartTheme.tickStroke }
                             options={
@@ -265,47 +323,31 @@ export class StockHistoryChartComponent extends React.Component {
         }
     };
 
+
+
+
     renderChartControlPanel = () => {
         return (
             <div className='stockchart-control-panel'>
                 <div className='stockchart-control-panel__title'>Chart:</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Candles}>Candles</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Area}>Area</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartType } id={CONSTANTS.CHART_TYPES.Line}>Line</div>
+                { chartTypes.map( a => <div key={ a.id } className='stockchart-control-panel__action' onClick={ this.handleChartType } id={ a.id }>{ a.name }</div> ) }
                 <div className='stockchart-control-panel__title'>Time range:</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Day}>D</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Week}>W</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month}>M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month2}>2M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month3}>3M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Month6}>6M</div>
-                <div className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={CONSTANTS.TIME_RANGES.Year}>Y</div>
+                { timeRanges.map( a => <div key={ a.id } className='stockchart-control-panel__action' onClick={ this.handleChartTimeRange } id={ a.id }>{ a.name }</div> ) }
             </div>
         );
     };
 
     render () {
         return (
-            <Fragment>
+            <div className='stockchart'>
                 { this.renderChartControlPanel() }
                 { this.renderChart( { ...this.props, type: 'svg' } ) }
-            </Fragment>
+            </div>
         );
     }
 
 }
-StockHistoryChartComponent.propTypes = {
-    securityItem: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired,
-    ratio: PropTypes.number.isRequired,
-    type: PropTypes.oneOf( [ 'svg', 'hybrid' ] ).isRequired,
-    indicators: PropTypes.array,
-    onIndicatorClick: PropTypes.func
-};
 
-StockHistoryChartComponent.defaultProps = {
-    type: 'svg',
-};
 StockHistoryChartComponent = fitWidth( StockHistoryChartComponent );
 
 
@@ -349,7 +391,7 @@ const calculateChartExtent = ( chartTimeRange, data, xAccessor ) => {
 
 const prepareIndicators = ( indicators ) => {
 
-    if(!indicators || !indicators.length)
+    if ( !indicators || !indicators.length )
         return [];
 
     return indicators.map( ind => {

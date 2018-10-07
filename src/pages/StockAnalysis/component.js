@@ -11,9 +11,9 @@ import CONFIG from 'config';
 import { LogService } from 'Services';
 
 import { StockHistoryChartComponent } from '../../components/StockHistoryChart';
-import { SecuritySelectorComponent } from './components/SecuritySelector';
 import { SecurityListComponent } from './components/SecurityList';
 import { IndicatorCtorComponent } from './components/IndicatorCtor';
+import { StockControlPanel} from 'components/StockControlPanel';
 
 import { CONSTANTS } from '../../constants';
 
@@ -22,9 +22,10 @@ import {
     addSecurityToList, deleteSecurityFromList, checkSecurity,
     addIndicator, deleteIndicator,
     updateAll
-} from 'pages/StockAnalysis/actions';
+} from './actions';
 
 import {selectors} from './reducers';
+
 
 
 @connect( ( state ) => {
@@ -41,6 +42,12 @@ class StockAnalysisPage extends PureComponent {
 
     }
 
+    static propTypes = {
+        securities: PropTypes.array,
+        indicators: PropTypes.array,
+        startDate: PropTypes.string
+    }
+
     componentDidMount () {
         this.props.restoreStockAnalysisState();
     }
@@ -52,8 +59,8 @@ class StockAnalysisPage extends PureComponent {
 
 
     
-    handleUpdateAll = async () => {
-        let { startDate, securities } = this.props;
+    handleUpdateAll = () => {
+        const { startDate, securities } = this.props;
 
         this.props.updateAll(securities, startDate);
     };
@@ -95,11 +102,9 @@ class StockAnalysisPage extends PureComponent {
                     <title>Demo stock analysis app</title>
                 </Helmet>
 
-                <div className='stock-analysis__control_panel'>
-                    <SecuritySelectorComponent onAdd={ this.handleAddSecurity } />
+                <StockControlPanel onUpdateAll={ this.handleUpdateAll } onAddSecurity={ this.handleAddSecurity } >
                     <IndicatorCtorComponent onAdd={ this.handleAddIndicator } />
-                    <div className='btn stock-analysis__control_panel__separator' onClick={ this.handleUpdateAll } title='Обновить все данные'> <span>&#x27F3;</span> Update all data</div>
-                </div>
+                </StockControlPanel>
 
                 <SecurityListComponent securityItems={ securities } onDelete={ this.handleDeleteSecurity } onCheck={ this.handleCheckSecurity } />
 

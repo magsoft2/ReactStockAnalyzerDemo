@@ -2,7 +2,8 @@ import { delay } from "redux-saga";
 import { all, put, fork } from 'redux-saga/effects';
 
 import { securityAnalysisRootSaga } from 'pages/StockAnalysis';
-import { securitySearchSagaRootSaga } from 'pages/StockAnalysis/components/SecuritySelector';
+import { securitySearchSagaRootSaga } from 'components/SecuritySelector';
+import { portfolioManagerRootSaga } from 'pages/Portfolio';
 
 import { SecurityService, CacheService, LogService } from "Services";
 
@@ -32,6 +33,7 @@ export function* rootSaga () {
 
     yield all([
         securityAnalysisRootSaga(),
-        securitySearchSagaRootSaga()
+        securitySearchSagaRootSaga(),
+        portfolioManagerRootSaga()
     ]);
 }

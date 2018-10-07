@@ -1,5 +1,6 @@
 
-const pageStateKey = 'stockAnalysisState';
+const pageStockAnalysisStateKey = 'stockAnalysisState';
+const pagePortfolioStateKey = 'portfolioState';
 
 class StoreServiceClass {
 
@@ -7,10 +8,22 @@ class StoreServiceClass {
     }
 
     storeStockAnalysisState = (data) => {
-        this._store(pageStateKey, data);
+        this._store(pageStockAnalysisStateKey, data);
     };
     restoreStockAnalysisState = () => {
-        let res = this._restore(pageStateKey);
+        let res = this._restore(pageStockAnalysisStateKey);
+        if(!res) {
+            res = {};
+        }
+
+        return res;
+    };
+
+    storePortfolioState = (data) => {
+        this._store(pagePortfolioStateKey, data);
+    };
+    restorePortfolioState = () => {
+        let res = this._restore(pagePortfolioStateKey);
         if(!res) {
             res = {};
         }

@@ -12,6 +12,13 @@ export class SecurityListComponent extends Component {
         super(props);
     }
 
+    static propTypes = {
+        onDelete: PropTypes.func,
+        onCheck: PropTypes.func,
+        securityItems: PropTypes.array
+    };
+
+
     render = () => {
 
     	const {securityItems, onDelete, onCheck} = this.props;
@@ -35,8 +42,3 @@ export class SecurityListComponent extends Component {
 
 }
     
-SecurityListComponent.propTypes = {
-    onDelete: PropTypes.func,
-    onCheck: PropTypes.func,
-    securityItems: PropTypes.array
-};

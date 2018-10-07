@@ -30,6 +30,23 @@ class SecuritySelectorComponent extends React.PureComponent {
         this.lastRequestId = null;
     }
 
+    static propTypes = {
+        searchSecurityAsync: PropTypes.func,
+        onChange: PropTypes.func,
+        onAdd: PropTypes.func,
+        references: PropTypes.object,
+        suggestionList: PropTypes.array,
+        suggestions: PropTypes.array,
+        isLoading: PropTypes.bool    
+    }
+
+    static defaultProps = {
+        isLoading: false,
+        references: undefined,
+        suggestions: new Map(),
+        suggestionList: []
+    }
+
     loadSuggestions ( value ) {
 
         this.props.searchSecurityAsync(value);
@@ -155,13 +172,5 @@ class SecuritySelectorComponent extends React.PureComponent {
         );
     }
 }
-
-SecuritySelectorComponent.propTypes = {
-    onAdd: PropTypes.func,
-    onChange: PropTypes.func,
-    suggestionList: PropTypes.array,
-    suggestions: PropTypes.object,
-    isLoading: PropTypes.bool
-};
 
 export { SecuritySelectorComponent };

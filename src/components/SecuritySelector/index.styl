@@ -10,13 +10,7 @@
 
     &__input
         width: 240px
-        //height: 30px;
-        //padding: 10px 20px;
-        //font-family: Helvetica, sans-serif;
         font-weight: 300
-        //font-size: 16px;
-        //border: 1px solid #aaa;
-        //border-radius: 4px;
 
         &--focused
             outline: none
@@ -38,12 +32,11 @@
             color: $text-color-2
             font-family: 'Roboto';
             font-weight: 300;
-            font-size: 12px;
+            font-size: $font-size-small
             border-bottom-left-radius: 2px;
             border-bottom-right-radius: 2px;
             z-index: 10000;
             +tablet()
-                font-size: 16px;
                 width:100vw
                 left:-5px
                 top 30px
@@ -70,8 +63,8 @@
         text-align: center
         cursor pointer
         +tablet()
-            height: 3rem
-            width: 3rem
+            width: 25px
+            height: 25px
         
 
     &__section-title
@@ -85,7 +78,7 @@
         display: inline-flex
         flex-direction: column
         min-width:500px
-        font-size: 12px
+        font-size: $font-size-small
 
     &_item        
         display: inline-flex

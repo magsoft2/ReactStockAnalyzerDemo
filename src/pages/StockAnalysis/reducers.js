@@ -3,29 +3,18 @@ import {createSelector } from 'reselect';
 
 import CONSTANTS from 'constants';
 import { globalizeSelectors, fromRoot } from 'utils';
-
+import {createDefaultSecurityList} from 'domain/securityHelpers';
 import { LogService } from 'Services';
 
 import { ACTIONS } from './actions';
 
 const HISTORY_HORIZON_YEAR = 1;
 
-const defaultDefinition = {
-    securityId: 'GAZP',
-    //name: 'GAZP',
-    group: 'stock_shares'
-};
+
+
 
 const initialState = {
-    securities: [
-        {
-            securityId: defaultDefinition.securityId,
-            selected: true,
-            definition: defaultDefinition,
-            history: undefined,
-            description: undefined
-        }
-    ],
+    securities: createDefaultSecurityList(),
     indicators: [],
 
     startDate: moment().add( -1*HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat ),
@@ -34,11 +23,15 @@ const initialState = {
 
 const securitiesAnalysis = ( state = initialState, action ) => {
     switch ( action.type ) {
-        case ACTIONS.STOCKANALYSIS_STATE_RESTORE_SUCCEEDED:
+        case ACTIONS.STOCKANALYSIS_STATE_RESTORE_SUCCEEDED: {
+            const { securities = state.securities } = action.data;
+
             return {
                 ...state,
-                ...action.data
+                ...action.data,
+                securities: [...securities]
             };
+        }
 
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_STARTED:
             return {
@@ -52,9 +45,9 @@ const securitiesAnalysis = ( state = initialState, action ) => {
             };
         case ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED: {
 
-            const { security, history, description } = action.data;
+            const { security } = action.data;
 
-            return addSecurityToList( security, history, description, state );
+            return addSecurityToList( security, state );
         }
         case ACTIONS.STOCKANALYSIS_SECURITY_DELETE: {
 
@@ -117,8 +110,9 @@ const securitiesAnalysis = ( state = initialState, action ) => {
             for(let item of securitiesNew) {
                 const prev = getSecuritySelectedById(state, item.securityId);
                 if(prev) {
-                    prev.history = item.history,
+                    prev.history = item.history;
                     prev.description = item.description;
+                    prev.price = item.price;
                 }else{
                     LogService.log('NOT FOUND: ' + item.securityId);
                 }
@@ -136,26 +130,19 @@ const securitiesAnalysis = ( state = initialState, action ) => {
 };
 
 
-const addSecurityToList = ( security, history, description, state ) => {
+const addSecurityToList = ( security, state ) => {
     
     const securities = getSecuritiesSelected( state );
 
-    const item = {
-        securityId: security.securityId,
-        selected: true
-    };
+    security.selected = true;
 
-    item.definition = security;
-    item.history = history ? history : item.history;
-    item.description = description ? description : item.description;
-    
     const index = securities.findIndex( it => it.securityId === security.securityId );
     
     if ( index >= 0 ) {
-        securities.splice( index, 1, item );
+        securities.splice( index, 1, security );
     }
     else {
-        securities.unshift( item );
+        securities.unshift( security );
     }
 
     securities.map( a => a.securityId != security.securityId ? a.selected = false : '' );

@@ -2,7 +2,7 @@
 
     font-family: 'Roboto'
     display: flex
-    height: "calc(100vh - %s - %s)" % ($header-height $footer-height)
+    min-height: "calc(100vh - %s - %s)" % ($header-height $footer-height)
     padding: 10px
 
     & a
@@ -12,3 +12,5 @@
         padding-top 80px
         margin: 0 auto
         min-height: 300px
+        +tablet()
+            padding: 5px

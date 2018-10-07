@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import compose from 'redux/es/compose';
 import createSagaMiddleware from 'redux-saga';
+import multi from 'redux-multi';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -31,7 +32,7 @@ const composeEnhancers = composeWithDevTools({
 });
 const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger( { collapsed: true } );
-let middleWares = [ sagaMiddleware ];
+let middleWares = [ multi, sagaMiddleware ];
 if ( NODE_ENV === 'development' ) {
     middleWares = [ ...middleWares, loggerMiddleware ];
 }

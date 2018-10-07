@@ -24,11 +24,23 @@ class SecurityServiceClass {
     	return MoexProvider.getSecurityDescription(securityId);
     };
 
-    getSecurityHistory = (securityId, group, startDate) => {
+    getSecurityHistory = async(securityId, group, startDate) => {
 
     	const [engine, market] = group.split('_');
         
-    	return MoexProvider.getSecurityHistory(securityId, startDate, interval, engine, market);
+        const resHist = await MoexProvider.getSecurityHistory(securityId, startDate, interval, engine, market);
+        
+        return {
+            securityId: securityId,
+            candles: resHist
+        };
+    };
+
+    getSecurityPrice = async(securityId, group, date = new Date()) => {
+
+    	const [engine, market] = group.split('_');
+        
+        return await MoexProvider.getSecurityPrice(securityId, date, engine, market);
     };
 
 }

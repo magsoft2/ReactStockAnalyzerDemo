@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 
-import {suggestions} from 'pages/StockAnalysis/components/SecuritySelector';
-import {securitiesAnalysis} from 'pages/StockAnalysis';
 import {notifications} from 'components/GlobalNotification';
+import {suggestions} from 'components/SecuritySelector';
+import {securitiesAnalysis} from 'pages/StockAnalysis';
+import {portfolio} from 'pages/Portfolio';
 
 export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
 
@@ -34,7 +35,8 @@ const combinedReducers = combineReducers( {
     securitiesAnalysis,
     suggestions,
     references,
-    notifications
+    notifications,
+    portfolio
 } );
 
 export {combinedReducers, getReferences, getSecurityTypeReference};

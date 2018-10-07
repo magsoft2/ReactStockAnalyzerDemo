@@ -5,10 +5,12 @@ import { showLoader, hideLoader, showMessage, setProgress } from 'components/Glo
 
 import { StoreService, LogService, SecurityService } from 'Services';
 
+import { updateSecuritiesData, updateSecurityData } from 'domain/securityUpdater';
+
 import {
     ACTIONS,
     showStockAnalysisState, storeStockAnalysisState,
-    addSecurityToList, addSecurityToListStarted, addSecurityToListSucceeded, addSecurityToListFailed,
+    addSecurityToListStarted, addSecurityToListSucceeded, addSecurityToListFailed,
     updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed
 } from './actions';
 
@@ -34,9 +36,9 @@ function* restoreState () {
 
     const state = yield select();
 
-    const uncompleteSecurities = (data.securities ? data.securities : selectors.getSecuritiesSelected(state)).filter( a => !a.description );
+    const uncompleteSecurities = ( data.securities ? data.securities : selectors.getSecuritiesSelected( state ) ).filter( a => !a.description );
 
-    if ( uncompleteSecurities.length > 0 || !data.securities) {
+    if ( uncompleteSecurities.length > 0 || !data.securities ) {
         yield put( updateAll( uncompleteSecurities, selectors.getStartDate( state ) ) );
     }
 }
@@ -69,11 +71,13 @@ function* addSecurity ( action ) {
 
             yield put( showLoader() );
 
-            const [ description, history ] = yield all(
-                [ call( SecurityService.getSecurityDescription, security.securityId ),
-                call( getSecurityHistory, security.securityId, security.group, startDate ) ] );
+            const item = {
+                securityId: security.securityId,
+                definition: security
+            };
+            const newSec = yield* updateSecurityData( item, startDate );
 
-            yield put( addSecurityToListSucceeded( security, history, description ) );
+            yield put( addSecurityToListSucceeded( newSec ) );
 
             yield put( storeStockAnalysisState() );
 
@@ -97,26 +101,10 @@ function* updateAllSaga ( action ) {
 
     try {
 
-        if ( securities && securities.length ) {
-            let counter = 1;
-            for ( const item of securities ) {
+        const res = yield* updateSecuritiesData( securities, startDate );
 
-                yield put( showMessage(`Updating ${item.definition.name ? item.definition.name : item.securityId}...`, Math.round(counter*100/securities.length) ) );
-
-                const [ description, history ] = yield all(
-                    [ call( SecurityService.getSecurityDescription, item.securityId ),
-                    call( getSecurityHistory, item.securityId, item.definition.group, startDate ) ]
-                );
-
-                item.history = history ? history : item.history;
-                item.description = description ? description : item.description;
-
-                counter++;
-            }
-        }
-
-        yield put( updateAllSucceeded( securities ) );
-
+        yield put( updateAllSucceeded( res ) );
+        
         yield put( storeStockAnalysisState() );
 
     } catch ( error ) {
@@ -125,20 +113,10 @@ function* updateAllSaga ( action ) {
         return;
     }
 
-    yield put( showMessage('', 0) );
+    yield put( showMessage( '', 0 ) );
     yield put( hideLoader() );
 
 }
-
-const getSecurityHistory = async ( securityId, securityGroup, startDate ) => {
-
-    const resHist = await SecurityService.getSecurityHistory( securityId, securityGroup, startDate );
-
-    return {
-        securityId: securityId,
-        candles: resHist
-    };
-};
 
 
 export function* securityAnalysisRootSaga () {

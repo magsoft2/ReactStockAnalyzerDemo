@@ -39,8 +39,8 @@ const addSecurityToList = (security, startDate) => {
 const addSecurityToListStarted = () => {
     return { type: ACTIONS.STOCKANALYSIS_SECURITY_ADD_STARTED };
 };
-const addSecurityToListSucceeded = (security, history, description) => {
-    return { type: ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED, data: {security, history, description}  };
+const addSecurityToListSucceeded = (security) => {
+    return { type: ACTIONS.STOCKANALYSIS_SECURITY_ADD_SUCCEEDED, data: {security}  };
 };
 const addSecurityToListFailed = (error) => {
     return { type: ACTIONS.STOCKANALYSIS_SECURITY_ADD_FAILED, error };

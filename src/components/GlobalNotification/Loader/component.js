@@ -17,6 +17,10 @@ class LoaderComponent extends PureComponent {
         showLoader: PropTypes.bool
     }
 
+    static defaultProps = {
+        showLoader: false
+    };
+
     render () {
         const { showLoader = false } = this.props;
 

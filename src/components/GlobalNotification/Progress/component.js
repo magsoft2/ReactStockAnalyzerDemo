@@ -17,6 +17,10 @@ class GlobalProgressComponent extends PureComponent {
         progressTick: PropTypes.number
     }
 
+    static defaultProps = {
+        progressTick: -1
+    }
+
     render () {
         const { progressTick = 0 } = this.props;
 

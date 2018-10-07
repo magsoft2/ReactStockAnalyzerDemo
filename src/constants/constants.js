@@ -28,5 +28,11 @@ export const CONSTANTS =
     
     DATA_PROVIDER_CODES: {
         MOEX: 'MOEX'
+    },
+
+    CURRENCY: {
+        RUB: 'RUB',
+        USD: 'USD',
+        EUR: 'EUR'
     }
 };

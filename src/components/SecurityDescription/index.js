@@ -33,13 +33,15 @@ export class SecurityDescriptionComponent extends Component {
     	const { securityItem } = this.props;
     	const isCollapsedClass = this.state.isCollapsed ? ' collapsed' : '';
 
-    	const description = securityItem.description;
+        if(!securityItem)
+            return null;
 
+    	const description = securityItem.description;
 
     	return (
             <Fragment>
-                <span className='security-desc_name'>{ this.getStockName(securityItem) }</span>
     			{ description && <div className={ 'security-desc_btn' + isCollapsedClass } onClick={ this.handleClick }> ?</div> }
+                <span className='security-desc_name'>{ this.getStockName(securityItem) }</span>
     			{
     				description &&
                     <div className='security-desc_tooltip_container'>

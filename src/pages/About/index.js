@@ -27,7 +27,10 @@ export class AboutPage extends PureComponent {
                     <div>Used libraries:
                         <ul>
                             <li><a href='https://rrag.github.io/react-stockcharts/'>React Stockcharts</a>  for drawing time series data.</li>
+                            <li><a href='https://www.highcharts.com/'>Highcharts</a> time series data. Free use for no-commercial-uses</li>
                             <li><a href='https://github.com/moroshko/react-autosuggest/'>React autosuggest</a> as autosuggest component.</li>
+                            <li><a href='https://github.com/react-tools/react-table/'>react-table</a> table component.</li>
+                            <li><a href='https://github.com/reactjs/react-tabs/'>react-tabs</a> tab control.</li>
                         </ul>
                     </div>
                 </div>

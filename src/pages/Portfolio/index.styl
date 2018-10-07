@@ -1,2 +1,73 @@
 .portfolio
     font-family: 'Roboto'
+    padding: 20px
+    padding-top:0px
+    +tablet()
+        padding:5px;
+
+    &_table
+        width:100%
+        max-height: 550px
+        overflow: auto
+        padding-top: 20px
+        +tablet()
+            width:100%
+
+        .rt-thead.-filters
+            input 
+                background-color $back_color_3
+                border: 1px solid #112c35
+                padding: 2px 4px
+                font-family: 'Roboto'
+                font-size: $font-size-base
+                color: $text-color-2
+                border-radius: 2px
+        .rt-th, .rt-td
+            padding: 0px 5px
+        
+        &_editable-cell
+            background-color $back_color_3
+            border: 1px solid #112c35
+            padding: 2px 4px
+            font-family: 'Roboto'
+            font-size: $font-size-base
+            color: $text-color-2
+            border-radius: 2px
+
+        &_delete_column
+            padding-left 10px
+            cursor pointer
+            flex-shrink: 0
+
+            &:hover
+                color: gray
+
+    .react-tabs__tab
+        list-style-type none
+        padding: 7px 15px
+
+        &--selected
+            background: gray    
+            background: $back-darker
+            color: $color2
+
+        &-list
+            display: flex
+            flex-wrap: wrap
+            -webkit-padding-start: 0px
+            padding-inline-start 0px
+            margin-block-end: 10px
+
+            > li
+                cursor pointer
+                text-decoration: underline
+                text-underline-position: under
+                border-radius: 3px
+                font-size: $font-size-medium
+                +tablet()
+                    width: 100%
+
+
+.ReactTable .rt-noData
+    display: none
+

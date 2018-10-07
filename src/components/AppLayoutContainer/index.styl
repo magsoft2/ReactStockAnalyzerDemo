@@ -1,11 +1,11 @@
 *
     box-sizing border-box
 
-//webfont('TUI', 'hinted-TUITypeCyrillicLight-Bold', true, 500, 'normal')
-
 html
     font-family 'Roboto', sans-serif
     font-size 10px
+    +tablet()
+        font-size 12px
 
 body
     overflow auto
@@ -16,22 +16,18 @@ input
     border: 1px solid #112c35
     padding: 2px 4px
     font-family: 'Roboto'
-    font-size: 15px
+    font-size: $font-size-base
     color: $text-color-2
     border-radius: 2px
-    +tablet()
-        font-size: 2rem
 
 select
     background-color: #52526b
     border: 1px solid #112c35
-    padding: 2px 4px
+    padding: 1px 4px
     font-family: 'Roboto'
-    font-size: 15px
+    font-size: $font-size-base
     color: #a1a1d1
     border-radius: 2px
-    +tablet()
-        font-size: 2.2rem
 
 
 .hidden
@@ -57,7 +53,7 @@ a
         padding-left: 4px
         width: 14px
         height: 14px
-        font-size: 12px
+        font-size: $font-size-small
 
         &:hover
             background $back-light
@@ -88,8 +84,6 @@ a
     min-height 100vh
     position relative
     overflow-x hidden
-    +tablet()
-        font-size: 2.5rem
 
     &-content
         min-height "calc(100vh - %s - %s)" % ($header-height $footer-height)

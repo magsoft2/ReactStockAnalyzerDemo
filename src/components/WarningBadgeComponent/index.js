@@ -8,12 +8,18 @@ export class WarningBadgeComponent extends PureComponent {
         message: PropTypes.string,
     }
 
+
+    static defaultProps = {
+        message: ''
+    }
+
+
     render () {
-        const {message} = this.props;
+        const { message } = this.props;
 
         return (
             <div className='warning-badge_container'>
-                <div className='warning-badge_item'>{message}</div>
+                <div className='warning-badge_item'>{ message }</div>
             </div>
         );
     }

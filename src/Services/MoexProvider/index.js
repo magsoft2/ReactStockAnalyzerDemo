@@ -1,12 +1,31 @@
 import axios from 'axios';
 import CONFIG from 'config';
-import { getHashCode } from '../../utils';
+import moment from 'moment';
 
+import { getHashCode } from '../../utils';
 import { LogService } from 'Services';
 import { CONSTANTS } from '../../constants';
 
 
 const baseUrl = 'https://iss.moex.com/';
+const additionalArguments = 'iss.meta=off&iss.json=compact';
+
+const MOEX_FIELD_NAMES = {
+    BOARDID: 'BOARDID',
+    TRADEDATE: 'TRADEDATE',
+    SECID: 'SECID',
+    OPEN: 'OPEN',
+    HIGH: 'HIGH',
+    LOW: 'LOW',
+    CLOSE: 'CLOSE',
+    VOLRUR: 'VOLRUR',
+    VOLUME: 'VOLUME',
+    LEGALCLOSEPRICE: 'LEGALCLOSEPRICE',
+    MARKETPRICE2: 'MARKETPRICE2',
+    MARKETPRICE3: 'MARKETPRICE3',
+    NUMTRADES: 'NUMTRADES'
+};
+
 
 
 class MoexProviderClass {
@@ -21,7 +40,7 @@ class MoexProviderClass {
 
     getAllReferences = async () => {
         const res = await this.instance
-            .get( 'iss/index.json' )
+            .get( 'iss/index.json?&iss.only=securitycollections,securitygroups,securitytypes&' + additionalArguments )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -30,15 +49,13 @@ class MoexProviderClass {
             } );
 
         const result = {
-            securityTypes:[],
-            securityGroups:[]
+            securityTypes: [],
+            securityGroups: []
         };
 
         if ( res.data && res.data.securitytypes && res.data.securitytypes.data &&
-             res.data.securitygroups && res.data.securitygroups.data ) {
+            res.data.securitygroups && res.data.securitygroups.data ) {
             //TODO:
-            //1. get securitytypes
-            //2. securitygroups
             //3. securitycollections
             result.securityTypes = res.data.securitytypes.data.map( securityTypesConvertor ).filter( item => item !== undefined );
             result.securityGroups = res.data.securitygroups.data.map( securityGroupsConvertor ).filter( item => item !== undefined );
@@ -49,7 +66,7 @@ class MoexProviderClass {
 
     getSecurityDescription = async ( securityId ) => {
         const res = await this.instance
-            .get( `iss/securities/${ securityId }.json` )
+            .get( `iss/securities/${ securityId }.json?${ additionalArguments }&iss.only=description` )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -67,7 +84,7 @@ class MoexProviderClass {
 
     findSecurity = async ( securityName, seach_stock_limit ) => {
         const res = await this.instance
-            .get( `iss/securities.json?q=${ securityName }&limit=${ seach_stock_limit }&is_trading=true&group_by=type` ) //&engine=${engine}&market=${market}
+            .get( `iss/securities.json?q=${ securityName }&limit=${ seach_stock_limit }&is_trading=true&group_by=type&${ additionalArguments }` )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -88,8 +105,7 @@ class MoexProviderClass {
 
     getSecurityHistory = async ( securityId, startDate, interval, engine, market ) => {
         const res = await this.instance
-            .get( `iss/engines/${ engine }/markets/${ market }/securities/${ securityId }/candles.json?from=${ startDate }&interval=${ interval }` )
-            //.get( `iss/engines/${ engine }/markets/${ market }/securities/${ securityId }/candles.json?till=${ '2018-09-23' }&interval=${ interval }` )
+            .get( `iss/engines/${ engine }/markets/${ market }/securities/${ securityId }/candles.json?from=${ getFormattedDate( startDate ) }&interval=${ interval }&${ additionalArguments }` )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -98,19 +114,37 @@ class MoexProviderClass {
             } );
 
         if ( res.data && res.data.candles && res.data.candles.data ) {
-            const resConverted = res.data.candles.data.map( securityHistoryConvertor ).filter( item => item !== undefined );
+            const resConverted = res.data.candles.data.map( securityCandlesConvertor ).filter( item => item !== undefined );
             return Promise.resolve( resConverted );
         }
 
         return Promise.resolve( [] );
     };
 
-    // async getGeoObjectIdsByName(params) {
-    // //return tuiApiInstance({baseURL:CONFIG.baseAuthUrl}).post(`api/content/geoobjectids`, {...params });
+    getSecurityPrice = async ( securityId, date, engine, market ) => {
+        const limit = 5; //get correct board id
+        const res = await this.instance
+            .get( `iss/history/engines/${ engine }/markets/${ market }/securities/${ securityId }.json?till=${ getFormattedDate( date ) }&limit=${ limit }&sort_order_desc=desc&iss.only=history&${ additionalArguments }` )
+            .then( ( data ) => {
+                if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
+                    //LogService.log(JSON.stringify(data));
+                }
+                return Promise.resolve( data );
+            } );
 
-    // return await this.cacheRequest(params, () => tuiApiInstance({baseURL:CONFIG.baseAuthUrl}).post(`api/content/geoobjectids`, {...params }));
-    // }
+        if ( res.data && res.data.history && res.data.history.data ) {
+            const resConverted = res.data.history.data.map( a => securityHistoryConvertor( a, res.data.history.columns ) )
+                .filter( item => item !== undefined )
+                .filter( item => item.close );
+            if ( resConverted.length > 0 ) {
+                return resConverted[ 0 ];
+            } else {
+                return Promise.resolve( resConverted );
+            }
+        }
 
+        return Promise.resolve( {} );
+    };
 
     async cacheRequest ( params, func ) {
         const key = getHashCode( JSON.stringify( params ) );
@@ -150,7 +184,8 @@ const securityInfoConvertor = ( item ) => {
         primaryBoardId: item[ 14 ],
         marketPriceBoardId: item[ 15 ],
 
-        providerCode: CONSTANTS.DATA_PROVIDER_CODES.MOEX
+        providerCode: CONSTANTS.DATA_PROVIDER_CODES.MOEX,
+        currency: CONSTANTS.CURRENCY.RUB
     };
 };
 
@@ -204,7 +239,38 @@ const securityTypesConvertor = ( item ) => {
 
 };
 
-const securityHistoryConvertor = ( item ) => {
+const securityHistoryConvertor = ( item, columns ) => {
+
+    if ( !item || !item.length )
+        return undefined;
+
+    //Note: format is different for different markets! TODO:check for other api results for it!
+    //"columns": ["BOARDID", "TRADEDATE", "SHORTNAME", "SECID", "OPEN", "LOW", "HIGH", "CLOSE", "NUMTRADES", "VOLRUR", "WAPRICE"], 
+
+    const map = columns.reduce( ( acc, curr, idx ) => { acc.set( curr, idx ); return acc; }, new Map() );
+
+    return {
+        boardId: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.BOARDID ),
+        date: new Date( tryGetFieldValue( map, item, MOEX_FIELD_NAMES.TRADEDATE ) ),
+        open: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.OPEN ),
+        low: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.LOW ),
+        high: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.HIGH ),
+        close: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.CLOSE, MOEX_FIELD_NAMES.LEGALCLOSEPRICE, MOEX_FIELD_NAMES.MARKETPRICE2, MOEX_FIELD_NAMES.MARKETPRICE3 ),
+        volume: tryGetFieldValue( map, item, MOEX_FIELD_NAMES.VOLUME, MOEX_FIELD_NAMES.VOLRUR )
+    };
+};
+
+const tryGetFieldValue = ( map, item, ...fieldNames ) => {
+    for(const name of fieldNames) {
+        let idx = map.get( name );
+        if ( idx && Array.isArray( item ) && idx < item.length && item[ idx ] ) {
+            return item[ idx ];
+        }
+    }
+    return undefined;
+};
+
+const securityCandlesConvertor = ( item ) => {
 
     if ( !item || !item.length )
         return undefined;
@@ -222,6 +288,12 @@ const securityHistoryConvertor = ( item ) => {
         end: new Date( item[ 7 ] ),
         date: new Date( item[ 6 ] )
     };
+};
+
+const getFormattedDate = ( date ) => {
+    //date or string only
+    const moexDateFormat = CONSTANTS.DateFormat;
+    return ( date && typeof date === 'string' ) ? date : moment( date ).format( moexDateFormat );
 };
 
 export const MoexProvider = new MoexProviderClass();

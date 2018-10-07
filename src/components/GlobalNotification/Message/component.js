@@ -17,6 +17,10 @@ class GLobalMessageComponent extends PureComponent {
         message: PropTypes.string
     }
 
+    static defaultProps = {
+        message: ''
+    }
+
     render () {
         const { message = '' } = this.props;
 
