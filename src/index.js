@@ -1,72 +1,67 @@
-"use strict";
-import React from "react";
-import {render} from "react-dom";
-import {createStore, combineReducers, applyMiddleware} from "redux";
-import {Provider} from "react-redux";
+import React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import { createLogger } from 'redux-logger';
+import compose from 'redux/es/compose';
 import createSagaMiddleware from 'redux-saga';
-import { createLogger } from 'redux-logger'
-import {Router, Route, browserHistory} from "react-router";
-import {syncHistoryWithStore, routerReducer} from "react-router-redux";
-import {transform, debounce} from 'lodash';
-import compose from "redux/es/compose";
-import persistState from 'redux-localstorage'
-import {createResponsiveStateReducer, calculateResponsiveState} from 'redux-responsive';
+import multi from 'redux-multi';
 
-import AppContainer from "containers/AppContainer";
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+import AppLayoutContainer from './components/AppLayoutContainer';
 import {
-    TestPage,
-	NotFoundPage
-} from "pages";
+    StockAnalysisPage,
+    PortfolioManagementPage,
+    AboutPage,
+    NotFoundPage
+} from './pages';
 
-import {NODE_ENV, BREAKPOINTS, ROUTES} from "./constants";
+import { NODE_ENV } from './constants';
 import CONFIG from 'config';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const sagaMiddleware = createSagaMiddleware();
-const loggerMiddleware = createLogger({
-    collapsed: true,
+import {rootSaga} from 'sagas';
+import {combinedReducers} from 'reducers';
+
+
+
+const composeEnhancers = composeWithDevTools({
+    // Specify name here, actionsBlacklist, actionsCreators and other options if needed
 });
-let middleWares = [sagaMiddleware];
-if(NODE_ENV === 'development'){
-    middleWares = [...middleWares, loggerMiddleware]
+const sagaMiddleware = createSagaMiddleware();
+const loggerMiddleware = createLogger( { collapsed: true } );
+let middleWares = [ multi, sagaMiddleware ];
+if ( NODE_ENV === 'development' ) {
+    middleWares = [ ...middleWares, loggerMiddleware ];
 }
 
 const store = createStore(
-    combineReducers({
-        routing: routerReducer,
-        browser: createResponsiveStateReducer(BREAKPOINTS, {
-            extraFields: ({ lessThan, is }) => ({
-                lessThanOrEqual: transform(lessThan, (result, value, mediaType) => {
-                    result[mediaType] = value || is[mediaType]
-                }, {})
-            }),
-        })
-    }),
+    combinedReducers,
     composeEnhancers(
         applyMiddleware(
             ...middleWares
-        ),
-        // persistState() //uncomment it when we will done with refactor
+        )
     )
 );
-//sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga);
 
-const history = syncHistoryWithStore(browserHistory, store);
-export const action = type => store.dispatch({type});
-
-const fireTracing = () => {
-    //@TODO move this line out from here
-    //window.scrollTo(0, 0);
-};
 
 render(
-    <Provider store={store}>
-            <Router onUpdate={() => fireTracing()} history={history}>
-                <Route path="/" component={AppContainer}>
-                    <Route path="/test" component={TestPage}/>
-                </Route>
-                <Route path="**" component={NotFoundPage} />
-            </Router>
-    </Provider>,
-    document.getElementById("app")
+    ( <Provider store={ store }>
+        <Router basename={ CONFIG.publicPath }>
+            <Switch>
+                <AppLayoutContainer>
+                    <Switch>
+                        <Route path="/" exact={ true } component={ StockAnalysisPage } />
+                        <Route path="/portfolio" component={ PortfolioManagementPage } />
+                        <Route path="/about" component={ AboutPage } />
+                        <Route path="*" component={ NotFoundPage } />
+                    </Switch>
+                </AppLayoutContainer>
+            </Switch>
+        </Router>
+    </Provider> ),
+    document.getElementById( 'app' )
 );

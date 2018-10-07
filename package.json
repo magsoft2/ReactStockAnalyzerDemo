@@ -1,20 +1,55 @@
 {
-  "name": "test",
+  "name": "ReactStockAnalyzerDemo",
   "version": "1.0.0",
   "private": true,
-  "description": "Test website",
-  "author": "",
+  "description": "ReactStockAnalyzerDemo demo application",
+  "author": "Serg volk",
+  "homepage": "https://magsoft2.github.io/ReactStockAnalyzerDemo",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/development.js",
     "build": "cross-env NODE_ENV=production webpack --display-modules --config ./webpack/production.js",
     "build_dev": "cross-env NODE_ENV=development webpack --display-modules --config ./webpack/development_build.js",
-    "build_prod": "cross-env NODE_ENV=production webpack --display-modules --config ./webpack/production.js"
+    "build_prod": "cross-env NODE_ENV=production webpack --display-modules --config ./webpack/production.js",
+    "build_for_deploy": "cross-env NODE_ENV=production ENV_PUBLIC_PATH='/ReactStockAnalyzerDemo' webpack --display-modules --config ./webpack/production_deploy.js",
+    "deploy_git": "gh-pages -d build",
+    "test": "cross-env NODE_ENV=test SUPPRESS_NO_CONFIG_WARNING=true jest"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "<rootDir>/__mocks__/setupEnvironment.js",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/node_modules/**"
+    ],
+    "globals": {
+      "__DEV__": true
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "modulePaths": [
+      "src",
+      "config"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   },
   "dependencies": {
     "autoprefixer": "^6.7.7",
     "axios": "^0.17.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.10.2",
     "babel-plugin-transform-decorators": "^6.24.1",
@@ -48,6 +83,7 @@
     "html-webpack-plugin": "^2.28.0",
     "immutable": "^3.8.1",
     "imports-loader": "^0.7.0",
+    "jest": "^23.6.0",
     "json-loader": "^0.5.7",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
@@ -65,24 +101,27 @@
     "react-accessible-accordion": "^2.4.0",
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-shallow-compare": "^15.4.2",
-    "react-autosuggest": "^9.3.4",
+    "react-autosuggest": "^9.4.1",
     "react-bootstrap": "^0.31.0",
     "react-compound-slider": "^0.12.0",
     "react-datepicker": "^1.2.2",
     "react-dates": "^14.0.0",
     "react-dom": "^16.5.1",
+    "react-helmet": "^5.2.0",
     "react-hot-loader": "^3.1.3",
+    "react-iframe": "^1.3.3",
     "react-intl": "^2.4.0",
     "react-notifications": "^1.3.0",
     "react-numeric-input": "^2.2.3",
     "react-redux": "^5.0.7",
-    "react-router": "^3.2.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-select": "^1.2.1",
     "react-stockcharts": "^0.7.8",
+    "react-table": "^6.8.6",
+    "react-tabs": "^2.3.0",
     "react-text-mask": "^5.4.1",
-    "react-timeseries-charts": "^0.15.3",
-    "recharts": "^1.1.0",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-devtools": "^3.3.2",
@@ -91,8 +130,10 @@
     "redux-form": "^7.3.0",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.6",
+    "redux-multi": "^0.1.12",
     "redux-responsive": "^4.3.7",
     "redux-saga": "^0.16.0",
+    "reselect": "^4.0.0",
     "reset-css": "^2.2.0",
     "resolve-url-loader": "^2.3.0",
     "ress": "^1.2.2",
@@ -111,15 +152,20 @@
     "zenscroll": "^4.0.2"
   },
   "devDependencies": {
+    "@types/react": "^16.4.14",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-plugin-transform-es2015-block-scoping": "^6.26.0",
     "babel-plugin-transform-es2015-for-of": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-wildcard": "^5.0.0",
     "babel-preset-minify": "^0.2.0",
     "clean-webpack-plugin": "^0.1.19",
+    "gh-pages": "^1.2.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "redux-devtools-extension": "^2.13.5",
     "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^3.0.0",

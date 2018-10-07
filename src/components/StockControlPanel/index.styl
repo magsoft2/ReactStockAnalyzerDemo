@@ -1,0 +1,27 @@
+.stock
+    &__control_panel
+        border-bottom: 1px solid #284242
+        padding: 10px 0px
+        display: flex
+        flex-wrap: wrap
+        align-items: baseline
+
+        &__separator
+            border-left: 1px solid #284242
+            margin-left: 15px
+            padding-right: 10px
+            height: 100%;
+            +tablet()
+                padding-left 0px
+                border: 0px
+
+        &__btn
+            min-width: 100px
+            cursor: pointer
+            display: inline-block
+            padding 0px
+            +tablet()
+                margin-left: 0px
+
+            &:hover
+                background: $dark-blue

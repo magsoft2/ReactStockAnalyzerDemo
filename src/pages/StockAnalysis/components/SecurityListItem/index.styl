@@ -1,0 +1,32 @@
+.security-list
+    &__item
+        padding: 0px 5px 2px 5px
+        border-bottom: 1px solid #284242
+        display: flex
+        padding: 0px
+        position relative
+        align-items: baseline
+
+.security-list
+    &__cell
+        &_check
+            padding-right 10px
+            cursor pointer
+            flex-shrink: 0
+            min-width: 20px
+
+            &:hover
+                color: gray
+
+        &_delete
+            padding-left 10px
+            cursor pointer
+            flex-shrink: 0
+
+            &:hover
+                color: gray
+            
+        &_filler
+            flex-grow: 1
+            min-width: 50px
+

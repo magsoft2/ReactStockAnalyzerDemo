@@ -12,7 +12,9 @@ const PROD = Utils.PROD;
 const DEBUG = !PROD;
 const MAX_INLINE_SIZE = 50000;
 
+
 module.exports = {
+
     context: Utils.ROOT,
 
     stats: {
@@ -28,7 +30,7 @@ module.exports = {
     },
 
     resolve: {
-        modules: ["src" ,"node_modules"],
+        modules: ["src", "node_modules"],
         extensions: ["json", ".js", ".styl"]
     },
 
@@ -46,7 +48,7 @@ module.exports = {
                 }
             },
             {
-                test:   /\.css$/,
+                test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: [
@@ -57,7 +59,7 @@ module.exports = {
                 })
             },
             {
-                test:   /\.styl$/,
+                test: /\.styl$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: [
@@ -70,7 +72,7 @@ module.exports = {
                 })
             },
             {
-                test:   /\.js$|jsx$/,
+                test: /\.js$|jsx$/,
                 use: [{
                     loader: "babel-loader",
                     options: {
@@ -106,14 +108,14 @@ module.exports = {
                         ]
                     }
                 }],
-                exclude: [/node_modules/,/libs/]
-               // exclude: [/node_modules/,/libs/]
+                exclude: [/node_modules/, /libs/]
+                // exclude: [/node_modules/,/libs/]
             },
             {
                 test: /\.pug$/,
                 use: [{
                     loader: "pug-loader",
-                    options: {pretty: DEBUG}
+                    options: { pretty: DEBUG }
                 }]
             },
             {
@@ -128,7 +130,7 @@ module.exports = {
                 }]
             },
             {
-                test:   /\.(png|jpg|gif|ico).*$/,
+                test: /\.(png|jpg|gif|ico).*$/,
                 use: [{
                     loader: "url-loader",
                     options: {
@@ -168,7 +170,7 @@ module.exports = {
                     }
                 }]
             },
-			{
+            {
                 test: /\.html.*?$/,
                 use: [{
                     loader: "file-loader",
@@ -190,7 +192,7 @@ module.exports = {
                 postcss: function () {
                     return {
                         defaults: [AutoPrefixer],
-                        cleaner:  [AutoPrefixer({ browsers: ["last 3 versions"] })],
+                        cleaner: [AutoPrefixer({ browsers: ["last 3 versions"] })],
                     };
                 },
                 stylus: {
@@ -217,8 +219,9 @@ module.exports = {
         new Webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru/),
         new CopyWebpackPlugin([
             // {from: Path.resolve(Utils.SRC_PATH, 'touch-icons'),  fromType: 'glob'},
-            {from: path.resolve(Utils.SRC_PATH, 'images'), to: 'images', fromType: 'glob'},
-            {from: path.resolve(Utils.SRC_PATH, 'robots.txt'),  fromType: 'glob'},
+            { from: path.resolve(Utils.SRC_PATH, 'images'), to: 'images', fromType: 'glob' },
         ])
     ]
+
 };
+

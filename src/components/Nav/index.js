@@ -1,9 +1,23 @@
-import React from "react";
-import classnames from "classnames";
+import React from 'react';
+import classnames from 'classnames';
+import { NavLink } from 'react-router-dom';
 
-import CONFIG from 'config';
+import './index.styl';
 
-import "./index.styl";
+const mainMenu = [
+    {
+        href: '/',
+        title: 'Stock analysis'
+    },
+    {
+        href: '/portfolio/',
+        title: 'Portfolio'
+    },
+    {
+        href: '/about/',
+        title: 'About'
+    }
+];
 
 
 export class Nav extends React.Component {
@@ -11,36 +25,24 @@ export class Nav extends React.Component {
         activeIndex: 0,
     };
 
-    constructor(...args) {
-        super(...args);
+    constructor ( ...args ) {
+        super( ...args );
     }
 
 
     render = () => {
-
-		const mainMenu = [
-			{
-				href:'/',
-				title:'Home'
-            },
-            {
-				href:'/test/',
-				title:'Test'
-			}
-		];
-	
         return (
-            <nav className="Nav">
-                <div className="Nav-wrapper">
-                    <div className="Nav-links">
-                        {mainMenu.map((link, key) => {
-                            const classNames = classnames("Nav-link");
-                                return <a href={link.href} key={key} className={classNames}>{link.title}</a>;
-                        })}
+            <nav className="nav">
+                <div className="nav-wrapper">
+                    <div className="nav-links">
+                        { mainMenu.map( ( link, key ) => {
+                            const classNames = classnames( 'nav-link' );
+                            return ( <NavLink exact={ key == 0 } to={ link.href } key={ key } className={ classNames }>{ link.title }</NavLink> );
+                        } ) }
                     </div>
                 </div>
             </nav>
-        )
+        );
     }
 }
 

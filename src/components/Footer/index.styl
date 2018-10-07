@@ -1,4 +1,18 @@
-.Footer
-    background $dark
-    color $white
-    padding-top 30px
+.footer
+    background $back-darker
+    color $color2
+    display: inline-flex
+    align-items: center
+    width: 100%
+    height $footer-height
+
+    &_item
+        padding 20px
+
+        a
+            color $color2
+
+        &_fixed_250_width
+            min-width: 250px
+        &_fixed_90_width
+            width: 90px

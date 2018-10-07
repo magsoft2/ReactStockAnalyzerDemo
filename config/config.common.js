@@ -2,6 +2,8 @@ import moment from 'moment';
 
 const defaultConfig = {
 
+	publicPath: '/',
+
     showDevFeatures: true,
 
     settings:{

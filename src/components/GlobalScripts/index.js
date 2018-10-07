@@ -1,15 +1,12 @@
-import React, {PureComponent} from 'react';
-import {NODE_ENV} from "../../constants";
-import {getCookie} from "../../utils";
-import CONFIG from "config";
+import React, { PureComponent } from 'react';
 
 
 export class GlobalScripts extends PureComponent {
 
-    componentWillMount() {
+    componentWillMount () {
     }
 
-    componentDidMount() {
+    componentDidMount () {
     }
 
 }

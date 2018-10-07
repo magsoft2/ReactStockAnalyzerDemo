@@ -1,0 +1,28 @@
+.loader
+
+    width: 64px
+    height: 64px
+    position: fixed
+    top: 20%
+    left: 40%
+    z-index 100000
+    +tablet()
+        top:30%
+
+    &:after
+        content: " "
+        display: block
+        width: 64px
+        height: 64px
+        margin: 1px
+        border-radius: 50%
+        border: 8px solid gray
+        border-color: royalblue transparent royalblue transparent
+        animation: loader-anim 1.2s linear infinite
+
+@keyframes loader-anim
+    0%
+        transform: rotate(0deg)
+    
+    100%
+        transform: rotate(360deg)

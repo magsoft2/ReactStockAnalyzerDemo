@@ -1,0 +1,39 @@
+.indicator-ctor
+    display inline-flex
+    padding: 0px
+    align-items: center
+    flex-wrap: wrap;
+    
+    +tablet()
+        margin-left: 0px
+        padding: 2px 0px
+        border: 0px
+
+    &__label
+        padding 0px 5px 0px 15px
+        +tablet()
+            flex-basis: 50%
+            padding-left: 0px
+
+        &:first-child
+            padding-left 0px
+
+    &__type
+        width 100px
+
+    &__window
+        width 60px
+
+    &__btn
+        font-size $font-size-large
+        background:black
+        height: 23px
+        width: 23px
+        text-align: center
+        cursor: pointer
+        margin-left: 15px
+        +tablet()
+            margin-left 3px
+            height: 26px
+            width: 26px
+            

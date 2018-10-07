@@ -1,2 +1,4 @@
-export {NotFoundPage} from "./NotFound/NotFound";
-export {TestPage} from "./TestPage";
+export {NotFoundPage} from './NotFound';
+export {StockAnalysisPage} from './StockAnalysis';
+export {PortfolioManagementPage} from './Portfolio';
+export {AboutPage} from './About';

@@ -1,6 +1,8 @@
-.Nav
-    height 4.8rem
-    background $x-dark-blue
+.nav
+    height $nav-height
+    background $back-darker
+    +tablet()
+        height unset
 
     &-wrapper
         centered-layout()
@@ -9,53 +11,53 @@
         align-items center
         justify-content space-between
         +tablet()
-            overflow-y scroll
+            overflow-y auto
 
-        .Nav-links
+        .nav-links
             display flex
             height 100%
             align-items center
             flex-wrap wrap
             min-width: 800px
             +tablet()
-                padding 0 5px
+                padding 0px
                 overflow auto
                 min-width unset
                 width 100%
+                flex-direction: column
+                align-items: baseline
 
     &-link
         display block
         padding 0 2rem
         font-size $font-size-medium
-        height 4.8rem
-        line-height 4.8rem
+        height $nav-height
+        line-height $nav-height
         text-align center
         text-transform uppercase
         text-decoration none
-        color #fff
+        color $color2
         background transparent
         transition background .3s
         +tablet()
-            font-size 17px
-            padding 4px 5px
+            padding-left 5px
             margin-right: 10px
             height 28px
             line-height initial
             color $white
             text-shadow 0 0.5px 0 #0c2c5c
-            font-family TUI-reg
             text-transform none
             border 2px
+            width: 100%
+            text-align: left
             // &:nth-child(3), &:nth-child(n+5)
             //     display: none;
         &:hover
-            background-color $light-blue
+            background-color #2A2A2C
 
         &.active
-            color $x-dark-blue
-            background-color $light-blue
+            //color $dark-color
+            background-color #2A2A2C
             +tablet()
                 background-color #2b4d80
-                color $white
-        &.hotmenu
-            color #ef0000
+                color $back-light = #fff

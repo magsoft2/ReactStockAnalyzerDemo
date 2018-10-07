@@ -1,0 +1,105 @@
+.react-autosuggest
+
+    display: inline-flex
+    align-items: center
+
+    &__container 
+        position: relative
+        font-family: 'Roboto'
+        display: inline-block
+
+    &__input
+        width: 240px
+        font-weight: 300
+
+        &--focused
+            outline: none
+
+        &--open
+            border-bottom-left-radius: 0
+            border-bottom-right-radius: 0
+
+    &__suggestions-container
+        display: none
+
+        &--open
+            display: block;
+            position: absolute;
+            top: 25px;
+            width: 380px;
+            border: 1px solid #aaa;
+            background-color: $back_color_3
+            color: $text-color-2
+            font-family: 'Roboto';
+            font-weight: 300;
+            font-size: $font-size-small
+            border-bottom-left-radius: 2px;
+            border-bottom-right-radius: 2px;
+            z-index: 10000;
+            +tablet()
+                width:100vw
+                left:-5px
+                top 30px
+
+    &__suggestions-list
+        margin: 0;
+        padding: 3px;
+        list-style-type: none;
+        max-height: 600px
+        overflow: auto
+
+    &__suggestion
+        cursor: pointer;
+        padding: 2px 4px;
+
+        &--highlighted
+            background-color: $back-color-2
+
+    &_add_btn
+        background: black
+        display: inline-block
+        height: 22px
+        width: 22px
+        text-align: center
+        cursor pointer
+        +tablet()
+            width: 25px
+            height: 25px
+        
+
+    &__section-title
+        padding-left:20px
+
+    &__status
+        padding-left: 5px
+
+.stock-description
+    &_container
+        display: inline-flex
+        flex-direction: column
+        min-width:500px
+        font-size: $font-size-small
+
+    &_item        
+        display: inline-flex
+        width: 100%
+    
+    &_cell_id
+        width: 12%
+        flex-shrink: 0;
+        
+    &_cell_name
+        width: 28%
+        flex-shrink: 0;
+        +tablet()
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+    &_cell_title
+        width: auto
+    &_cell_description
+        flex-grow: 1
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
+
