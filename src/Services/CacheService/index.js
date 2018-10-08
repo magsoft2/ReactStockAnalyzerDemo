@@ -25,6 +25,10 @@ class CacheServiceClass {
             return value;
         }
     }
+
+    clearCache = () => {
+        this.cache = {};
+    }
     
 }
 
