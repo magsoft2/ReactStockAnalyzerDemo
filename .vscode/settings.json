@@ -2,7 +2,7 @@
     "editor.minimap.enabled": false,
     "favorites.sortDirection": "ASC",
     "favorites.groupsFirst": true,
-    "breadcrumbs.enabled": true,
+    "breadcrumbs.enabled": false,
     "search.quickOpen.includeSymbols": true,
     "telemetry.enableTelemetry": false,
     "telemetry.enableCrashReporter": false,

@@ -33,7 +33,9 @@ import { selectors } from './reducers';
 @connect( ( state ) => {
     return {
         positions: selectors.getPositions( state ),
-        startDate: selectors.getStartDate( state )
+        startDate: selectors.getStartDate( state ),
+        calculatedData: selectors.getPortfolioCalculatedData (state),
+        referenceData: selectors.getReferenceData(state)
     };
 }, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll } )
 class PortfolioManagementPage extends Component {
@@ -74,41 +76,48 @@ class PortfolioManagementPage extends Component {
     };
 
 
-    renderHistoryChart = ( positions ) => {
+    renderHistoryChart = ( calculatedData, referenceData ) => {
 
-        if ( !positions || !positions.length )
+        if ( !calculatedData || !calculatedData.history)
             return null;
 
         const options = {
             title: {
-                text: positions[ 0 ].securityId
+                text: 'Portfolio'
             },
             xAxis: {
                 type: 'datetime'
             },
             series: [],
+            
             ...themeHighCharts,
+
+            legend: {
+                ...themeHighCharts.legend,
+                enabled: true,
+                align: 'top',
+                layout: 'horizontal',
+                verticalAlign: 'top',
+                y: 0,
+                x: 280,
+                shadow: true
+            },
+
             height: 300 // Not working!
         };
 
-        if(!positions[ 0 ].securityItem.history){
-            return null;
-        }
-
-
-        //TEMP!
-        if(positions[ 0 ].securityItem.history){
+        if(calculatedData.history){
             options.series.push({
-                name: positions[ 0 ].securityId,
-                data: positions[ 0 ].securityItem.history.candles.map( a => {
+                name: calculatedData.history.securityId,
+                data: calculatedData.history.candles.map( a => {
                     return [ a.date.getTime(), a.close ];
                 } )
             });
         }
-        if(positions[ 1 ].securityItem.history){
+        if(referenceData && referenceData.history){
             options.series.push({
-                name: positions[ 1 ].securityId,
-                data: positions[ 1 ].securityItem.history.candles.map( a => {
+                name: referenceData.history.securityId,
+                data: referenceData.history.candles.map( a => {
                     return [ a.date.getTime(), a.close ];
                 } )
             });
@@ -154,7 +163,7 @@ class PortfolioManagementPage extends Component {
         );
     }
 
-    renderTable = ( positions ) => {
+    renderTable = ( positions, calculatedData ) => {
 
         const options = {
             showPagination: false,
@@ -200,13 +209,13 @@ class PortfolioManagementPage extends Component {
             },
             {
                 Header: 'Market Value',
-                accessor: 'marketValue',
+                accessor: 'calculatedData.marketValue',
                 minWidth: 100,
                 maxWidth: 100,
                 Footer: (
                     <span>
                         <strong>Total:</strong>{ ' ' }
-                        { _.round( _.sum( _.map( positions, d => d.marketValue ) ) ) }
+                        { _.round( calculatedData.marketValue ) }
                     </span>
                 )
             },
@@ -232,7 +241,7 @@ class PortfolioManagementPage extends Component {
     }
 
     render = () => {
-        const { positions } = this.props;
+        const { positions, calculatedData, referenceData } = this.props;
 
         return (
             <div className='portfolio'>
@@ -244,7 +253,7 @@ class PortfolioManagementPage extends Component {
                 <StockControlPanel onUpdateAll={ this.handleUpdateAll } onAddSecurity={ this.handleAddSecurity } />
 
                 <div className='portfolio_table'>
-                    { this.renderTable( positions ) }
+                    { this.renderTable( positions, calculatedData ) }
                 </div>
 
                 <div>
@@ -256,7 +265,7 @@ class PortfolioManagementPage extends Component {
                         </TabList>
 
                         <TabPanel>
-                            { this.renderHistoryChart( positions ) }
+                            { this.renderHistoryChart( calculatedData, referenceData ) }
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />

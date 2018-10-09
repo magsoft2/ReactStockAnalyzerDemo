@@ -15,10 +15,17 @@ const HISTORY_HORIZON_YEAR = 1;
 const initialState = {
     positions: createDefaultPortfolioPositions(),
     startDate: moment().add( -1 * HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat ),
-    aggregatedData: {
+    horizon: 12, //TODO: implement horizon GUI
+    calculatedData: {
         history: undefined,
-        totalMav: 0,
+        historyProc: undefined,
+        historyReferenceBased: undefined,
+        marketValue: 0,
         volatility: 0
+    },
+    referenceData: {
+        referenceHistory: undefined,
+        referenceHistoryProc: undefined
     }
 };
 
@@ -45,30 +52,19 @@ const portfolio = ( state = initialState, action ) => {
 
             const { security } = action.data;
 
-            return addSecurityToPortfolio( security, state );
+            return processPortfolio( addPortfolioPosition( state, security ));
         }
         case ACTIONS.PORTFOLIO_SECURITY_DELETE: {
 
-            let { idx } = action.data;
-            const positions = getPositions( state );
+            const { idx } = action.data;            
 
-            return deleteSecurityFromPortfolio( positions, idx, state );
+            return processPortfolio(deletePortfolioPosition( state, idx ));
         }
         case ACTIONS.PORTFOLIO_POSITION_EDIT: {
 
             let { idx, newPosition } = action.data;
-            const positions = getPositions( state );
 
-            if(positions && idx < positions.length && positions[idx].shares != newPosition) {
-
-                positions[idx].shares = newPosition;
-
-                return {
-                    ...state,
-                    positions: [ ...positions ]
-                };
-            }
-            return state;
+            return processPortfolio(editPortfolioPosition( state, idx, newPosition ));      
         }
         case ACTIONS.PORTFOLIO_CALCULATE_ALL: {
 
@@ -89,20 +85,8 @@ const portfolio = ( state = initialState, action ) => {
 
             const { securities } = action.data;
 
-            const positions = getPositions( state );
+            return processPortfolio(updateAllSecurities( state, securities ));     
 
-            for ( const item of securities ) {
-                for ( const pos of positions ) {
-                    if ( item.securityId === pos.securityId ) {//TODO: optimize it!
-                        pos.securityItem = item;
-                    }
-                }
-            }
-
-            return {
-                ...state,
-                positions: [ ...positions ]
-            };
         }
 
         default:
@@ -111,59 +95,165 @@ const portfolio = ( state = initialState, action ) => {
 };
 
 
-const addSecurityToPortfolio = ( security, state ) => {
+const addPortfolioPosition = ( state, security, shares = 1 ) => {
 
     const positions = getPositions( state );
 
     security.selected = true;
 
-    positions.push( {
+    const position = {
         securityId: security.securityId,
         securityItem: security,
-        shares: 1,
+        shares,
         currency: CONSTANTS.CURRENCY.RUB,
-        marketValue: security.price.close*1,
-        timeStamp: new Date(),
-        calculatedData: {
-            volatility: undefined
-        }
-    } );
+        timeStamp: new Date()
+    };
+
+    positions.push(position);
 
     return {
         ...state,
-        positions: [ ...positions ]
+        positions
     };
 };
+const deletePortfolioPosition = ( state, idx ) => {
 
-const deleteSecurityFromPortfolio = ( positions, idx, state ) => {
+    const positions = getPositions( state );
+
     if ( positions && idx < positions.length) {
         positions.splice(idx, 1);
     }
     return {
         ...state,
-        positions: [ ...positions ]
+        positions
     };
 };
+const editPortfolioPosition = ( state, idx, newShares ) => {
+    const positions = getPositions( state );
 
-const processPortfolio = ( state ) => {
+    if(positions && idx < positions.length && positions[idx].shares != newShares) {
+        positions[idx].shares = newShares;
+
+        return {
+            ...state,
+            positions
+        };
+    }
+    return state;
+};
+const updateAllSecurities = ( state, securities ) => {
 
     const positions = getPositions( state );
 
-    for(const pos of positions) {
-        pos.marketValue = pos.securityItem.price.close*pos.shares;
+    for ( const item of securities ) {
+        for ( const pos of positions ) {
+            if ( item.securityId === pos.securityId ) {//TODO: optimize it!
+                pos.securityItem = item;
+            }
+        }
     }
-
-    //TODO: implement process portfolio logic
 
     return {
         ...state,
-        positions: [ ...positions ]
+        positions
+    };
+};
+
+const processPortfolioPosition = (position, portfolioData) => {
+    
+    position.calculatedData = {
+        volatility: 0,
+        marketValue: getPositionPrice(position)*position.shares
+    };
+};
+const processPortfolio = ( state ) => {
+
+    const positions = getPositions( state );
+    const calculatedData = getPortfolioCalculatedData( state );
+    const referenceData = getReferenceData( state );
+
+    //TODO: implement process portfolio logic
+    // position calculations could depend on portfolio level
+    // refactor this simple implementation
+
+    //1. TODO: aggregate portfolio history and make history calculations
+    calculatedData.history = aggregateHistory(positions);
+
+    calculatedData.historyProc = undefined;
+    referenceData.history = {...positions[1].securityItem.history};
+    referenceData.history.securityId = 'Reference';
+    if(referenceData && referenceData.referenceHistory) {
+        
+        referenceData.referenceHistoryProc = undefined;
+
+        calculatedData.referenceHistory = undefined;
+    }
+
+    //2. calculate every position
+    for(const position of positions) {
+        processPortfolioPosition(position, calculatedData);
+    }
+
+    //3. calculate portfolio data
+    calculatedData.marketValue = 0;
+    for(const position of positions) {
+        calculatedData.marketValue += getCalculatedData(position, 'marketValue');
+    }
+   
+
+    return {
+        ...state,
+        positions: [ ...positions ],
+        calculatedData,
+        referenceData
+    };
+};
+
+const aggregateHistory = (positions) => {
+
+    //return {...positions[0].securityItem.history, securityId: 'Portfolio'};
+
+    // Very non-optimal implementation!
+    // Also works only for equal history dates in all stocks!
+    const candles = [];
+    for(const point of positions[0].securityItem.history.candles) {
+        const candle = {
+            ...point
+        };
+        candle.close = 0;
+        for(const pos of positions) {
+            const p = pos.securityItem.history.candles.filter(a => a.date.getTime() === point.date.getTime());
+            if(p && p.length) {
+                candle.close += p[0].close*pos.shares;
+            }
+        }
+        candles.push(candle);
+    }
+
+    return {
+        securityId: 'Portfolio',
+        candles
     };
 };
 
 
 const getPositions = ( state ) => state.positions;
 const getStartDate = ( state ) => state.startDate;
+const getPositionPrice = (position) => position && position.securityItem && position.securityItem.price ? position.securityItem.price.close : NaN;
+const getPortfolioCalculatedData = (state, fieldName = undefined) => {
+    return getCalculatedData(state, fieldName);
+};
+const getReferenceData = (state) => state.referenceData;
+const getCalculatedData = (position, fieldName = undefined) => {
+    if(!fieldName)
+        return position.calculatedData;
+
+    if(position.calculatedData) {
+        return position.calculatedData[fieldName];
+    }
+
+    return undefined;
+};
 
 const getSecuritySelectedById = createSelector(
     ( state, securityId ) => { return { suggestions: getPositions( state ), securityId }; },
@@ -176,7 +266,9 @@ const getSecuritySelectedById = createSelector(
 export const selectors = globalizeSelectors( {
     getPositions,
     getSecuritySelectedById,
-    getStartDate
+    getStartDate,
+    getPortfolioCalculatedData,
+    getReferenceData
 }, 'portfolio' );
 
 
