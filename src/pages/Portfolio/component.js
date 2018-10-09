@@ -87,7 +87,8 @@ class PortfolioManagementPage extends Component {
                 type: 'datetime'
             },
             series: [],
-            ...themeHighCharts
+            ...themeHighCharts,
+            height: 300 // Not working!
         };
 
         if(!positions[ 0 ].securityItem.history){
@@ -116,11 +117,15 @@ class PortfolioManagementPage extends Component {
         options.rangeSelector.selected = 1;
 
         return (
-            <HighchartsReact
-                highcharts={ Highcharts }
-                constructorType={ 'stockChart' }
-                options={ options }
-            /> );
+            <div className='portfolio__history-chart'>
+                <HighchartsReact
+                    highcharts={ Highcharts }
+                    constructorType={ 'stockChart' }
+                    options={ options }               
+                    chart={ {height: 200 } }     
+                />
+            </div>
+            );
     };
 
 
@@ -251,7 +256,6 @@ class PortfolioManagementPage extends Component {
                         </TabList>
 
                         <TabPanel>
-                            <WarningBadgeComponent message={ 'Under construction.' } />
                             { this.renderHistoryChart( positions ) }
                         </TabPanel>
                         <TabPanel>
