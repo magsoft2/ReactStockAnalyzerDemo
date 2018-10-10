@@ -15,8 +15,8 @@ export class Footer extends PureComponent {
     			<div className="footer_item"><a href='https://github.com/magsoft2/ReactStockAnalyzerDemo'>Gitub sources</a></div>
     			<div className="footer_item">2018</div>
     			<div className="footer_item"><Link to={'/about'}>About</Link></div>
-                <div className="footer_item footer_item_fixed_90_width"><GlobalProgressComponent/></div>
-                <div className="footer_item footer_item_fixed_250_width"><GLobalMessageComponent/></div>
+                <div className="footer_item footer_item_fixed_90_width footer_item footer_item--white-color"><GlobalProgressComponent/></div>
+                <div className="footer_item footer_item_fixed_250_width footer_item--white-color"><GLobalMessageComponent/></div>
     		</div>
     	);
     }

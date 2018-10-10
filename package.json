@@ -91,6 +91,7 @@
     "file-loader": "^1.1.11",
     "font-awesome": "^4.7.0",
     "highcharts": "^6.1.4",
+    "highcharts-more": "^0.1.7",
     "highcharts-react-official": "^1.4.0",
     "history": "^4.5.1",
     "html-webpack-plugin": "^2.28.0",

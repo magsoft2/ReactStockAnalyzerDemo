@@ -8,16 +8,15 @@ import _ from 'lodash';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
 
 import './index.styl';
 
-import { themeHighCharts } from './theme';
 import { WarningBadgeComponent } from 'components';
 import { SecurityDescriptionComponent } from 'components/SecurityDescription';
 import { StockControlPanel } from 'components/StockControlPanel';
 
+import HistoryChartComponent from './components/HistoryChart';
+import RiskPerformanceChart from './components/RiskPerformanceChart';
 
 import {
     restorePortfolioState, storePortfolioState,
@@ -76,67 +75,6 @@ class PortfolioManagementPage extends Component {
     };
 
 
-    renderHistoryChart = ( calculatedData, referenceData ) => {
-
-        if ( !calculatedData || !calculatedData.history)
-            return null;
-
-        const options = {
-            title: {
-                text: 'Portfolio'
-            },
-            xAxis: {
-                type: 'datetime'
-            },
-            series: [],
-            
-            ...themeHighCharts,
-
-            legend: {
-                ...themeHighCharts.legend,
-                enabled: true,
-                align: 'top',
-                layout: 'horizontal',
-                verticalAlign: 'top',
-                y: 0,
-                x: 280,
-                shadow: true
-            },
-
-            height: 300 // Not working!
-        };
-
-        if(calculatedData.history){
-            options.series.push({
-                name: calculatedData.history.securityId,
-                data: calculatedData.history.candles.map( a => {
-                    return [ a.date.getTime(), a.close ];
-                } )
-            });
-        }
-        if(referenceData && referenceData.history){
-            options.series.push({
-                name: referenceData.history.securityId,
-                data: referenceData.history.candles.map( a => {
-                    return [ a.date.getTime(), a.close ];
-                } )
-            });
-        }
-
-        options.rangeSelector.selected = 1;
-
-        return (
-            <div className='portfolio__history-chart'>
-                <HighchartsReact
-                    highcharts={ Highcharts }
-                    constructorType={ 'stockChart' }
-                    options={ options }               
-                    chart={ {height: 200 } }     
-                />
-            </div>
-            );
-    };
-
 
     renderPositionEditor = ( cellInfo ) => {
 
@@ -193,6 +131,12 @@ class PortfolioManagementPage extends Component {
                 maxWidth: 100
             },
             {
+                Header: '% Mav Position',
+                accessor: 'calculatedData.positionProc',
+                minWidth: 100,
+                maxWidth: 100
+            },
+            {
                 Header: 'Del.',
                 accessor: 'securityId',
                 filterable: false,
@@ -216,6 +160,30 @@ class PortfolioManagementPage extends Component {
                     <span>
                         <strong>Total:</strong>{ ' ' }
                         { _.round( calculatedData.marketValue ) }
+                    </span>
+                )
+            },
+            {
+                Header: 'Perf',
+                accessor: 'calculatedData.performance',
+                minWidth: 100,
+                maxWidth: 100,
+                Footer: (
+                    <span>
+                        <strong>Total:</strong>{ ' ' }
+                        { _.round( calculatedData.performance ) }
+                    </span>
+                )
+            },
+            {
+                Header: 'Vol',
+                accessor: 'calculatedData.volatility',
+                minWidth: 100,
+                maxWidth: 100,
+                Footer: (
+                    <span>
+                        <strong>Total:</strong>{ ' ' }
+                        { _.round( calculatedData.volatility ) }
                     </span>
                 )
             },
@@ -265,10 +233,13 @@ class PortfolioManagementPage extends Component {
                         </TabList>
 
                         <TabPanel>
-                            { this.renderHistoryChart( calculatedData, referenceData ) }
+                            <div className="portfolio__history-chart">
+                                <HistoryChartComponent calculatedData={calculatedData} referenceData={referenceData}/>
+                            </div>
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />
+                            <RiskPerformanceChart positions={positions} calculatedData={calculatedData} referenceData={referenceData}/>
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />

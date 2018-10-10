@@ -21,7 +21,9 @@ const initialState = {
         historyProc: undefined,
         historyReferenceBased: undefined,
         marketValue: 0,
-        volatility: 0
+        volatility: 0,
+        performance: 0,
+        positionProc: 100
     },
     referenceData: {
         referenceHistory: undefined,
@@ -163,8 +165,27 @@ const processPortfolioPosition = (position, portfolioData) => {
     
     position.calculatedData = {
         volatility: 0,
+        performance: 0,
+        positionProc: 0,
         marketValue: getPositionPrice(position)*position.shares
     };
+
+    const candles = position.securityItem.history && position.securityItem.history.candles  ? position.securityItem.history.candles : undefined;
+    
+    calculateData(position.calculatedData, candles, portfolioData);
+
+};
+const calculateData = (calculatedData, candles, portfolioData) => {
+    if(candles && candles.length > 0) {
+        const first = candles[0].close;
+        const last = candles[candles.length - 1].close;
+        if(first !== 0) {
+            calculatedData.performance = 100*(last - first)/first;
+         
+            //for test!
+            calculatedData.volatility = Math.abs(last - first);
+        }
+    }
 };
 const processPortfolio = ( state ) => {
 
@@ -179,15 +200,14 @@ const processPortfolio = ( state ) => {
     //1. TODO: aggregate portfolio history and make history calculations
     calculatedData.history = aggregateHistory(positions);
 
-    calculatedData.historyProc = undefined;
+    calculatedData.historyProc = getProcHistory(calculatedData.history);
     referenceData.history = {...positions[1].securityItem.history};
     referenceData.history.securityId = 'Reference';
     if(referenceData && referenceData.referenceHistory) {
-        
-        referenceData.referenceHistoryProc = undefined;
-
-        calculatedData.referenceHistory = undefined;
+        referenceData.referenceHistoryProc = getProcHistory(referenceData.referenceHistory);
     }
+
+   
 
     //2. calculate every position
     for(const position of positions) {
@@ -199,6 +219,12 @@ const processPortfolio = ( state ) => {
     for(const position of positions) {
         calculatedData.marketValue += getCalculatedData(position, 'marketValue');
     }
+    for(const position of positions) {
+        position.calculatedData.positionProc = Number(100*getCalculatedData(position, 'marketValue')/calculatedData.marketValue).toFixed(2);
+    }
+    const candles = calculatedData.history && calculatedData.history.candles  ? calculatedData.history.candles : undefined;
+    
+    calculateData(calculatedData, candles, calculatedData);
    
 
     return {
@@ -209,6 +235,23 @@ const processPortfolio = ( state ) => {
     };
 };
 
+const getProcHistory = (history) => {
+    const candles = history && history.candles ? history.candles : undefined;
+    if(candles && candles.length) {
+        const historyProc = [];
+        const first = history.candles
+        for(const pos of history.candles){
+            const point = {...pos};
+            point.close = 100*(point.close - first.close)/first.close;
+            historyProc.push(point);
+        }
+        return {
+            securityId: history.securityId,
+            candles: historyProc
+        };
+    }
+    return undefined;
+};
 const aggregateHistory = (positions) => {
 
     //return {...positions[0].securityItem.history, securityId: 'Portfolio'};
