@@ -18,8 +18,8 @@ import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList } from './redu
     };
 }, { searchSecurityAsync } )
 class SecuritySelectorComponent extends React.PureComponent {
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
 
         this.state = {
             value: '',

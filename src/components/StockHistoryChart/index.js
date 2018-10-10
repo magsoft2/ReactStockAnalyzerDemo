@@ -225,7 +225,7 @@ export class StockHistoryChartComponent extends React.Component {
                                 yAccessor: d => d.close,
                                 type: securityId,
                                 stroke: ChartTheme.raiseColor,
-                                windowSize: item.definition.name
+                                windowSize: ''
                             }
                         ] }
                     />
@@ -241,7 +241,7 @@ export class StockHistoryChartComponent extends React.Component {
                                         type: item.type(),
                                         stroke: item.stroke(),
                                         key: item.key,
-                                        windowSize: item.options().windowSize
+                                        windowSize: item.options().windowSize ? item.options().windowSize : ''
                                     };
                                 }
                                 )

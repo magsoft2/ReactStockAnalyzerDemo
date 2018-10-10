@@ -40,7 +40,7 @@ class MoexProviderClass {
 
     getAllReferences = async () => {
         const res = await this.instance
-            .get( 'iss/index.json?&iss.only=securitycollections,securitygroups,securitytypes&' + additionalArguments )
+            .get( 'iss/index.json?iss.only=securitycollections,securitygroups,securitytypes&' + additionalArguments )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -62,6 +62,11 @@ class MoexProviderClass {
         }
 
         return Promise.resolve( result );
+    };
+
+    getIndexes = () => {
+        //https://iss.moex.com/iss/statistics/engines/stock/markets/index/analytics.json
+        //https://iss.moex.com/iss/securitygroups/12/collections/210/securities.json
     };
 
     getSecurityDescription = async ( securityId ) => {

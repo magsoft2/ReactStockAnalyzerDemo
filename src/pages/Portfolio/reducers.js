@@ -220,7 +220,7 @@ const processPortfolio = ( state ) => {
         calculatedData.marketValue += getCalculatedData(position, 'marketValue');
     }
     for(const position of positions) {
-        position.calculatedData.positionProc = Number(100*getCalculatedData(position, 'marketValue')/calculatedData.marketValue).toFixed(2);
+        position.calculatedData.positionProc = 100*getCalculatedData(position, 'marketValue')/calculatedData.marketValue;
     }
     const candles = calculatedData.history && calculatedData.history.candles  ? calculatedData.history.candles : undefined;
     
@@ -239,7 +239,7 @@ const getProcHistory = (history) => {
     const candles = history && history.candles ? history.candles : undefined;
     if(candles && candles.length) {
         const historyProc = [];
-        const first = history.candles
+        const first = history.candles[0];
         for(const pos of history.candles){
             const point = {...pos};
             point.close = 100*(point.close - first.close)/first.close;

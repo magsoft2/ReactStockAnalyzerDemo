@@ -53,10 +53,8 @@ export const createDefaultPortfolioPositions = () => {
         createDefStockItem('GAZP', 'stock_shares'),
         createDefStockItem('YNDX', 'stock_shares'),
         createDefStockItem('LKOH', 'stock_shares'),
-        createDefStockItem('RTSI', 'stock_index'),
         createDefStockItem('MGNT', 'stock_shares'),
         createDefStockItem('SBERP', 'stock_shares'),
-        createDefStockItem('RTSSTD', 'stock_index'),
         createDefStockItem('AFH9', 'futures_forts'),
     ].map(item => createPortfolioPosition(item));
 };

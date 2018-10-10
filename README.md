@@ -19,6 +19,7 @@ TODO:
 
  PortfolioProcessor()
  DataAnalysis()
+ - fix BEM
 11. Add some Jest unit tests
 12. PERFOMANCE analysis
 13. current date and WhatIf date selector

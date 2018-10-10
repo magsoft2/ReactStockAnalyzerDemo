@@ -17,6 +17,7 @@ import { StockControlPanel } from 'components/StockControlPanel';
 
 import HistoryChartComponent from './components/HistoryChart';
 import RiskPerformanceChart from './components/RiskPerformanceChart';
+import FactorsPolarChart from './components/FactorsPolarChart';
 
 import {
     restorePortfolioState, storePortfolioState,
@@ -33,8 +34,8 @@ import { selectors } from './reducers';
     return {
         positions: selectors.getPositions( state ),
         startDate: selectors.getStartDate( state ),
-        calculatedData: selectors.getPortfolioCalculatedData (state),
-        referenceData: selectors.getReferenceData(state)
+        calculatedData: selectors.getPortfolioCalculatedData( state ),
+        referenceData: selectors.getReferenceData( state )
     };
 }, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll } )
 class PortfolioManagementPage extends Component {
@@ -46,7 +47,118 @@ class PortfolioManagementPage extends Component {
 
     static propTypes = {
         positions: PropTypes.array,
-        startDate: PropTypes.string
+        startDate: PropTypes.string,
+        calculatedData: PropTypes.object,
+        referenceData: PropTypes.object
+    }
+
+
+
+    getTableConfig ( positions, calculatedData ) {
+        const options = {
+            showPagination: false,
+            filterable: true,
+            minRows: 5,
+            noDataText: '',
+            className: '-striped -highlight'
+        };
+
+        const columns = [
+            {
+                Header: 'Del.',
+                accessor: 'securityId',
+                filterable: false,
+                Cell: row => (
+                    <div className='portfolio_table_delete_column' id={ row.index } onClick={ this.handleDeleteSecurity }>&#x2715;</div>
+                ),
+                width: 40
+            },
+            {
+                Header: 'Security',
+                accessor: 'securityId',
+                maxWidth: 150,
+                Footer: (
+                    <span>
+                        <strong>Total:{ ' ' }
+                            { positions.length }
+                        </strong>
+                    </span>
+                )
+            },
+            {
+                Header: 'Shares',
+                accessor: 'shares',
+                Cell: this.renderPositionEditor,
+                minWidth: 100,
+                maxWidth: 100
+            },
+            {
+                Header: 'Mav %',
+                accessor: 'calculatedData.positionProc',
+                minWidth: 70,
+                maxWidth: 70,
+                Cell: row => (
+                    <div >{ _.round( row.value, 2 ) } %</div>
+                ),
+            },
+            {
+                Header: 'Price',
+                accessor: 'securityItem.price.close',
+                minWidth: 100,
+                maxWidth: 100
+            },
+            {
+                Header: 'Market Value',
+                accessor: 'calculatedData.marketValue',
+                minWidth: 100,
+                maxWidth: 100,
+                Cell: row => (
+                    <div >{ _.round( row.value ) }</div>
+                ),
+                Footer: (
+                    <strong>
+                        { _.round( calculatedData.marketValue ) }
+                    </strong>
+                )
+            },
+            {
+                Header: 'Perf %',
+                accessor: 'calculatedData.performance',
+                minWidth: 100,
+                maxWidth: 100,
+                Cell: row => (
+                    <div >{ _.round( row.value, 2 ) } %</div>
+                ),
+                Footer: (
+                    <strong>
+                        { _.round( calculatedData.performance, 2 ) } %
+                    </strong>
+                )
+            },
+            {
+                Header: 'Vol',
+                accessor: 'calculatedData.volatility',
+                minWidth: 100,
+                maxWidth: 100,
+                Cell: row => (
+                    <div >{ _.round( row.value ) }</div>
+                ),
+                Footer: (
+                    <strong>
+                        { _.round( calculatedData.volatility, 2 ) }
+                    </strong>
+                )
+            },
+            {
+                Header: 'Description',
+                accessor: 'securityItem',
+                Cell: row => (
+                    <SecurityDescriptionComponent securityItem={ row.value } />
+                )
+            }
+        ];
+
+        return { options, columns };
     }
 
     componentDidMount () {
@@ -90,7 +202,7 @@ class PortfolioManagementPage extends Component {
                     const newPosition = e.target.innerHTML;
                     //TODO: add validation
 
-                    if(newPosition != positions[ cellInfo.index ].shares) {
+                    if ( newPosition != positions[ cellInfo.index ].shares ) {
                         this.props.editPortfolioPosition( cellInfo.index, newPosition );
                     }
                 } }
@@ -103,105 +215,14 @@ class PortfolioManagementPage extends Component {
 
     renderTable = ( positions, calculatedData ) => {
 
-        const options = {
-            showPagination: false,
-            filterable: true,
-            minRows: 5,
-            noDataText: '',
-            className: '-striped -highlight'
-        };
-
-        const columns = [
-            {
-                Header: 'Security',
-                accessor: 'securityId',
-                maxWidth: 200,
-                Footer: (
-                    <span>
-                        <strong>Count:</strong>{ ' ' }
-                        { positions.length }
-                    </span>
-                )
-            },
-            {
-                Header: 'Shares',
-                accessor: 'shares',
-                Cell: this.renderPositionEditor,
-                minWidth: 100,
-                maxWidth: 100
-            },
-            {
-                Header: '% Mav Position',
-                accessor: 'calculatedData.positionProc',
-                minWidth: 100,
-                maxWidth: 100
-            },
-            {
-                Header: 'Del.',
-                accessor: 'securityId',
-                filterable: false,
-                Cell: row => (
-                    <div className='portfolio_table_delete_column' id={ row.index } onClick={ this.handleDeleteSecurity }>&#x2715;</div>
-                ),
-                width: 40
-            },
-            {
-                Header: 'Price',
-                accessor: 'securityItem.price.close',
-                minWidth: 100,
-                maxWidth: 100
-            },
-            {
-                Header: 'Market Value',
-                accessor: 'calculatedData.marketValue',
-                minWidth: 100,
-                maxWidth: 100,
-                Footer: (
-                    <span>
-                        <strong>Total:</strong>{ ' ' }
-                        { _.round( calculatedData.marketValue ) }
-                    </span>
-                )
-            },
-            {
-                Header: 'Perf',
-                accessor: 'calculatedData.performance',
-                minWidth: 100,
-                maxWidth: 100,
-                Footer: (
-                    <span>
-                        <strong>Total:</strong>{ ' ' }
-                        { _.round( calculatedData.performance ) }
-                    </span>
-                )
-            },
-            {
-                Header: 'Vol',
-                accessor: 'calculatedData.volatility',
-                minWidth: 100,
-                maxWidth: 100,
-                Footer: (
-                    <span>
-                        <strong>Total:</strong>{ ' ' }
-                        { _.round( calculatedData.volatility ) }
-                    </span>
-                )
-            },
-            {
-                Header: 'Description',
-                accessor: 'securityItem',
-                Cell: row => (
-                    <SecurityDescriptionComponent securityItem={ row.value } />
-                )
-            }
-        ];
+        const tableConfig = this.getTableConfig( positions, calculatedData );
 
         return (
             <div>
                 <ReactTable
                     data={ positions }
-                    columns={ columns }
-                    { ...options }
+                    columns={ tableConfig.columns }
+                    { ...tableConfig.options }
                 />
                 <br />
             </div>
@@ -234,15 +255,16 @@ class PortfolioManagementPage extends Component {
 
                         <TabPanel>
                             <div className="portfolio__history-chart">
-                                <HistoryChartComponent calculatedData={calculatedData} referenceData={referenceData}/>
+                                <HistoryChartComponent calculatedData={ calculatedData } referenceData={ referenceData } />
                             </div>
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />
-                            <RiskPerformanceChart positions={positions} calculatedData={calculatedData} referenceData={referenceData}/>
+                            <RiskPerformanceChart positions={ positions } calculatedData={ calculatedData } referenceData={ referenceData } />
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />
+                            <FactorsPolarChart positions={ positions } calculatedData={ calculatedData } referenceData={ referenceData } />
                         </TabPanel>
                     </Tabs>
 
