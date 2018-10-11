@@ -6,9 +6,16 @@ import {suggestions} from 'components/SecuritySelector';
 import {securitiesAnalysis} from 'pages/StockAnalysis';
 import {portfolio} from 'pages/Portfolio';
 
+import {createDefaultIndexList} from 'domain/securityHelpers';
+
+
 export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
 
-const references = ( state = null, action ) => {
+const initialReferenceState = {
+    indexes: createDefaultIndexList()
+};
+
+const references = ( state = initialReferenceState, action ) => {
     switch ( action.type ) {
         case ACTIONS.INITIALIZE_COMPLETED:
             return {
@@ -29,6 +36,12 @@ const getSecurityTypeReference = createSelector(
         return references.securityTypes.find(a => a.typeName === securityTypeId);
     }
 );
+const getIndexListReference = createSelector(
+    (state) => getReferences(state),
+    ( obj ) => {
+        return obj ? obj.indexes: [];
+    }
+);
 
 
 const combinedReducers = combineReducers( {
@@ -39,4 +52,4 @@ const combinedReducers = combineReducers( {
     portfolio
 } );
 
-export {combinedReducers, getReferences, getSecurityTypeReference};
+export {combinedReducers, getReferences, getSecurityTypeReference, getIndexListReference};

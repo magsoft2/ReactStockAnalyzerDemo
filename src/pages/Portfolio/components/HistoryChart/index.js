@@ -7,11 +7,11 @@ import HighchartsReact from 'highcharts-react-official';
 import { themeHighCharts } from '../theme';
 
 
-
 export default class HistoryChartComponent extends Component {
     static propTypes = {
         calculatedData: PropTypes.object,
-        referenceData: PropTypes.object
+        referenceData: PropTypes.object,
+        indexes: PropTypes.array
     };
 
     constructor (props) {
@@ -49,11 +49,12 @@ export default class HistoryChartComponent extends Component {
 
     handleReferenceChange = (event) => {
         this.setState( { refrenceId: event.target.value } );
+        this.props.onChangeReference(event.target.value);
     };
 
 
     render () {
-        const { calculatedData, referenceData } = this.props;
+        const { calculatedData, referenceData, indexes } = this.props;
         const {refrenceId} = this.state;
 
         if ( !calculatedData || !calculatedData.history ) return null;
@@ -84,10 +85,8 @@ export default class HistoryChartComponent extends Component {
             <div>
                 <span>Reference: </span>
                 <select value={ refrenceId } onChange={ this.handleReferenceChange } >
-                <option value={ undefined }> </option>
-                    <option value={ 'idx1' }>IDX1</option>
-                    <option value={ 'idx2' }>IDX2</option>
-                    <option value={ 'idx3' }>IDX3</option>
+                    <option value={ undefined }> </option>
+                    {!!indexes && indexes.map( ind => <option value={ ind.securityId }>{ind.securityId}</option>) }
                 </select>
                 <HighchartsReact highcharts={ Highcharts } constructorType={ 'stockChart' } options={ options } chart={ { height: 200 } } />
             </div>

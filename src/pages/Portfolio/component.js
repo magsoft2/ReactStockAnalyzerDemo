@@ -26,6 +26,8 @@ import {
     updateAll
 } from './actions';
 
+import {getIndexListReference} from 'reducers';
+
 import { selectors } from './reducers';
 
 
@@ -35,7 +37,8 @@ import { selectors } from './reducers';
         positions: selectors.getPositions( state ),
         startDate: selectors.getStartDate( state ),
         calculatedData: selectors.getPortfolioCalculatedData( state ),
-        referenceData: selectors.getReferenceData( state )
+        referenceData: selectors.getReferenceData( state ),
+        indexes: getIndexListReference( state )
     };
 }, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll } )
 class PortfolioManagementPage extends Component {
@@ -186,7 +189,9 @@ class PortfolioManagementPage extends Component {
         this.props.updateAll( positions.map( a => a.securityItem ), startDate );
     };
 
-
+    handleChangeReference = (ref) => {
+        console.log('onChangeReference:', ref);
+    };
 
     renderPositionEditor = ( cellInfo ) => {
 
@@ -230,7 +235,7 @@ class PortfolioManagementPage extends Component {
     }
 
     render = () => {
-        const { positions, calculatedData, referenceData } = this.props;
+        const { positions, calculatedData, referenceData, indexes } = this.props;
 
         return (
             <div className='portfolio'>
@@ -255,7 +260,7 @@ class PortfolioManagementPage extends Component {
 
                         <TabPanel>
                             <div className="portfolio__history-chart">
-                                <HistoryChartComponent calculatedData={ calculatedData } referenceData={ referenceData } />
+                                <HistoryChartComponent calculatedData={ calculatedData } referenceData={ referenceData } indexes={indexes} onChangeReference={this.handleChangeReference} />
                             </div>
                         </TabPanel>
                         <TabPanel>

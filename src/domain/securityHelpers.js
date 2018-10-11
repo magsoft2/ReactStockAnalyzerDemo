@@ -58,3 +58,29 @@ export const createDefaultPortfolioPositions = () => {
         createDefStockItem('AFH9', 'futures_forts'),
     ].map(item => createPortfolioPosition(item));
 };
+
+export const createDefaultIndexList = () => {
+
+    return [
+        createDefStockItem('IMOEX', 'stock_index'),
+        createDefStockItem('MICEX10INDEX', 'stock_index'),
+        createDefStockItem('RTSI', 'stock_index'),
+        createDefStockItem('RTSSTD', 'stock_index'),
+        createDefStockItem('MICEXFNL', 'stock_index'),
+        createDefStockItem('MICEXO&G', 'stock_index'),
+        createDefStockItem('MICEXM&M', 'stock_index'),
+        createDefStockItem('MICEXCGS', 'stock_index'),
+        createDefStockItem('MICEXPWR', 'stock_index'),
+        createDefStockItem('MICEXTLC', 'stock_index'),
+        createDefStockItem('RUBMI', 'stock_index'),
+        createDefStockItem('MICEXTRN', 'stock_index'),
+        createDefStockItem('MICEXCHM', 'stock_index'),
+        createDefStockItem('MICEXINNOV', 'stock_index'),
+        createDefStockItem('RTSSIB', 'stock_index'),
+        createDefStockItem('MICEXSC', 'stock_index'),
+        createDefStockItem('MICEXMNF', 'stock_index'),
+        createDefStockItem('OPSI', 'stock_index'),
+        createDefStockItem('OPSI', 'stock_index'),
+        createDefStockItem('OPSI', 'stock_index')
+    ];
+};
