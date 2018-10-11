@@ -7,11 +7,13 @@ import { securitySearchSagaRootSaga } from 'components/SecuritySelector';
 import { portfolioManagerRootSaga } from 'pages/Portfolio';
 
 import { SecurityService, CacheService, LogService } from "Services";
-import {createDefaultIndexList} from 'domain/securityHelpers';
+import {DefaultCollections} from 'domain/defaultCollections';
 import {updateSecuritiesData} from 'domain/securityUpdater';
 
-import {ACTIONS} from './reducers';
+import { showMessage } from 'components/GlobalNotification';
 
+
+import {ACTIONS} from './reducers';
 import {CONSTANTS} from './constants';
 
 function* initialSaga() {
@@ -19,15 +21,15 @@ function* initialSaga() {
     const references = yield CacheService.getOrAdd('get_all_references', function*() {
             
         try {
-            const indexes = createDefaultIndexList();
+            const indexes = DefaultCollections.createDefaultIndexList();
 
             const HISTORY_HORIZON_YEAR = 1;
             const startDate = moment().add( -1 * HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat );
 
             const descr = yield SecurityService.getAllReferences();
-            const indx = yield updateSecuritiesData( indexes, startDate);
+            descr.indexes = yield updateSecuritiesData( indexes, startDate);
 
-            return descr.indexes = indx;
+            return descr;
 
         } catch (err) {
             LogService.error('getting all references error, ', err);
@@ -36,6 +38,7 @@ function* initialSaga() {
     });
 
     yield put({type: ACTIONS.INITIALIZE_COMPLETED, data: {references}});
+    yield put(showMessage('', 0));
 
 }
 

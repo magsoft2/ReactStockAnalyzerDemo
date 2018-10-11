@@ -55,8 +55,7 @@ class MoexProviderClass {
 
         if ( res.data && res.data.securitytypes && res.data.securitytypes.data &&
             res.data.securitygroups && res.data.securitygroups.data ) {
-            //TODO:
-            //3. securitycollections
+
             result.securityTypes = res.data.securitytypes.data.map( securityTypesConvertor ).filter( item => item !== undefined );
             result.securityGroups = res.data.securitygroups.data.map( securityGroupsConvertor ).filter( item => item !== undefined );
         }

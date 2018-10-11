@@ -23,7 +23,7 @@ import {
     restorePortfolioState, storePortfolioState,
     addSecurityToPortfolio, deleteSecurityFromPortfolio,
     editPortfolioPosition,
-    updateAll
+    updateAll, changeReference
 } from './actions';
 
 import {getIndexListReference} from 'reducers';
@@ -40,7 +40,7 @@ import { selectors } from './reducers';
         referenceData: selectors.getReferenceData( state ),
         indexes: getIndexListReference( state )
     };
-}, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll } )
+}, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll, changeReference } )
 class PortfolioManagementPage extends Component {
 
     constructor ( props ) {
@@ -189,8 +189,8 @@ class PortfolioManagementPage extends Component {
         this.props.updateAll( positions.map( a => a.securityItem ), startDate );
     };
 
-    handleChangeReference = (ref) => {
-        console.log('onChangeReference:', ref);
+    handleChangeReference = (referenceId, item) => {
+        this.props.changeReference(item);
     };
 
     renderPositionEditor = ( cellInfo ) => {

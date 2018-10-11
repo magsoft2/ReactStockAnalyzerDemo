@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { globalizeSelectors, fromRoot } from 'utils';
 
 import { LogService } from 'Services';
-import {createDefaultPortfolioPositions} from 'domain/securityHelpers';
+import {DefaultCollections} from 'domain/defaultCollections';
 
 import { ACTIONS } from './actions';
 import { CONSTANTS } from '../../constants';
@@ -13,7 +13,7 @@ const HISTORY_HORIZON_YEAR = 1;
 
 
 const initialState = {
-    positions: createDefaultPortfolioPositions(),
+    positions: DefaultCollections.createDefaultPortfolioPositions(),
     startDate: moment().add( -1 * HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat ),
     horizon: 12, //TODO: implement horizon GUI
     calculatedData: {
@@ -90,6 +90,22 @@ const portfolio = ( state = initialState, action ) => {
             return processPortfolio(updateAllSecurities( state, securities ));     
 
         }
+
+        case ACTIONS.PORTFOLIO_CHANGE_REFERENCE: {
+            const { referenceItem } = action.data;
+
+            const referenceData = getReferenceData( state );
+
+            referenceData.referenceHistory = referenceItem ? referenceItem.history : undefined;
+            referenceData.referenceHistoryProc = undefined;
+
+            const newState = {
+                ...state,
+                referenceData
+            };
+            return processPortfolio(newState);
+        }
+
 
         default:
             return state;
@@ -197,17 +213,13 @@ const processPortfolio = ( state ) => {
     // position calculations could depend on portfolio level
     // refactor this simple implementation
 
-    //1. TODO: aggregate portfolio history and make history calculations
+    //TODO: aggregate portfolio history and make history calculations
     calculatedData.history = aggregateHistory(positions);
 
     calculatedData.historyProc = getProcHistory(calculatedData.history);
-    referenceData.history = {...positions[1].securityItem.history};
-    referenceData.history.securityId = 'Reference';
     if(referenceData && referenceData.referenceHistory) {
         referenceData.referenceHistoryProc = getProcHistory(referenceData.referenceHistory);
-    }
-
-   
+    }   
 
     //2. calculate every position
     for(const position of positions) {

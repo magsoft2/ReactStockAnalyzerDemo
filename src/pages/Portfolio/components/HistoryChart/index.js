@@ -6,16 +6,19 @@ import HighchartsReact from 'highcharts-react-official';
 
 import { themeHighCharts } from '../theme';
 
+import { Security } from 'domain/securityHelpers';
+
 
 export default class HistoryChartComponent extends Component {
     static propTypes = {
         calculatedData: PropTypes.object,
         referenceData: PropTypes.object,
-        indexes: PropTypes.array
+        indexes: PropTypes.array,
+        onChangeReference: PropTypes.func
     };
 
-    constructor (props) {
-        super(props);
+    constructor ( props ) {
+        super( props );
 
         this.state = {
             refrenceId: undefined
@@ -47,38 +50,49 @@ export default class HistoryChartComponent extends Component {
     }
 
 
-    handleReferenceChange = (event) => {
-        this.setState( { refrenceId: event.target.value } );
-        this.props.onChangeReference(event.target.value);
+    handleReferenceChange = ( event ) => {
+        const { indexes } = this.props;
+        const id = event.target.value;
+
+        this.setState( { refrenceId: id } );
+        let item = undefined;
+        if ( indexes ) {
+            item = indexes.find( a => a.securityId === id );
+        }
+        this.props.onChangeReference( id, item );
     };
 
 
     render () {
         const { calculatedData, referenceData, indexes } = this.props;
-        const {refrenceId} = this.state;
+        const { refrenceId } = this.state;
 
         if ( !calculatedData || !calculatedData.history ) return null;
 
         const options = this.getOptions();
 
-        if ( calculatedData.history ) {
+
+        if ( refrenceId && referenceData && referenceData.referenceHistoryProc ) {
             options.series.push( {
-                name: calculatedData.history.securityId,
-                data: calculatedData.history.candles.map( a => {
-                    return [ a.date.getTime(), a.close ];
-                } )
-            } );
-        }
-        if ( referenceData && referenceData.history ) {
-            options.series.push( {
-                name: referenceData.history.securityId,
-                data: referenceData.history.candles.map( a => {
+                name: referenceData.referenceHistoryProc.securityId,
+                data: referenceData.referenceHistoryProc.candles.map( a => {
                     return [ a.date.getTime(), a.close ];
                 } )
             } );
         }
 
-        options.rangeSelector.selected = 1;
+        if ( calculatedData.history ) {
+            options.series.push( {
+                name: calculatedData.history.securityId,
+                data: (refrenceId ? calculatedData.historyProc : calculatedData.history).candles.map( a => {
+                    return [ a.date.getTime(), a.close ];
+                } )
+            } );
+        }
+
+        if(!refrenceId) {
+            options.rangeSelector.selected = 1;
+        }
 
 
         return (
@@ -86,12 +100,12 @@ export default class HistoryChartComponent extends Component {
                 <span>Reference: </span>
                 <select value={ refrenceId } onChange={ this.handleReferenceChange } >
                     <option value={ undefined }> </option>
-                    {!!indexes && indexes.map( ind => <option value={ ind.securityId }>{ind.securityId}</option>) }
+                    { !!indexes && indexes.map( ind => <option key={ ind.securityId } value={ ind.securityId }>{ Security.getName( ind ) }</option> ) }
                 </select>
                 <HighchartsReact highcharts={ Highcharts } constructorType={ 'stockChart' } options={ options } chart={ { height: 200 } } />
             </div>
         );
     }
 
-    
+
 }

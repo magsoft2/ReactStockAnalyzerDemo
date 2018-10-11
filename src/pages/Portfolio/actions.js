@@ -17,6 +17,8 @@ const ACTIONS = {
 
     PORTFOLIO_CALCULATE_ALL: 'PORTFOLIO.CALCULATE.ALL',
 
+    PORTFOLIO_CHANGE_REFERENCE: 'PORTFOLIO.CHANGE.REFERENCE',
+
     PORTFOLIO_UPDATE_ALL: 'PORTFOLIO.UPDATE_ALL',
     PORTFOLIO_UPDATE_ALL_STARTED: 'PORTFOLIO.UPDATE_ALL.STARTED',
     PORTFOLIO_UPDATE_ALL_ADD_SUCCEEDED: 'PORTFOLIO.UPDATE_ALL.SUCCEEDED',
@@ -72,6 +74,9 @@ const updateAllFailed = (error) => {
 const processPortfolio = (data) => {
     return { type: ACTIONS.PORTFOLIO_CALCULATE_ALL, data };
 };
+const changeReference = (referenceItem) => {
+    return { type: ACTIONS.PORTFOLIO_CHANGE_REFERENCE, data: {referenceItem} };
+};
 
 export {
     ACTIONS, 
@@ -79,5 +84,6 @@ export {
     addSecurityToPortfolio, addSecurityToPortfolioStarted, addSecurityToPortfolioSucceeded, addSecurityToPortfolioFailed,
     deleteSecurityFromPortfolio, editPortfolioPosition,
     processPortfolio,
-    updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed
+    updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed,
+    changeReference
 };

@@ -6,13 +6,14 @@ import {suggestions} from 'components/SecuritySelector';
 import {securitiesAnalysis} from 'pages/StockAnalysis';
 import {portfolio} from 'pages/Portfolio';
 
-import {createDefaultIndexList} from 'domain/securityHelpers';
+import { DefaultCollections } from 'domain/defaultCollections';
+
 
 
 export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
 
 const initialReferenceState = {
-    indexes: createDefaultIndexList()
+    indexes: DefaultCollections.createDefaultIndexList()
 };
 
 const references = ( state = initialReferenceState, action ) => {
