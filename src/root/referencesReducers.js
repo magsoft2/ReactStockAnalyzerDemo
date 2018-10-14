@@ -1,16 +1,9 @@
-import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 
-import {notifications} from 'components/GlobalNotification';
-import {suggestions} from 'components/SecuritySelector';
-import {securitiesAnalysis} from 'pages/StockAnalysis';
-import {portfolio} from 'pages/Portfolio';
 
 import { DefaultCollections } from 'domain/defaultCollections';
 
-
-
-export const ACTIONS = { INITIALIZE_COMPLETED: 'ACTION.INITIALIZE.COMPLETED' };
+import { ACTIONS } from './actions';
 
 const initialReferenceState = {
     indexes: DefaultCollections.createDefaultIndexList()
@@ -29,6 +22,7 @@ const references = ( state = initialReferenceState, action ) => {
 };
 
 const getReferences = (state) => state.references;
+const getIndexes = (state) => getReferences(state).indexes;
 
 const getSecurityTypeReference = createSelector(
     (state, securityTypeId) => { return { references: getReferences(state), securityTypeId}; },
@@ -45,12 +39,4 @@ const getIndexListReference = createSelector(
 );
 
 
-const combinedReducers = combineReducers( {
-    securitiesAnalysis,
-    suggestions,
-    references,
-    notifications,
-    portfolio
-} );
-
-export {combinedReducers, getReferences, getSecurityTypeReference, getIndexListReference};
+export {references, getReferences, getSecurityTypeReference, getIndexListReference};

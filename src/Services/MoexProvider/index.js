@@ -63,11 +63,6 @@ class MoexProviderClass {
         return Promise.resolve( result );
     };
 
-    getIndexes = () => {
-        //https://iss.moex.com/iss/statistics/engines/stock/markets/index/analytics.json
-        //https://iss.moex.com/iss/securitygroups/12/collections/210/securities.json
-    };
-
     getSecurityDescription = async ( securityId ) => {
         const res = await this.instance
             .get( `iss/securities/${ securityId }.json?${ additionalArguments }&iss.only=description` )

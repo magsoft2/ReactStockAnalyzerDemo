@@ -2,7 +2,6 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import moment from 'moment';
 
 import './index.styl';
 
@@ -108,7 +107,7 @@ class StockAnalysisPage extends PureComponent {
 
                 <SecurityListComponent securityItems={ securities } onDelete={ this.handleDeleteSecurity } onCheck={ this.handleCheckSecurity } />
 
-                <div className='stock-analysis_chart_container'>
+                <div className='stock-analysis__chart-container'>
                     { securities && securities.length &&
                         <StockHistoryChartComponent
                             securityItem={ securities.filter( a => a.selected ).pop() }

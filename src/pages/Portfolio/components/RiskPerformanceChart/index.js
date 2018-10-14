@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import ReactHighcharts from 'react-highcharts';
 import HighchartsMore from 'highcharts-more';
 
@@ -48,7 +46,7 @@ export default class RiskPerformanceChart extends Component {
 
             tooltip: {
                 ...themeHighCharts.tooltip,
-                pointFormat: '{point.name}:<br/>Vol: <b>{point.x} <br/>Perf: {point.y} %</br><br/>Mav: {point.z}',
+                pointFormat: '{point.name}:<br/>Vol: <b>{point.x} %<br/>Perf: {point.y} %</br><br/>Mav: {point.z}',
                 valueSuffix: '',
                 shared: true
             },
@@ -86,17 +84,47 @@ export default class RiskPerformanceChart extends Component {
         if ( positions ) {
 
             this.options.series.push( {
+                name: 'Portfolio',
+                data: [{
+                    name: 'Portfolio',
+                    x: _.round(calculatedData.volatility, 2),
+                    y: _.round(calculatedData.performance, 2),
+                    z: _.round(calculatedData.marketValue)
+                }],
+                dataLabels: {
+                    enabled: true,
+                    borderRadius: 2,
+                    align: 'right',
+                    style: {
+                        
+                        textOutline: 'none'
+                    },
+                    format: '{point.name}'
+                }
+            });
+
+            this.options.series.push( {
+                name: 'Positions',
                 data: positions.map( a => {
                     return {
                         name: a.securityId,
                         x: _.round(a.calculatedData.volatility, 2),
                         y: _.round(a.calculatedData.performance, 2),
-                        z: _.round(a.calculatedData.marketValue),
-                        country: a.securityId
+                        z: _.round(a.calculatedData.marketValue)
                     };
-                } )
-            }
-            );
+                } ),
+                dataLabels: {
+                    enabled: true,
+                    borderRadius: 2,
+                    align: 'right',
+                    style: {
+                        
+                        textOutline: 'none'
+                    },
+                    format: '{point.name}'
+                }
+            });
+
         }
         // if (referenceData && referenceData.history) {
         //     options.series.push({

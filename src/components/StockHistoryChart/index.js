@@ -6,14 +6,7 @@ import moment from 'moment';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import {
-    curveLinear,
-    curveStep,
-    curveStepBefore,
-    curveStepAfter,
-    curveBasis,
-    curveCardinal,
-    curveMonotoneX,
-    curveCatmullRom
+    curveLinear    
 } from 'd3-shape';
 import { ChartCanvas, Chart } from 'react-stockcharts';
 import {
@@ -23,16 +16,16 @@ import {
     LineSeries
 } from 'react-stockcharts/lib/series';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
-import { MovingAverageTooltip, HoverTooltip, SingleValueTooltip } from 'react-stockcharts/lib/tooltip';
+import { MovingAverageTooltip, } from 'react-stockcharts/lib/tooltip'; //HoverTooltip, SingleValueTooltip
 import {
     CrossHairCursor,
     EdgeIndicator,
-    CurrentCoordinate,
+    //CurrentCoordinate,
     MouseCoordinateX,
     MouseCoordinateY
 } from 'react-stockcharts/lib/coordinates';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { LabelAnnotation, Label, Annotate } from 'react-stockcharts/lib/annotation';
+//import { LabelAnnotation, Label, Annotate } from 'react-stockcharts/lib/annotation';
 import { fitWidth } from 'react-stockcharts/lib/helper';
 import { last, hexToRGBA, getClosestItem } from 'react-stockcharts/lib/utils';
 import { ema, wma, sma, tma } from 'react-stockcharts/lib/indicator';

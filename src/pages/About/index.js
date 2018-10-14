@@ -15,7 +15,7 @@ export class AboutPage extends PureComponent {
 
     	return (
     		<div className='about-page'>
-                <div className='about-page_container'>
+                <div className='about-page__container'>
     			    <div>Demo React Stock Analyser is a sample project for stock analysis and portfolio management. 
                         <br/>Application is built with React, Redux, Redux-sage.
                     </div>

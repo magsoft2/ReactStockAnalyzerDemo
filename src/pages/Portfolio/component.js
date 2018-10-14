@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import _ from 'lodash';
 
 import ReactTable from 'react-table';
@@ -26,18 +25,18 @@ import {
     updateAll, changeReference
 } from './actions';
 
-import {getIndexListReference} from 'reducers';
+import {getIndexListReference} from 'root/referencesReducers';
 
-import { selectors } from './reducers';
+import { globalSelectors } from './selectors';
 
 
 
 @connect( ( state ) => {
     return {
-        positions: selectors.getPositions( state ),
-        startDate: selectors.getStartDate( state ),
-        calculatedData: selectors.getPortfolioCalculatedData( state ),
-        referenceData: selectors.getReferenceData( state ),
+        positions: globalSelectors.getPositions( state ),
+        startDate: globalSelectors.getStartDate( state ),
+        calculatedData: globalSelectors.getPortfolioCalculatedData( state ),
+        referenceData: globalSelectors.getReferenceData( state ),
         indexes: getIndexListReference( state )
     };
 }, { restorePortfolioState, storePortfolioState, addSecurityToPortfolio, deleteSecurityFromPortfolio, editPortfolioPosition, updateAll, changeReference } )
@@ -72,7 +71,7 @@ class PortfolioManagementPage extends Component {
                 accessor: 'securityId',
                 filterable: false,
                 Cell: row => (
-                    <div className='portfolio_table_delete_column' id={ row.index } onClick={ this.handleDeleteSecurity }>&#x2715;</div>
+                    <div className='portfolio-table__delete-column' id={ row.index } onClick={ this.handleDeleteSecurity }>&#x2715;</div>
                 ),
                 width: 40
             },
@@ -139,16 +138,16 @@ class PortfolioManagementPage extends Component {
                 )
             },
             {
-                Header: 'Vol',
+                Header: 'Vol %',
                 accessor: 'calculatedData.volatility',
                 minWidth: 100,
                 maxWidth: 100,
                 Cell: row => (
-                    <div >{ _.round( row.value ) }</div>
+                    <div >{ _.round( row.value, 2 ) } %</div>
                 ),
                 Footer: (
                     <strong>
-                        { _.round( calculatedData.volatility, 2 ) }
+                        { _.round( calculatedData.volatility, 2 ) } %
                     </strong>
                 )
             },
@@ -199,7 +198,7 @@ class PortfolioManagementPage extends Component {
 
         return (
             <div
-                className='portfolio_table_editable-cell'
+                className='portfolio-table__editable-cell'
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={ e => {
@@ -246,7 +245,7 @@ class PortfolioManagementPage extends Component {
 
                 <StockControlPanel onUpdateAll={ this.handleUpdateAll } onAddSecurity={ this.handleAddSecurity } />
 
-                <div className='portfolio_table'>
+                <div className='portfolio-table'>
                     { this.renderTable( positions, calculatedData ) }
                 </div>
 
@@ -259,17 +258,20 @@ class PortfolioManagementPage extends Component {
                         </TabList>
 
                         <TabPanel>
-                            <div className="portfolio__history-chart">
-                                <HistoryChartComponent calculatedData={ calculatedData } referenceData={ referenceData } indexes={indexes} onChangeReference={this.handleChangeReference} />
+                            <div className="portfolio-history-chart">
+                                <HistoryChartComponent 
+                                    calculatedData={ calculatedData } 
+                                    referenceData={ referenceData } 
+                                    indexes={indexes} 
+                                    onChangeReference={this.handleChangeReference} />
                             </div>
                         </TabPanel>
                         <TabPanel>
-                            <WarningBadgeComponent message={ 'Under construction.' } />
                             <RiskPerformanceChart positions={ positions } calculatedData={ calculatedData } referenceData={ referenceData } />
                         </TabPanel>
                         <TabPanel>
                             <WarningBadgeComponent message={ 'Under construction.' } />
-                            <FactorsPolarChart positions={ positions } calculatedData={ calculatedData } referenceData={ referenceData } />
+                            <FactorsPolarChart positions={ positions } calculatedData={ calculatedData } referenceData={ referenceData } indexes={indexes}/>
                         </TabPanel>
                     </Tabs>
 

@@ -24,14 +24,14 @@ export class DefaultCollections {
     static createDefaultPortfolioPositions = () => {
     
         return [
-            Security.createStockItem('USD000UTSTOM', 'currency_selt', true),
-            Security.createStockItem('GAZP', 'stock_shares'),
-            Security.createStockItem('YNDX', 'stock_shares'),
-            Security.createStockItem('LKOH', 'stock_shares'),
-            Security.createStockItem('MGNT', 'stock_shares'),
-            Security.createStockItem('SBERP', 'stock_shares'),
-            Security.createStockItem('AFH9', 'futures_forts'),
-        ].map(item => createPortfolioPosition(item));
+            createPortfolioPosition(Security.createStockItem('USD000UTSTOM', 'currency_selt', true)),
+            createPortfolioPosition(Security.createStockItem('GAZP', 'stock_shares')),
+            createPortfolioPosition(Security.createStockItem('YNDX', 'stock_shares'), 0.1),
+            createPortfolioPosition(Security.createStockItem('LKOH', 'stock_shares'), 0.05),
+            createPortfolioPosition(Security.createStockItem('MGNT', 'stock_shares'), 0.1),
+            createPortfolioPosition(Security.createStockItem('SBERP', 'stock_shares')),
+            createPortfolioPosition(Security.createStockItem('AFH9', 'futures_forts'), 0.005),
+        ];
     };
     
     static createDefaultIndexList = () => {

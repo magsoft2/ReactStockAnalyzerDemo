@@ -1,5 +1,5 @@
 
-import { put, takeEvery, all, call, select } from 'redux-saga/effects';
+import { put, all, call } from 'redux-saga/effects';
 
 import { showMessage } from 'components/GlobalNotification';
 

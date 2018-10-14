@@ -8,7 +8,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = webpackMerge(baseConfig, {
-    resolve: {
+	resolve: {
         alias: {
             config: Path.join(__dirname, '../config/config.prod_deploy.js')
         }

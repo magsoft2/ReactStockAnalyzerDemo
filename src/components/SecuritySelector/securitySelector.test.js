@@ -1,5 +1,4 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { call, put } from 'redux-saga/effects';
 import assert from 'assert';
 
@@ -7,7 +6,6 @@ import { securitySearchFunc } from './sagas';
 import { SecurityService, CacheService } from 'Services';
 import {SecuritySelectorComponent } from './component';
 import { ACTIONS } from './actions';
-import {Map} from 'immutable';
 
 
 const mockSuggestions = {

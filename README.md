@@ -17,14 +17,10 @@ Responsive web design.
 
 TODO:
 
- PortfolioProcessor()
- DataAnalysis()
- - fix BEM
-11. Add some Jest unit tests
-12. PERFOMANCE analysis
+ - normalize: securities array. positions and secList contains only secId
+ - Add some Jest unit tests
 
 20. Portfolio manager
-    - risk(volatility)-income bubbles chart
     - factor analysis on indexes set: securitycollections
     - make .Net Core back service for factor analysis?
     - pivot by sectors etc?

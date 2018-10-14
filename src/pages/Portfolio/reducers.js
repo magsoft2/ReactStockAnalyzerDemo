@@ -1,13 +1,15 @@
 import moment from 'moment';
-import { createSelector } from 'reselect';
-
-import { globalizeSelectors, fromRoot } from 'utils';
 
 import { LogService } from 'Services';
 import {DefaultCollections} from 'domain/defaultCollections';
+import {HistoryProcessor} from 'domain/historyProcessor';
+import {PortfolioProcessor} from 'domain/portfolioProcessor';
 
 import { ACTIONS } from './actions';
+import {ACTIONS as GLOBAL_ACTIONS} from 'root/actions';
 import { CONSTANTS } from '../../constants';
+
+import {selectors} from './selectors';
 
 const HISTORY_HORIZON_YEAR = 1;
 
@@ -26,9 +28,10 @@ const initialState = {
         positionProc: 100
     },
     referenceData: {
-        referenceHistory: undefined,
+        referenceSecurityItem: undefined,
         referenceHistoryProc: undefined
-    }
+    },
+    factors: []
 };
 
 
@@ -94,9 +97,9 @@ const portfolio = ( state = initialState, action ) => {
         case ACTIONS.PORTFOLIO_CHANGE_REFERENCE: {
             const { referenceItem } = action.data;
 
-            const referenceData = getReferenceData( state );
+            const referenceData = selectors.getReferenceData( state );
 
-            referenceData.referenceHistory = referenceItem ? referenceItem.history : undefined;
+            referenceData.referenceSecurityItem = referenceItem;
             referenceData.referenceHistoryProc = undefined;
 
             const newState = {
@@ -105,6 +108,13 @@ const portfolio = ( state = initialState, action ) => {
             };
             return processPortfolio(newState);
         }
+
+        case GLOBAL_ACTIONS.INITIALIZE_COMPLETED:
+            
+            return processPortfolio({
+                ...state,
+                factors: action.data.references.indexes
+            });
 
 
         default:
@@ -115,7 +125,7 @@ const portfolio = ( state = initialState, action ) => {
 
 const addPortfolioPosition = ( state, security, shares = 1 ) => {
 
-    const positions = getPositions( state );
+    const positions = selectors.getPositions( state );
 
     security.selected = true;
 
@@ -136,7 +146,7 @@ const addPortfolioPosition = ( state, security, shares = 1 ) => {
 };
 const deletePortfolioPosition = ( state, idx ) => {
 
-    const positions = getPositions( state );
+    const positions = selectors.getPositions( state );
 
     if ( positions && idx < positions.length) {
         positions.splice(idx, 1);
@@ -147,7 +157,7 @@ const deletePortfolioPosition = ( state, idx ) => {
     };
 };
 const editPortfolioPosition = ( state, idx, newShares ) => {
-    const positions = getPositions( state );
+    const positions = selectors.getPositions( state );
 
     if(positions && idx < positions.length && positions[idx].shares != newShares) {
         positions[idx].shares = newShares;
@@ -161,7 +171,7 @@ const editPortfolioPosition = ( state, idx, newShares ) => {
 };
 const updateAllSecurities = ( state, securities ) => {
 
-    const positions = getPositions( state );
+    const positions = selectors.getPositions( state );
 
     for ( const item of securities ) {
         for ( const pos of positions ) {
@@ -177,66 +187,14 @@ const updateAllSecurities = ( state, securities ) => {
     };
 };
 
-const processPortfolioPosition = (position, portfolioData) => {
-    
-    position.calculatedData = {
-        volatility: 0,
-        performance: 0,
-        positionProc: 0,
-        marketValue: getPositionPrice(position)*position.shares
-    };
-
-    const candles = position.securityItem.history && position.securityItem.history.candles  ? position.securityItem.history.candles : undefined;
-    
-    calculateData(position.calculatedData, candles, portfolioData);
-
-};
-const calculateData = (calculatedData, candles, portfolioData) => {
-    if(candles && candles.length > 0) {
-        const first = candles[0].close;
-        const last = candles[candles.length - 1].close;
-        if(first !== 0) {
-            calculatedData.performance = 100*(last - first)/first;
-         
-            //for test!
-            calculatedData.volatility = Math.abs(last - first);
-        }
-    }
-};
 const processPortfolio = ( state ) => {
 
-    const positions = getPositions( state );
-    const calculatedData = getPortfolioCalculatedData( state );
-    const referenceData = getReferenceData( state );
-
-    //TODO: implement process portfolio logic
-    // position calculations could depend on portfolio level
-    // refactor this simple implementation
-
-    //TODO: aggregate portfolio history and make history calculations
-    calculatedData.history = aggregateHistory(positions);
-
-    calculatedData.historyProc = getProcHistory(calculatedData.history);
-    if(referenceData && referenceData.referenceHistory) {
-        referenceData.referenceHistoryProc = getProcHistory(referenceData.referenceHistory);
-    }   
-
-    //2. calculate every position
-    for(const position of positions) {
-        processPortfolioPosition(position, calculatedData);
-    }
-
-    //3. calculate portfolio data
-    calculatedData.marketValue = 0;
-    for(const position of positions) {
-        calculatedData.marketValue += getCalculatedData(position, 'marketValue');
-    }
-    for(const position of positions) {
-        position.calculatedData.positionProc = 100*getCalculatedData(position, 'marketValue')/calculatedData.marketValue;
-    }
-    const candles = calculatedData.history && calculatedData.history.candles  ? calculatedData.history.candles : undefined;
-    
-    calculateData(calculatedData, candles, calculatedData);
+    const {positions, calculatedData, referenceData} = PortfolioProcessor.processPortfolio(
+        selectors.getPositions( state ), 
+        selectors.getPortfolioCalculatedData( state ), 
+        selectors.getReferenceData( state ),
+        selectors.getFactors( state )
+    );
    
 
     return {
@@ -246,85 +204,5 @@ const processPortfolio = ( state ) => {
         referenceData
     };
 };
-
-const getProcHistory = (history) => {
-    const candles = history && history.candles ? history.candles : undefined;
-    if(candles && candles.length) {
-        const historyProc = [];
-        const first = history.candles[0];
-        for(const pos of history.candles){
-            const point = {...pos};
-            point.close = 100*(point.close - first.close)/first.close;
-            historyProc.push(point);
-        }
-        return {
-            securityId: history.securityId,
-            candles: historyProc
-        };
-    }
-    return undefined;
-};
-const aggregateHistory = (positions) => {
-
-    //return {...positions[0].securityItem.history, securityId: 'Portfolio'};
-
-    // Very non-optimal implementation!
-    // Also works only for equal history dates in all stocks!
-    const candles = [];
-    for(const point of positions[0].securityItem.history.candles) {
-        const candle = {
-            ...point
-        };
-        candle.close = 0;
-        for(const pos of positions) {
-            const p = pos.securityItem.history.candles.filter(a => a.date.getTime() === point.date.getTime());
-            if(p && p.length) {
-                candle.close += p[0].close*pos.shares;
-            }
-        }
-        candles.push(candle);
-    }
-
-    return {
-        securityId: 'Portfolio',
-        candles
-    };
-};
-
-
-const getPositions = ( state ) => state.positions;
-const getStartDate = ( state ) => state.startDate;
-const getPositionPrice = (position) => position && position.securityItem && position.securityItem.price ? position.securityItem.price.close : NaN;
-const getPortfolioCalculatedData = (state, fieldName = undefined) => {
-    return getCalculatedData(state, fieldName);
-};
-const getReferenceData = (state) => state.referenceData;
-const getCalculatedData = (position, fieldName = undefined) => {
-    if(!fieldName)
-        return position.calculatedData;
-
-    if(position.calculatedData) {
-        return position.calculatedData[fieldName];
-    }
-
-    return undefined;
-};
-
-const getSecuritySelectedById = createSelector(
-    ( state, securityId ) => { return { suggestions: getPositions( state ), securityId }; },
-    ( obj ) => {
-        const { suggestions, securityId } = obj;
-        return suggestions.find( a => a.securityId === securityId );
-    }
-);
-
-export const selectors = globalizeSelectors( {
-    getPositions,
-    getSecuritySelectedById,
-    getStartDate,
-    getPortfolioCalculatedData,
-    getReferenceData
-}, 'portfolio' );
-
 
 export { portfolio };

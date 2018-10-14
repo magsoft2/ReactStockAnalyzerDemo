@@ -19,10 +19,6 @@ export default class HistoryChartComponent extends Component {
 
     constructor ( props ) {
         super( props );
-
-        this.state = {
-            refrenceId: undefined
-        };
     }
 
     getOptions = () => {
@@ -54,7 +50,6 @@ export default class HistoryChartComponent extends Component {
         const { indexes } = this.props;
         const id = event.target.value;
 
-        this.setState( { refrenceId: id } );
         let item = undefined;
         if ( indexes ) {
             item = indexes.find( a => a.securityId === id );
@@ -65,14 +60,13 @@ export default class HistoryChartComponent extends Component {
 
     render () {
         const { calculatedData, referenceData, indexes } = this.props;
-        const { refrenceId } = this.state;
 
         if ( !calculatedData || !calculatedData.history ) return null;
 
         const options = this.getOptions();
 
 
-        if ( refrenceId && referenceData && referenceData.referenceHistoryProc ) {
+        if ( referenceData && referenceData.referenceSecurityItem && referenceData.referenceHistoryProc ) {
             options.series.push( {
                 name: referenceData.referenceHistoryProc.securityId,
                 data: referenceData.referenceHistoryProc.candles.map( a => {
@@ -84,21 +78,22 @@ export default class HistoryChartComponent extends Component {
         if ( calculatedData.history ) {
             options.series.push( {
                 name: calculatedData.history.securityId,
-                data: (refrenceId ? calculatedData.historyProc : calculatedData.history).candles.map( a => {
+                data: (referenceData && referenceData.referenceHistoryProc ? calculatedData.historyProc : calculatedData.history).candles.map( a => {
                     return [ a.date.getTime(), a.close ];
                 } )
             } );
         }
 
-        if(!refrenceId) {
+        if(!referenceData.referenceSecurityItem) {
             options.rangeSelector.selected = 1;
         }
 
+        const referenceId = referenceData.referenceSecurityItem ? referenceData.referenceSecurityItem.securityId : undefined ;
 
         return (
             <div>
                 <span>Reference: </span>
-                <select value={ refrenceId } onChange={ this.handleReferenceChange } >
+                <select value={ referenceId } onChange={ this.handleReferenceChange } >
                     <option value={ undefined }> </option>
                     { !!indexes && indexes.map( ind => <option key={ ind.securityId } value={ ind.securityId }>{ Security.getName( ind ) }</option> ) }
                 </select>

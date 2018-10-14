@@ -1,4 +1,3 @@
-import { delay } from 'redux-saga';
 import { put, takeEvery, all, call, select } from 'redux-saga/effects';
 
 import { showLoader, hideLoader, showMessage, setProgress } from 'components/GlobalNotification';
@@ -14,7 +13,7 @@ import {
     updateAll, updateAllStarted, updateAllSucceeded, updateAllFailed
 } from './actions';
 
-import { selectors } from './reducers';
+import { globalSelectors } from './selectors';
 
 
 function* restoreStateSaga () {
@@ -35,10 +34,10 @@ function* restoreStateSaga () {
 
     const state = yield select();
 
-    const uncompleteSecurities = ( data.positions ? data.positions : selectors.getPositions( state ) ).filter( a => !a.securityItem.description ).map( a => a.securityItem );
+    const uncompleteSecurities = ( data.positions ? data.positions : globalSelectors.getPositions( state ) ).filter( a => !a.securityItem.description ).map( a => a.securityItem );
 
     if ( uncompleteSecurities.length > 0 || !data.positions ) {
-        yield put( updateAll( uncompleteSecurities, selectors.getStartDate( state ) ) );
+        yield put( updateAll( uncompleteSecurities, globalSelectors.getStartDate( state ) ) );
     }else{
         yield put( processPortfolio() );
     }
@@ -50,7 +49,7 @@ function* storeStateSaga ( action ) {
     let { positions = undefined } = action.data ? action.data : {};
 
     if ( !positions )
-        positions = selectors.getPositions( state );
+        positions = globalSelectors.getPositions( state );
 
     const data = { positions };
     yield call( StoreService.storePortfolioState, data );
