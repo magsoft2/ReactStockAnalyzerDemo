@@ -73,7 +73,7 @@ export default class FactorsPolarChart extends Component {
         
             yAxis: {
                 ...themeHighCharts.yAxis,
-                //gridLineInterpolation: 'polygon',
+                gridLineInterpolation: 'polygon',
                 lineWidth: 0,
                 min: -1,
                 max: 1
