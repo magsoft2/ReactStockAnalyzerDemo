@@ -61,10 +61,9 @@ export default class HistoryChartComponent extends Component {
     render () {
         const { calculatedData, referenceData, indexes } = this.props;
 
-        if ( !calculatedData || !calculatedData.history ) return null;
+        if ( !calculatedData || !calculatedData.history || !calculatedData.history.candles.length ) return null;
 
         const options = this.getOptions();
-
 
         if ( referenceData && referenceData.referenceSecurityItem && referenceData.referenceHistoryProc ) {
             options.series.push( {
@@ -75,7 +74,7 @@ export default class HistoryChartComponent extends Component {
             } );
         }
 
-        if ( calculatedData.history ) {
+        if ( calculatedData.history && calculatedData.history.candles && calculatedData.history.candles.length ) {
             options.series.push( {
                 name: calculatedData.history.securityId,
                 data: (referenceData && referenceData.referenceHistoryProc ? calculatedData.historyProc : calculatedData.history).candles.map( a => {

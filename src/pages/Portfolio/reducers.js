@@ -38,10 +38,10 @@ const initialState = {
 const portfolio = ( state = initialState, action ) => {
     switch ( action.type ) {
         case ACTIONS.PORTFOLIO_STATE_RESTORE_SUCCEEDED:
-            return {
+            return processPortfolio( {
                 ...state,
                 ...action.data
-            };
+            });
 
         case ACTIONS.PORTFOLIO_SECURITY_ADD_STARTED:
             return {
@@ -200,7 +200,7 @@ const processPortfolio = ( state ) => {
     return {
         ...state,
         positions: [ ...positions ],
-        calculatedData,
+        calculatedData: {...calculatedData},
         referenceData
     };
 };

@@ -30,7 +30,6 @@ import {getIndexListReference} from 'root/referencesReducers';
 import { globalSelectors } from './selectors';
 
 
-
 @connect( ( state ) => {
     return {
         positions: globalSelectors.getPositions( state ),
