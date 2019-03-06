@@ -1,4 +1,5 @@
 const Path = require("path");
+const Webpack = require("webpack");
 const webpackMerge = require('webpack-merge');
 const Utils = require('./utils');
 const baseConfig = require('./base');
@@ -18,17 +19,18 @@ module.exports = webpackMerge(baseConfig, {
     },
 
     plugins: [
-        new MinifyPlugin({
-			parallel: 4,
-			sourceMap: false,
-			uglifyOptions: {
-			  warnings: false,
-			  compress: true,
-			  mangle: true,
-			  keep_classnames: undefined,
-			  keep_fnames: false,
-			}
-		  }),
+		new Webpack.optimize.ModuleConcatenationPlugin(),
+        // new MinifyPlugin({
+			// parallel: 4,
+			// sourceMap: false,
+			// uglifyOptions: {
+			  // warnings: false,
+			  // compress: true,
+			  // mangle: true,
+			  // keep_classnames: undefined,
+			  // keep_fnames: false,
+			// }
+		  // }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano'),

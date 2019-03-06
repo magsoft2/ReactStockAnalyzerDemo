@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import './index.styl';
 
 
+import {Security} from 'domain/securityHelpers';
+
+
 export class SecurityDescriptionComponent extends Component {
 
     constructor ( props ) {
@@ -14,19 +17,7 @@ export class SecurityDescriptionComponent extends Component {
 
     handleClick = () => this.setState( { isCollapsed: !this.state.isCollapsed } );
 
-    getStockName = (item) => {
-        if(!item)
-            return null;
-
-        if(item.description){
-            //TODO: make mapping of table to stock fields
-            const raw = item.description.find(a => a.name ==='NAME');
-            if(raw)
-                return raw.value;
-        }
-
-        return item.definition && item.definition.name ? item.definition.name : item.securityId;
-    }
+    
 
     render () {
 
@@ -40,18 +31,18 @@ export class SecurityDescriptionComponent extends Component {
 
     	return (
             <Fragment>
-    			{ description && <div className={ 'security-desc_btn' + isCollapsedClass } onClick={ this.handleClick }> ?</div> }
-                <span className='security-desc_name'>{ this.getStockName(securityItem) }</span>
+    			{ description && <div className={ 'security-desc__btn' + isCollapsedClass } onClick={ this.handleClick }> ?</div> }
+                <span className='security-desc__name'>{ Security.getName(securityItem) }</span>
     			{
     				description &&
-                    <div className='security-desc_tooltip_container'>
-                    	<div className={ 'security-desc_list' + isCollapsedClass } >
+                    <div className='security-desc__tooltip-container'>
+                    	<div className={ 'security-desc__list' + isCollapsedClass } >
                     		{ description.map(
                     			( item, key ) => {
                     				return (
-                    					<div key={ key } className='security-desc_row '>
-                    						<span className='security-desc_cell__name'>{ item.title }</span>
-                    						<span className='security-desc_cell__value'>{ item.value }</span>
+                    					<div key={ key } className='security-desc__row '>
+                    						<span className='security-desc__cell-name'>{ item.title }</span>
+                    						<span className='security-desc__cell-value'>{ item.value }</span>
                     					</div>
                     				);
                     			}

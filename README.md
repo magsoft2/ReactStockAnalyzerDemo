@@ -17,19 +17,13 @@ Responsive web design.
 
 TODO:
 
-- current date and WhatIf date selector
- PortfolioProcessor()
- DataAnalysis()
-11. Add some Jest unit tests
-12. PERFOMANCE analysis, react perf. tools etc.
-13. refactor stock chart code
+ - normalize: securities array. positions and secList contains only secId
+ - Add some Jest unit tests
 
 20. Portfolio manager
-    - show portfolio hist chart
-    - add common index from list to compare
-    - risk(volatility)-income bubbles chart
     - factor analysis on indexes set: securitycollections
     - make .Net Core back service for factor analysis?
     - pivot by sectors etc?
+    - current date and WhatIf date selector
 
 101. Dataprovider selector (quandl etc)

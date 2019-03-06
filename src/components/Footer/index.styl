@@ -5,9 +5,11 @@
     align-items: center
     width: 100%
     height $footer-height
+    +tablet()
+        $footer-height-mobile
 
-    &_item
-        padding 20px
+    &__item
+        padding 10px 20px
 
         a
             color $color2
@@ -16,3 +18,6 @@
             min-width: 250px
         &_fixed_90_width
             width: 90px
+
+        &--white-color
+            color white

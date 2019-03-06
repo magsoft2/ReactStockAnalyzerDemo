@@ -40,7 +40,7 @@ class MoexProviderClass {
 
     getAllReferences = async () => {
         const res = await this.instance
-            .get( 'iss/index.json?&iss.only=securitycollections,securitygroups,securitytypes&' + additionalArguments )
+            .get( 'iss/index.json?iss.only=securitycollections,securitygroups,securitytypes&' + additionalArguments )
             .then( ( data ) => {
                 if ( data.response && ( data.response.status === 401 || data.response.status === 403 ) ) {
                     //LogService.log(JSON.stringify(data));
@@ -55,8 +55,7 @@ class MoexProviderClass {
 
         if ( res.data && res.data.securitytypes && res.data.securitytypes.data &&
             res.data.securitygroups && res.data.securitygroups.data ) {
-            //TODO:
-            //3. securitycollections
+
             result.securityTypes = res.data.securitytypes.data.map( securityTypesConvertor ).filter( item => item !== undefined );
             result.securityGroups = res.data.securitygroups.data.map( securityGroupsConvertor ).filter( item => item !== undefined );
         }

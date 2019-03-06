@@ -18,8 +18,8 @@ export class WarningBadgeComponent extends PureComponent {
         const { message } = this.props;
 
         return (
-            <div className='warning-badge_container'>
-                <div className='warning-badge_item'>{ message }</div>
+            <div className='warning-badge__container'>
+                <div className='warning-badge__item'>{ message }</div>
             </div>
         );
     }

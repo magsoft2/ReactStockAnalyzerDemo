@@ -1,15 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { createLogger } from 'redux-logger';
-import compose from 'redux/es/compose';
-import createSagaMiddleware from 'redux-saga';
-import multi from 'redux-multi';
 
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 import AppLayoutContainer from './components/AppLayoutContainer';
 import {
@@ -19,34 +12,10 @@ import {
     NotFoundPage
 } from './pages';
 
-import { NODE_ENV } from './constants';
+
 import CONFIG from 'config';
 
-import {rootSaga} from 'sagas';
-import {combinedReducers} from 'reducers';
-
-
-
-const composeEnhancers = composeWithDevTools({
-    // Specify name here, actionsBlacklist, actionsCreators and other options if needed
-});
-const sagaMiddleware = createSagaMiddleware();
-const loggerMiddleware = createLogger( { collapsed: true } );
-let middleWares = [ multi, sagaMiddleware ];
-if ( NODE_ENV === 'development' ) {
-    middleWares = [ ...middleWares, loggerMiddleware ];
-}
-
-const store = createStore(
-    combinedReducers,
-    composeEnhancers(
-        applyMiddleware(
-            ...middleWares
-        )
-    )
-);
-sagaMiddleware.run(rootSaga);
-
+import {store} from 'root';
 
 render(
     ( <Provider store={ store }>

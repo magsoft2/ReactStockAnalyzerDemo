@@ -3,7 +3,7 @@ import {createSelector } from 'reselect';
 
 import CONSTANTS from 'constants';
 import { globalizeSelectors, fromRoot } from 'utils';
-import {createDefaultSecurityList} from 'domain/securityHelpers';
+import {DefaultCollections} from 'domain/defaultCollections';
 import { LogService } from 'Services';
 
 import { ACTIONS } from './actions';
@@ -14,7 +14,7 @@ const HISTORY_HORIZON_YEAR = 1;
 
 
 const initialState = {
-    securities: createDefaultSecurityList(),
+    securities: DefaultCollections.createDefaultSecurityList(),
     indicators: [],
 
     startDate: moment().add( -1*HISTORY_HORIZON_YEAR, 'years' ).format( CONSTANTS.dateFormat ),

@@ -8,6 +8,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const AutoPrefixer = require("autoprefixer");
 const Utils = require("./utils");
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const PROD = Utils.PROD;
 const DEBUG = !PROD;
 const MAX_INLINE_SIZE = 50000;
@@ -220,7 +222,8 @@ module.exports = {
         new CopyWebpackPlugin([
             // {from: Path.resolve(Utils.SRC_PATH, 'touch-icons'),  fromType: 'glob'},
             { from: path.resolve(Utils.SRC_PATH, 'images'), to: 'images', fromType: 'glob' },
-        ])
+        ]),
+		//new BundleAnalyzerPlugin()
     ]
 
 };

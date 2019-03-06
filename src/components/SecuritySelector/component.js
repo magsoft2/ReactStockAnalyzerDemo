@@ -17,9 +17,9 @@ import {getSecuritiesSuggestionsMap, getSecuritiesSuggestionsList } from './redu
         references: state.references //getReferences(state)
     };
 }, { searchSecurityAsync } )
-class SecuritySelectorComponent extends React.PureComponent {
-    constructor () {
-        super();
+class SecuritySelectorComponent extends PureComponent {
+    constructor (props) {
+        super(props);
 
         this.state = {
             value: '',
@@ -108,10 +108,9 @@ class SecuritySelectorComponent extends React.PureComponent {
     renderSuggestion = ( item ) => {
         return (
             <Fragment>
-                <div className='stock-description_item' key={ item.securityId }>
-                    {/* <span className='stock-description_cell_id'>{item.id}</span> */ }
-                    <span className='stock-description_cell_name'>{ item.securityId }</span>
-                    <span className='stock-description_cell_description'>{ item.name }</span>
+                <div className='stock-description__item' key={ item.securityId }>
+                    <span className='stock-description__cell-name'>{ item.securityId }</span>
+                    <span className='stock-description__cell-description'>{ item.name }</span>
                 </div>
             </Fragment>
         );
@@ -130,10 +129,10 @@ class SecuritySelectorComponent extends React.PureComponent {
         }
 
         return (
-            <div className='stock-description_item' >
-                <span className='stock-description_cell_id'></span>
-                <span className='stock-description_cell_title'><strong>{ title }</strong></span>
-                <span className='stock-description_cell_description'></span>
+            <div className='stock-description__item' >
+                <span className='stock-description__cell-id'></span>
+                <span className='stock-description__cell-title'><strong>{ title }</strong></span>
+                <span className='stock-description__cell-description'></span>
             </div>
         );
     }
@@ -161,7 +160,7 @@ class SecuritySelectorComponent extends React.PureComponent {
                     getSectionSuggestions={ this.getSectionSuggestions }
                     inputProps={ inputProps } />
 
-                <div className="react-autosuggest_add_btn" onClick={ this.onAdd }>
+                <div className="react-autosuggest__add-btn" onClick={ this.onAdd }>
                     +
     			</div>
                 <div className="react-autosuggest__status">

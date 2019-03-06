@@ -55,13 +55,14 @@
         &--highlighted
             background-color: $back-color-2
 
-    &_add_btn
+    &__add-btn
         background: black
         display: inline-block
         height: 22px
         width: 22px
         text-align: center
         cursor pointer
+        font-size: 2rem
         +tablet()
             width: 25px
             height: 25px
@@ -74,32 +75,33 @@
         padding-left: 5px
 
 .stock-description
-    &_container
+    &__container
         display: inline-flex
         flex-direction: column
         min-width:500px
         font-size: $font-size-small
 
-    &_item        
+    &__item        
         display: inline-flex
         width: 100%
     
-    &_cell_id
-        width: 12%
-        flex-shrink: 0;
-        
-    &_cell_name
-        width: 28%
-        flex-shrink: 0;
-        +tablet()
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-    &_cell_title
-        width: auto
-    &_cell_description
-        flex-grow: 1
-        text-overflow: ellipsis
-        overflow: hidden
-        white-space: nowrap
+    &__cell
+        &-id
+            width: 12%
+            flex-shrink: 0;
+            
+        &-name
+            width: 28%
+            flex-shrink: 0;
+            +tablet()
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+        &-title
+            width: auto
+        &-description
+            flex-grow: 1
+            text-overflow: ellipsis
+            overflow: hidden
+            white-space: nowrap
 

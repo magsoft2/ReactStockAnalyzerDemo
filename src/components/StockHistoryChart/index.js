@@ -6,14 +6,7 @@ import moment from 'moment';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import {
-    curveLinear,
-    curveStep,
-    curveStepBefore,
-    curveStepAfter,
-    curveBasis,
-    curveCardinal,
-    curveMonotoneX,
-    curveCatmullRom
+    curveLinear    
 } from 'd3-shape';
 import { ChartCanvas, Chart } from 'react-stockcharts';
 import {
@@ -23,16 +16,16 @@ import {
     LineSeries
 } from 'react-stockcharts/lib/series';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
-import { MovingAverageTooltip, HoverTooltip, SingleValueTooltip } from 'react-stockcharts/lib/tooltip';
+import { MovingAverageTooltip, } from 'react-stockcharts/lib/tooltip'; //HoverTooltip, SingleValueTooltip
 import {
     CrossHairCursor,
     EdgeIndicator,
-    CurrentCoordinate,
+    //CurrentCoordinate,
     MouseCoordinateX,
     MouseCoordinateY
 } from 'react-stockcharts/lib/coordinates';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { LabelAnnotation, Label, Annotate } from 'react-stockcharts/lib/annotation';
+//import { LabelAnnotation, Label, Annotate } from 'react-stockcharts/lib/annotation';
 import { fitWidth } from 'react-stockcharts/lib/helper';
 import { last, hexToRGBA, getClosestItem } from 'react-stockcharts/lib/utils';
 import { ema, wma, sma, tma } from 'react-stockcharts/lib/indicator';
@@ -173,7 +166,7 @@ export class StockHistoryChartComponent extends React.Component {
 
         const xExtents = calculateChartExtent( chartTimeRange, data, xAccessor );
 
-        const height = 500;
+        const height = 390;
 
         return (
             <ChartCanvas height={ height }
@@ -191,7 +184,7 @@ export class StockHistoryChartComponent extends React.Component {
 
                 {/* <Label x={50} y={50} fontSize={24} text={securityId} /> */ }
 
-                <Chart id={ 1 } height={ 360 } yExtents={ d => [ d.high, d.low ] } >
+                <Chart id={ 1 } height={ 280 } yExtents={ d => [ d.high, d.low ] } >
                     <YAxis axisAt="right" orient="right" ticks={ 7 } tickStroke={ ChartTheme.tickStroke } opacity={ 0.5 } />
                     {/* <YAxis axisAt="left" orient="left" showTicks={false} /> */ }
                     <XAxis axisAt="bottom" orient="bottom" ticks={ 7 } showTicks={ true } tickStroke={ ChartTheme.tickStroke } stroke={ ChartTheme.tickStroke } opacity={ 0.5 } />
@@ -225,7 +218,7 @@ export class StockHistoryChartComponent extends React.Component {
                                 yAccessor: d => d.close,
                                 type: securityId,
                                 stroke: ChartTheme.raiseColor,
-                                windowSize: item.definition.name
+                                windowSize: ''
                             }
                         ] }
                     />
@@ -241,7 +234,7 @@ export class StockHistoryChartComponent extends React.Component {
                                         type: item.type(),
                                         stroke: item.stroke(),
                                         key: item.key,
-                                        windowSize: item.options().windowSize
+                                        windowSize: item.options().windowSize ? item.options().windowSize : ''
                                     };
                                 }
                                 )
@@ -271,7 +264,7 @@ export class StockHistoryChartComponent extends React.Component {
 
     renderVolumeChart = ( chartTheme ) => {
 
-        const height = 100;
+        const height = 70;
 
         return (
             <Chart id={ 2 } origin={ ( w, h ) => [ 0, h - height ] } height={ height } yExtents={ d => d.volume }>

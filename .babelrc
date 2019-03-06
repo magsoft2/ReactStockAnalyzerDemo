@@ -1,4 +1,21 @@
 {
-  "plugins": ["wildcard", "transform-decorators-legacy"],
-  "presets": ["env", "react", "es2015", "stage-0"]  
+  "plugins": ["wildcard", "transform-decorators-legacy", "syntax-dynamic-import", "transform-es2015-modules-commonjs"],
+  "presets": ["env", "react", "es2016", "stage-0"],  
+  
+  "env": {
+    "test": {
+      "presets":[
+        "env", 
+		"es2016",		
+        "react",
+		"stage-0"
+      ],
+      "plugins": [
+		"wildcard",
+		"transform-decorators-legacy",
+		"transform-es2015-modules-commonjs"
+      ]
+    }
+  }
+
 }

@@ -12,9 +12,9 @@ export class Header extends React.Component {
 
     	return (
     		<header className="header">
-    			<div className="header_logo"><img src={(CONFIG.publicPath && CONFIG.publicPath !== '/' ? CONFIG.publicPath : '' ) + '/images/logo.jpg'}></img></div>
-    			<div className="header_menu_container">              
-    				<div className="header_caption">Demo React Stock Analyser</div>  
+    			<div className="header__logo"><img src={(CONFIG.publicPath && CONFIG.publicPath !== '/' ? CONFIG.publicPath : '' ) + '/images/logo.jpg'}></img></div>
+    			<div className="header__menu-container">              
+    				<div className="header__caption">Demo React Stock Analyser</div>  
     				<Nav />
     			</div>
     		</header>
